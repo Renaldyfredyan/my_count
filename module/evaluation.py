@@ -27,7 +27,16 @@ def evaluate_model(checkpoint_path, data_path, img_size=512, batch_size=8, split
 
     # Load model
     model = LowShotObjectCounting().to(device)
-    model.load_state_dict(torch.load(checkpoint_path, map_location=device))
+
+    # Hapus prefix 'module.' jika ada
+    checkpoint = torch.load(checkpoint_path, map_location=device)
+    state_dict = checkpoint
+    new_state_dict = {}
+    for key, value in state_dict.items():
+        new_key = key.replace("module.", "")  # Hapus prefix 'module.'
+        new_state_dict[new_key] = value
+
+    model.load_state_dict(new_state_dict)
     model.eval()
 
     mae, mse, total_samples = 0.0, 0.0, 0
@@ -40,9 +49,6 @@ def evaluate_model(checkpoint_path, data_path, img_size=512, batch_size=8, split
 
             # Forward pass
             outputs = model(images, exemplars)
-
-            # Debug: Check output structure
-            # print(f"Output type: {type(outputs)}, Output shape: {outputs[0].shape if isinstance(outputs, tuple) else outputs.shape}")
 
             # Unpack outputs (assumes density map is the first element of the tuple)
             density_map = outputs[0] if isinstance(outputs, tuple) else outputs

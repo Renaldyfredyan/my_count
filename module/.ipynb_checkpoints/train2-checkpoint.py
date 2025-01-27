@@ -1,15 +1,14 @@
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import DataLoader, DistributedSampler
-from torch.nn.parallel import DistributedDataParallel
+from torch.utils.data import DataLoader
 from torchvision import transforms
 import os
 from tqdm import tqdm
 import time
 from torch.cuda.amp import GradScaler, autocast
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
-import argparse
 
 # Import modules
 from swin_transformer_encoder import HybridEncoder
@@ -55,29 +54,21 @@ class LowShotObjectCounting(nn.Module):
 
         return density_map, similarity_maps
 
+
 # Training setup
 def train():
-    parser = argparse.ArgumentParser(description="Low Shot Object Counting Training Script")
-    parser.add_argument('--freeze_backbone', action='store_true', help="Freeze backbone during training")
-    parser.add_argument('--unfreeze_epoch', type=int, default=5, help="Epoch to unfreeze backbone")
-    parser.add_argument('--num_epochs', type=int, default=10, help="Number of training epochs")
-    parser.add_argument('--batch_size', type=int, default=8, help="Batch size")
-    parser.add_argument('--learning_rate', type=float, default=1e-4, help="Learning rate for non-backbone params")
-    parser.add_argument('--backbone_learning_rate', type=float, default=1e-5, help="Learning rate for backbone params")
-    parser.add_argument('--checkpoint_dir', type=str, default="checkpoints", help="Directory to save model checkpoints")
-    args = parser.parse_args()
-
-    # Set device
+    # Hyperparameters
+    num_epochs = 10
+    batch_size = 8
+    learning_rate = 1e-4
+    backbone_learning_rate = 1e-5  # Smaller LR for backbone
+    lambda_aux = 0.1  # Weight for auxiliary loss
+    patience = 3  # Early stopping patience
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Initialize distributed training
-    torch.distributed.init_process_group(backend="nccl")
-    local_rank = int(os.environ["LOCAL_RANK"])
-    torch.cuda.set_device(local_rank)
-    device = torch.device("cuda", local_rank)
-
     # Directory to save model checkpoints
-    os.makedirs(args.checkpoint_dir, exist_ok=True)
+    checkpoint_dir = "checkpoints"
+    os.makedirs(checkpoint_dir, exist_ok=True)
 
     # Data preparation
     dataset = ObjectCountingDataset(
@@ -93,15 +84,17 @@ def train():
         tiling_p=0.0
     )
 
-    train_sampler = DistributedSampler(dataset)
-    val_sampler = DistributedSampler(val_dataset, shuffle=False)
-
-    dataloader = DataLoader(dataset, batch_size=args.batch_size, sampler=train_sampler, num_workers=4, pin_memory=True)
-    val_dataloader = DataLoader(val_dataset, batch_size=args.batch_size, sampler=val_sampler, num_workers=4, pin_memory=True)
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
     # Model initialization
     model = LowShotObjectCounting().to(device)
-    model = DistributedDataParallel(model, device_ids=[local_rank], output_device=local_rank)
+
+    # Freeze backbone parameters
+    # for name, param in model.encoder.backbone.named_parameters():
+    #     param.requires_grad = False
+    # for name, param in model.encoder.swin_backbone.named_parameters():
+    #     param.requires_grad = False
 
     # Separate backbone and non-backbone parameters
     backbone_params = []
@@ -116,53 +109,52 @@ def train():
 
     # Optimizer with different learning rates
     optimizer = optim.AdamW([
-        {"params": backbone_params, "lr": args.backbone_learning_rate},
-        {"params": non_backbone_params, "lr": args.learning_rate}
+        {"params": backbone_params, "lr": backbone_learning_rate},
+        {"params": non_backbone_params, "lr": learning_rate}
     ], weight_decay=1e-4)
 
     # Scheduler for learning rate
     scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)
 
     # Loss function
-    criterion = ObjectNormalizedL2Loss()
+    criterion = criterion = nn.MSELoss()
+
     scaler = GradScaler()  # For mixed precision training
 
-    # Initialize best validation loss
+    # Variables for saving the best model
     best_val_loss = float('inf')
+    best_checkpoint_path = None
 
     # Training loop
-    for epoch in range(args.num_epochs):
-        if epoch == 0:  # Untuk mencatat waktu awal pelatihan
-            total_start_time = time.perf_counter()
-        epoch_start_time = time.perf_counter()
-        
+    total_start_time = time.time()
+    for epoch in range(num_epochs):
+        epoch_start_time = time.time()
         model.train()
-        train_sampler.set_epoch(epoch)
-
-        # Logika freeze/unfreeze backbone
-        if args.freeze_backbone and epoch < args.unfreeze_epoch:
-            for param in backbone_params:
-                param.requires_grad = False  # Membekukan backbone
-        else:
-            for param in backbone_params:
-                param.requires_grad = True  # Melatih backbone
-
         running_loss = 0.0
 
-        with tqdm(total=len(dataloader), desc=f"Epoch {epoch+1}/{args.num_epochs}", unit="batch") as pbar:
+        # Optionally unfreeze backbone after a few epochs
+        if epoch == 5:
+            for name, param in model.encoder.swin_backbone.named_parameters():
+                param.requires_grad = True
+            print("Backbone unfrozen!")
+
+        with tqdm(total=len(dataloader), desc=f"Epoch {epoch+1}/{num_epochs}", unit="batch") as pbar:
             for images, exemplars, density_maps in dataloader:
-                images = images.to(device, non_blocking=True)
-                exemplars = exemplars.to(device, non_blocking=True)
-                density_maps = density_maps.to(device, non_blocking=True)
+                images = images.to(device)
+                exemplars = exemplars.to(device)
+                density_maps = density_maps.to(device)
 
+                with autocast():  # Mixed precision forward pass
+                    outputs = model(images, exemplars)
+
+                    # Unpack outputs
+                    density_map, _ = outputs
+
+                    # Compute main loss
+                    loss = criterion(density_map, density_maps)
+
+                # Backward pass with gradient scaling
                 optimizer.zero_grad()
-
-                with autocast():
-                    density_map, _ = model(images, exemplars)
-                    num_objects = density_maps.sum(dim=(1, 2, 3))  # Hitung jumlah objek
-                    loss = criterion(density_map, density_maps, num_objects=num_objects)
-                    loss = loss.mean()  # Pastikan loss adalah skalar
-
                 scaler.scale(loss).backward()
 
                 # Gradient clipping
@@ -176,45 +168,48 @@ def train():
                 pbar.set_postfix(loss=running_loss / (pbar.n + 1))
                 pbar.update(1)
 
-        scheduler.step()
-        # Catat waktu selesai epoch
-        epoch_end_time = time.perf_counter()
-        epoch_duration = epoch_end_time - epoch_start_time
-
-        # Tampilkan waktu untuk setiap epoch
-        print(f"Epoch [{epoch+1}/{args.num_epochs}] completed in {epoch_duration:.2f} seconds")
-
         # Validation loop
         model.eval()
         val_loss = 0.0
         with torch.no_grad():
             for val_images, val_exemplars, val_density_maps in val_dataloader:
-                val_images = val_images.to(device, non_blocking=True)
-                val_exemplars = val_exemplars.to(device, non_blocking=True)
-                val_density_maps = val_density_maps.to(device, non_blocking=True)
+                val_images = val_images.to(device)
+                val_exemplars = val_exemplars.to(device)
+                val_density_maps = val_density_maps.to(device)
 
-                with autocast():
-                    val_density_map, _ = model(val_images, val_exemplars)
-                    num_objects = val_density_maps.sum(dim=(1, 2, 3))  # Hitung jumlah objek
-                    loss_tensor = criterion(val_density_map, val_density_maps, num_objects=num_objects)
-                    val_loss += loss_tensor.mean().item()  # Ambil rata-rata loss
+                # Forward pass
+                val_outputs = model(val_images, val_exemplars)
+
+                # Unpack outputs
+                val_density_map, _ = val_outputs
+
+                # Compute validation loss
+                val_main_loss = criterion(val_density_map, val_density_maps)
+                val_loss += val_main_loss.item()
 
         val_loss /= len(val_dataloader)
         print(f"Validation Loss: {val_loss:.4f}")
 
-        # Save the best model
+        # Save best model checkpoint
         if val_loss < best_val_loss:
             best_val_loss = val_loss
-            best_checkpoint_path = os.path.join(args.checkpoint_dir, "best_model.pth")
+            best_checkpoint_path = os.path.join(checkpoint_dir, "best_model.pth")
             torch.save(model.state_dict(), best_checkpoint_path)
-            print(f"New best model saved at {best_checkpoint_path} with validation loss: {best_val_loss:.4f}")
+            print(f"New best model saved at {best_checkpoint_path}")
 
-    # Catat total waktu pelatihan
-    total_end_time = time.perf_counter()
+        # Step scheduler
+        scheduler.step()
+
+        # Log epoch time
+        epoch_end_time = time.time()
+        epoch_duration = epoch_end_time - epoch_start_time
+        print(f"Epoch [{epoch+1}/{num_epochs}] completed in {epoch_duration:.2f} seconds, Loss: {running_loss/len(dataloader):.4f}")
+
+    # Log total training time
+    total_end_time = time.time()
     total_duration = total_end_time - total_start_time
     print(f"Training completed in {total_duration:.2f} seconds.")
-
-    torch.distributed.destroy_process_group()
+    print(f"Best model saved at {best_checkpoint_path} with validation loss: {best_val_loss:.4f}")
 
 if __name__ == "__main__":
     train()
