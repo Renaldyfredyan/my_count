@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -62,7 +61,6 @@ def train():
     batch_size = 8
     learning_rate = 1e-4
     backbone_learning_rate = 1e-5  # Smaller LR for backbone
-    lambda_aux = 0.1  # Weight for auxiliary loss
     patience = 3  # Early stopping patience
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -90,12 +88,6 @@ def train():
     # Model initialization
     model = LowShotObjectCounting().to(device)
 
-    # Freeze backbone parameters
-    # for name, param in model.encoder.backbone.named_parameters():
-    #     param.requires_grad = False
-    # for name, param in model.encoder.swin_backbone.named_parameters():
-    #     param.requires_grad = False
-
     # Separate backbone and non-backbone parameters
     backbone_params = []
     non_backbone_params = []
@@ -117,7 +109,7 @@ def train():
     scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)
 
     # Loss function
-    criterion = nn.MSELoss()
+    criterion = ObjectNormalizedL2Loss()
 
     scaler = GradScaler()  # For mixed precision training
 
@@ -132,12 +124,6 @@ def train():
         model.train()
         running_loss = 0.0
 
-        # Optionally unfreeze backbone after a few epochs
-        if epoch == 5:
-            for name, param in model.encoder.swin_backbone.named_parameters():
-                param.requires_grad = True
-            print("Backbone unfrozen!")
-
         with tqdm(total=len(dataloader), desc=f"Epoch {epoch+1}/{num_epochs}", unit="batch") as pbar:
             for images, exemplars, density_maps in dataloader:
                 images = images.to(device)
@@ -150,8 +136,13 @@ def train():
                     # Unpack outputs
                     density_map, _ = outputs
 
+                    # Compute the number of objects in each image
+                    num_objects = density_maps.sum(dim=(1, 2, 3)) + 1e-6  # Avoid division by zero
+
                     # Compute main loss
-                    loss = criterion(density_map, density_maps)
+                    loss = criterion(density_map, density_maps, num_objects=num_objects)
+
+                    loss = loss.mean()
 
                 # Backward pass with gradient scaling
                 optimizer.zero_grad()
@@ -183,8 +174,11 @@ def train():
                 # Unpack outputs
                 val_density_map, _ = val_outputs
 
+                # Compute the number of objects in each image
+                num_objects = val_density_maps.sum(dim=(1, 2, 3)) + 1e-6
+
                 # Compute validation loss
-                val_main_loss = criterion(val_density_map, val_density_maps)
+                val_main_loss = criterion(val_density_map, val_density_maps, num_objects=num_objects)
                 val_loss += val_main_loss.item()
 
         val_loss /= len(val_dataloader)
