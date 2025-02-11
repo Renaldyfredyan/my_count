@@ -97,7 +97,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Low-Shot Object Counting Evaluation')
     parser.add_argument('--checkpoint_path', type=str, default="checkpoints/", help='Path to the model checkpoint')
-    parser.add_argument('--model_name', type=str, default='best_model', help='Model name')
+    parser.add_argument('--model_name', type=str, default='new_best_model', help='Model name')
     parser.add_argument('--data_path', type=str, default="/home/renaldy_fredyan/PhDResearch/LOCA/Dataset/", help='Path to the dataset')
     parser.add_argument('--img_size', type=int, default=512, help='Input image size')
     parser.add_argument('--batch_size', type=int, default=8, help='Batch size')

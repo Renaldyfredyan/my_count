@@ -8,4 +8,3 @@ class ObjectNormalizedL2Loss(nn.Module):
 
     def forward(self, output, dmap, num_objects):
         return ((output - dmap) ** 2).sum() / num_objects
-

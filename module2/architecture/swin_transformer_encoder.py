@@ -8,14 +8,14 @@ import os
 def download_pretrained_model():
     # Download pretrained model and save locally if not already present
     model_dir = "models"
-    model_path = os.path.join(model_dir, "swin_base_patch4_window7_224.ms_in22k.pth")
+    model_path = os.path.join(model_dir, "swin_tiny_patch4_window7_224.ms_in22k.pth")
 
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
 
     if not os.path.exists(model_path):
         print("Downloading pre-trained model using timm...")
-        model = create_model('swin_base_patch4_window7_224.ms_in22k', pretrained=True)
+        model = create_model('swin_tiny_patch4_window7_224.ms_in22k', pretrained=True)
         torch.save(model.state_dict(), model_path)
         print(f"Model saved to {model_path}")
     else:
@@ -24,12 +24,12 @@ def download_pretrained_model():
     return model_path
 
 
-def build_swin_transformer(embed_dim=256, model_path="models/swin_base_patch4_window7_224.ms_in22k.pth"):
+def build_swin_transformer(embed_dim=256, model_path="models/swin_tiny_patch4_window7_224.ms_in22k.pth"):
     # Load the pretrained model weights and prepare the backbone
     if not os.path.exists(model_path):
         print("Downloading pretrained model...")
         model = create_model(
-            'swin_base_patch4_window7_224.ms_in22k',
+            'swin_tiny_patch4_window7_224.ms_in22k',
             pretrained=True,
             num_classes=0  # Remove classification head
         )
@@ -41,7 +41,7 @@ def build_swin_transformer(embed_dim=256, model_path="models/swin_base_patch4_wi
 
     # Create model and load weights
     model = create_model(
-        'swin_base_patch4_window7_224.ms_in22k',
+        'swin_tiny_patch4_window7_224.ms_in22k',
         pretrained=False,  # Prevent auto-download
         num_classes=0      # Remove classification head
     )
@@ -62,8 +62,7 @@ class HybridEncoder(nn.Module):
 
         # Swin Transformer Backbone (SwinT-Tiny)
         self.swin_backbone = build_swin_transformer(embed_dim)
-        # self.swin_proj = nn.Conv2d(768, embed_dim, kernel_size=1)  # Project to embed_dim
-        self.swin_proj = nn.Conv2d(1024, embed_dim, kernel_size=1)  # Update in_channels to 1024
+        self.swin_proj = nn.Conv2d(768, embed_dim, kernel_size=1)  # Project to embed_dim
 
     def forward(self, x):
         # Swin Transformer Path

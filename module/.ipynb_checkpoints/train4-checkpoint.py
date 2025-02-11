@@ -16,7 +16,7 @@ from feature_enhancer import FeatureEnhancer
 from exemplar_feature_learning import ExemplarFeatureLearning
 from exemplar_image_matching import ExemplarImageMatching
 from density_regression_decoder import DensityRegressionDecoder
-from data_loader import ObjectCountingDataset
+from data import FSC147Dataset
 from losses import ObjectNormalizedL2Loss
 
 # Define the full model
@@ -76,13 +76,13 @@ def train():
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     # Data preparation
-    dataset = ObjectCountingDataset(
+    dataset = FSC147Dataset(
         data_path="/home/renaldy_fredyan/PhDResearch/LOCA/Dataset/",
         img_size=512,
         split='train',
         tiling_p=0.5
     )
-    val_dataset = ObjectCountingDataset(
+    val_dataset = FSC147Dataset(
         data_path="/home/renaldy_fredyan/PhDResearch/LOCA/Dataset/",
         img_size=512,
         split='val',
@@ -117,8 +117,8 @@ def train():
     scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)
 
     # Loss function
-    # criterion = ObjectNormalizedL2Loss()
-    criterion = nn.MSEloss()
+    criterion = ObjectNormalizedL2Loss()
+    # criterion = nn.MSELoss()
     
     scaler = GradScaler()  # For mixed precision training
 
@@ -195,8 +195,8 @@ def train():
         val_loss /= len(val_dataloader)
         print(f"Validation Loss: {val_loss:.4f}")
 
-        # val_loss /= len(val_dataloader)
-        # print(f"Validation Loss: {val_loss:.4f}")
+        val_loss /= len(val_dataloader)
+        print(f"Validation Loss: {val_loss:.4f}")
 
         # Save best model checkpoint
         if val_loss < best_val_loss:

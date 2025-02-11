@@ -1,14 +1,18 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torch.distributed as dist
 from torch.utils.data import DataLoader, DistributedSampler
 from torch.nn.parallel import DistributedDataParallel
 from torchvision import transforms
 import os
 from tqdm import tqdm
 import time
-from torch.cuda.amp import GradScaler, autocast
+from time import perf_counter
+from torch.amp import GradScaler, autocast
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
+import csv
+import math
 
 # Import modules
 from swin_transformer_encoder import HybridEncoder
@@ -58,11 +62,20 @@ class LowShotObjectCounting(nn.Module):
 # Training setup
 def train():
     # Hyperparameters
-    num_epochs = 10
+    num_epochs = 100
     batch_size = 8
     learning_rate = 1e-4
     backbone_learning_rate = 1e-5  # Smaller LR for backbone
     patience = 3  # Early stopping patience
+    aux_weight = 0.3
+    max_grad_norm = 0.1
+
+    SEED = 42
+    torch.manual_seed(SEED)
+    torch.cuda.manual_seed_all(SEED)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Initialize distributed training
@@ -88,14 +101,13 @@ def train():
         split='val',
         tiling_p=0.0
     )
+    sampler = DistributedSampler(dataset)
+    dataloader = DataLoader(dataset, batch_size=batch_size, sampler=sampler)
+    val_sampler = DistributedSampler(val_dataset)
+    val_dataloader = DataLoader(val_dataset, batch_size=batch_size, sampler=val_sampler)
 
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
-
-    # Model initialization
     model = LowShotObjectCounting().to(device)
     model = DistributedDataParallel(model, device_ids=[local_rank], output_device=local_rank)
-
     # Separate backbone and non-backbone parameters
     backbone_params = []
     non_backbone_params = []
@@ -107,7 +119,6 @@ def train():
         else:  # Non-backbone parameters
             non_backbone_params.append(param)
 
-    # Optimizer with different learning rates
     optimizer = optim.AdamW([
         {"params": backbone_params, "lr": backbone_learning_rate},
         {"params": non_backbone_params, "lr": learning_rate}
@@ -116,108 +127,198 @@ def train():
     # Scheduler for learning rate
     scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)
 
+    '''
+    lr ^
+    |    /\        /\            /\ 
+    |   /  \      /  \          /  \ 
+    |  /    \    /    \        /    \ 
+    | /      \  /      \      /      \ 
+    |/        \/        \    /        \ 
+    +---------------------------------> epoch
+    0    10    20        40            80
+    '''
     # Loss function
     criterion = ObjectNormalizedL2Loss()
-    # criterion = nn.MSEloss()
+    # criterion = nn.MSELoss()
     
-    scaler = GradScaler()  # For mixed precision training
+    scaler = GradScaler('cuda')  # For mixed precision training
 
     # Variables for saving the best model
     best_val_loss = float('inf')
     best_checkpoint_path = None
+    best = float('inf') 
+    start_epoch = 0
+    num_objects = 3
 
+    print(local_rank)
     # Training loop
     total_start_time = time.time()
-    for epoch in range(num_epochs):
-        epoch_start_time = time.time()
-        model.train()
+    for epoch in range(start_epoch + 1, num_epochs + 1):
+        if local_rank == 0:
+            start = perf_counter()
+        
         running_loss = 0.0
+        train_loss = torch.tensor(0.0).to(device).requires_grad_(False)
+        val_loss = torch.tensor(0.0).to(device).requires_grad_(False)
+        aux_train_loss = torch.tensor(0.0).to(device).requires_grad_(False)
+        aux_val_loss = torch.tensor(0.0).to(device).requires_grad_(False)
+        train_ae = torch.tensor(0.0).to(device).requires_grad_(False)
+        val_ae = torch.tensor(0.0).to(device).requires_grad_(False)
 
-        with tqdm(total=len(dataloader), desc=f"Epoch {epoch+1}/{num_epochs}", unit="batch") as pbar:
-            for images, exemplars, density_maps in dataloader:
-                images = images.to(device)
-                exemplars = exemplars.to(device)
-                density_maps = density_maps.to(device)
+        model.train()
 
-                with autocast():  # Mixed precision forward pass
-                    outputs = model(images, exemplars)
+        #Consistently shuffles (randomizes) data across GPUs on every epoch
+        dataloader.sampler.set_epoch(epoch) 
+        
 
-                    # Unpack outputs
-                    density_map, _ = outputs
+       
+        for images, exemplars, density_maps in dataloader:
+            images = images.to(device)
+            exemplars = exemplars.to(device)
+            density_maps = density_maps.to(device)
 
-                    # Compute the number of objects in each image
-                    num_objects = density_maps.sum(dim=(1, 2, 3)) + 1e-6  # Avoid division by zero
+            optimizer.zero_grad() 
 
-                    # Compute main loss
-                    loss = criterion(density_map, density_maps, num_objects=num_objects)
+            with autocast('cuda'):  # Mixed precision forward pass
+                out, aux_out = model(images, exemplars)
 
-                    loss = loss.mean()
+                main_loss = criterion(out, density_map, num_objects=num_objects)
 
-                # Backward pass with gradient scaling
-                optimizer.zero_grad()
-                scaler.scale(loss).backward()
+                aux_loss = sum([
+                    aux_weight * criterion(aux, density_map, num_objects=num_objects)
+                    for aux in aux_out
+                ])
 
-                # Gradient clipping
-                scaler.unscale_(optimizer)
-                nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                loss = main_loss + aux_loss
+            # Backward pass with scaled gradients
+            scaler.scale(loss).backward()
 
-                scaler.step(optimizer)
-                scaler.update()
+            '''When using mixed precision training, gradients are scaled to a normal scale first
+            This is important because gradient clipping must be done on the actual gradient values, not the scaled ones.
+            This function limits the norm (magnitude) of gradients
+            If gradient norm > max_grad_norm, the gradient will be scaled down
+            Prevents exploding gradients'''
+            
+            # Gradient clipping (optional)
+            if max_grad_norm > 0:
+                scaler.unscale_(optimizer)  # Unscale gradients before clipping
+                nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
 
-                running_loss += loss.item()
-                pbar.set_postfix(loss=running_loss / (pbar.n + 1))
-                pbar.update(1)
+            # Optimizer step
+            scaler.step(optimizer)
+            scaler.update()
 
-        # Validation loop
+            # Accumulate training metrics
+            train_loss += main_loss * img.size(0)
+            aux_train_loss += aux_loss * img.size(0)
+            train_ae += torch.abs(density_map.sum(dim=(1, 2, 3)) - out.sum(dim=(1, 2, 3))).sum()
+        
+            # Free unused variables to avoid OOM
+            del img, exemplars, density_map, out, aux_out
+            torch.cuda.empty_cache()  # Clear GPU cache
+
+
         model.eval()
-        val_loss = 0.0
         with torch.no_grad():
-            for val_images, val_exemplars, val_density_maps in val_dataloader:
-                val_images = val_images.to(device)
-                val_exemplars = val_exemplars.to(device)
-                val_density_maps = val_density_maps.to(device)
+            for img, exemplars, density_map in val_dataloader:
+                img = img.to(device)
+                exemplars = exemplars.to(device)
+                density_map = density_map.to(device)
+                out, aux_out = model(img, exemplars)
+                with torch.no_grad():
+                    num_objects = density_map.sum()
+                    dist.all_reduce(num_objects)
 
-                # Forward pass
-                val_outputs = model(val_images, val_exemplars)
+                main_loss = criterion(out, density_map, num_objects)
+                aux_loss = sum([
+                    aux_weight * criterion(aux, density_map, num_objects) for aux in aux_out
+                ])
+                loss = main_loss + aux_loss
 
-                # Unpack outputs
-                val_density_map, _ = val_outputs
+                val_loss += main_loss * img.size(0)
+                aux_val_loss += aux_loss * img.size(0)
+                val_ae += torch.abs(
+                    density_map.flatten(1).sum(dim=1) - out.flatten(1).sum(dim=1)
+                ).sum()
 
-                # Compute the number of objects in each image
-                num_objects = val_density_maps.sum(dim=(1, 2, 3)) + 1e-6  # Hindari pembagian dengan nol
+                # Clear unused variables to reduce memory usage
+                del img, exemplars, density_map, out, aux_out  # Clear GPU memory
+                torch.cuda.empty_cache()  # Free cached GPU memory
+                
+                # # Periksa bentuk aux_out dan lakukan penyesuaian jika diperlukan
+                # reshaped_aux_out = []
+                # for aux in aux_out:
+                #     if aux.dim() == 2:
+                #         aux = aux.unsqueeze(0).unsqueeze(0)  # Tambahkan dimensi batch dan channel jika perlu
+                #     elif aux.dim() == 3:
+                #         aux = aux.unsqueeze(0)  # Tambahkan dimensi batch jika perlu
+                    
+                #     # Periksa jumlah dimensi spasial aux
+                #     if aux.size(-1) != density_map.size(-1) or aux.size(-2) != density_map.size(-2):
+                #         aux = nn.functional.interpolate(aux, size=density_map.shape[-2:], mode='bilinear', align_corners=False)
+                    
+                #     reshaped_aux_out.append(aux)
+                
+                # aux_loss = sum([
+                #     aux_weight * criterion(aux, density_map, num_objects) for aux in reshaped_aux_out
+                # ])
+                # loss = main_loss + aux_loss
 
-                # Compute validation loss
-                val_main_loss = criterion(val_density_map, val_density_maps, num_objects=num_objects)
+                # val_loss += main_loss * img.size(0)
+                # aux_val_loss += aux_loss * img.size(0)
+                # val_ae += torch.abs(
+                #     density_map.flatten(1).sum(dim=1) - out.flatten(1).sum(dim=1)
+                # ).sum()
 
-                # Ambil rata-rata loss agar menjadi skalar
-                val_loss += val_main_loss.mean().item()  # Pastikan rata-rata batch loss digunakan
+        dist.all_reduce(train_loss)
+        dist.all_reduce(val_loss)
+        dist.all_reduce(aux_train_loss)
+        dist.all_reduce(aux_val_loss)
+        dist.all_reduce(train_ae)
+        dist.all_reduce(val_ae)
 
-        val_loss /= len(val_dataloader)
-        print(f"Validation Loss: {val_loss:.4f}")
-
-        val_loss /= len(val_dataloader)
-        print(f"Validation Loss: {val_loss:.4f}")
-
-        # Save best model checkpoint
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
-            best_checkpoint_path = os.path.join(checkpoint_dir, "best_model.pth")
-            torch.save(model.state_dict(), best_checkpoint_path)
-            print(f"New best model saved at {best_checkpoint_path}")
-
-        # Step scheduler
         scheduler.step()
 
-        # Log epoch time
-        epoch_end_time = time.time()
-        epoch_duration = epoch_end_time - epoch_start_time
-        print(f"Epoch [{epoch+1}/{num_epochs}] completed in {epoch_duration:.2f} seconds, Loss: {running_loss/len(dataloader):.4f}")
 
-    # Log total training time
-    total_end_time = time.time()
-    total_duration = total_end_time - total_start_time
-    print(f"Training completed in {total_duration:.2f} seconds.")
-    print(f"Best model saved at {best_checkpoint_path} with validation loss: {best_val_loss:.4f}")
+        if local_rank == 0:
+            end = perf_counter()
+            best_epoch = False
+            if val_ae.item() / len(val_dataset) < best:
+                best = val_ae.item() / len(val_dataset)
+                checkpoint = {
+                    'epoch': epoch,
+                    'model': model.state_dict(),
+                    'optimizer': optimizer.state_dict(),
+                    'scheduler': scheduler.state_dict(),
+                    'best_val_ae': val_ae.item() / len(val_dataset)
+                }
+                torch.save(
+                    checkpoint,
+                    os.path.join(checkpoint_dir, "_new_best_model.pth")
+                )
+                best_epoch = True
+            print(
+                f"Epoch: {epoch}",
+                f"Train loss: {running_loss.item():.3f}",
+                f"Aux train loss: {aux_train_loss.item():.3f}",
+                f"Val loss: {val_loss.item():.3f}",
+                f"Aux val loss: {aux_val_loss.item():.3f}",
+                f"Train MAE: {train_ae.item() / len(train):.3f}",
+                f"Val MAE: {val_ae.item() / len(val):.3f}",
+                f"Epoch time: {end - start:.3f} seconds",
+                'best' if best_epoch else ''
+            )
+            # Simpan informasi ke dalam file CSV
+            # csv_file = 'training_info.csv'
+            csv_file = os.path.join(checkpoint_dir, 'training_info.csv')
+            file_exists = os.path.isfile(csv_file)
+            with open(csv_file, mode='a' if file_exists else 'w', newline='') as file:
+                writer = csv.writer(file)
+                if not file_exists:
+                    writer.writerow(['Epoch', 'Training Loss', 'Validation Loss', 'Validation MAE', 'Best Epoch'])
+                writer.writerow([epoch, running_loss.item() / len(dataloader), val_loss.item() / len(val_dataloader), val_ae.item() / len(val_dataset), 'Yes' if best_epoch else 'No'])
+
+    dist.destroy_process_group()
 
 if __name__ == "__main__":
     train()
