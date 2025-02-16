@@ -13,6 +13,7 @@ from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 from data import FSC147Dataset
 from loss import FSCLoss  # Menggunakan loss function yang baru
 from engine import FSCModel  # Menggunakan nama model yang baru
+from debug_utils import print_tensor_info, print_gpu_usage
 
 def train():
     # Print version info for debugging
@@ -117,7 +118,7 @@ def train():
     criterion = FSCLoss(lambda_aux=0.3)
     
     # Mixed precision training
-    scaler = GradScaler()
+    # scaler = GradScaler()
 
     # Variables for tracking best model
     best_val_mae = float('inf')
@@ -133,44 +134,67 @@ def train():
         train_mae = 0.0
         
         # Training loop
+        # for batch_idx, (images, exemplars, density_maps) in enumerate(train_dataloader):
+        #     torch.cuda.empty_cache()
+        #     images = images.to(device)
+        #     exemplars = exemplars.to(device)
+        #     density_maps = density_maps.to(device)
+
         for batch_idx, (images, exemplars, density_maps) in enumerate(train_dataloader):
-            torch.cuda.empty_cache()
-            images = images.to(device)
-            exemplars = exemplars.to(device)
-            density_maps = density_maps.to(device)
+            # print_gpu_usage(f"Start of batch {batch_idx}")
 
-            with autocast('cuda'):
-                # Forward pass - get all density maps
-                pred_density_maps = model(images, exemplars)
-                
-                # Calculate loss dengan auxiliary supervision
-                loss, loss_components = criterion(
-                    pred_density_maps[-1],  # Final density map
-                    density_maps,
-                    pred_density_maps[:-1],  # Auxiliary density maps
-                    [density_maps] * len(pred_density_maps[:-1])  # Same GT for all auxiliary maps
-                )
+            # Check data validity
+            # print(f"\nBatch {batch_idx}:")
+            # print(f"Images: shape={images.shape}, dtype={images.dtype}, device={images.device}")
+            # print(f"Exemplars: shape={exemplars.shape}, dtype={exemplars.dtype}, device={exemplars.device}")
+            # print(f"Density maps: shape={density_maps.shape}, dtype={density_maps.dtype}, device={density_maps.device}")
+            
+            # Ensure data is on correct device
+            images = images.to(device, non_blocking=True)
+            exemplars = exemplars.to(device, non_blocking=True)
+            density_maps = density_maps.to(device, non_blocking=True)
 
-            # Backward pass with gradient scaling
+        #     # with autocast('cuda'):
+            
+            # Forward pass - get all density maps
+            pred_density_maps = model(images, exemplars)
+            
+            # Calculate loss dengan auxiliary supervision
+            loss, loss_components = criterion(
+                pred_density_maps[-1],  # Final density map
+                density_maps,
+                pred_density_maps[:-1],  # Auxiliary density maps
+                [density_maps] * len(pred_density_maps[:-1])  # Same GT for all auxiliary maps
+            )
+
+
+
+            # # Backward pass with gradient scaling
+            # optimizer.zero_grad()
+            # scaler.scale(loss).backward()
+            
+            # # Gradient clipping
+            # scaler.unscale_(optimizer)
+            # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            
+            # scaler.step(optimizer)
+            # scaler.update()
+
             optimizer.zero_grad()
-            scaler.scale(loss).backward()
-            
-            # Gradient clipping
-            scaler.unscale_(optimizer)
+            loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-            
-            scaler.step(optimizer)
-            scaler.update()
+            optimizer.step()
 
             # Update metrics - use final density map for MAE
             train_loss += loss.item()
             train_mae += torch.abs(pred_density_maps[-1].sum() - density_maps.sum()).item()
 
-            # Print progress
-            if batch_idx % 20 == 0 and local_rank == 0:
-                print(f"Epoch [{epoch}/{epochs}][{batch_idx}/{len(train_dataloader)}] "
-                      f"Loss: {loss.item():.4f} (Lc: {loss_components['Lc']:.4f}, Laux: {loss_components['Laux']:.4f})")
+            # # Print progress
+            # if batch_idx % 20 == 0 and local_rank == 0:
+            #     print(f"Epoch [{epoch}/{epochs}][{batch_idx}/{len(train_dataloader)}] "
+            #         f"Loss: {loss.item():.4f} (Lc: {loss_components['Lc']:.4f}, Laux: {loss_components['Laux']:.4f})")
 
+    
         del images, exemplars, density_maps
         torch.cuda.empty_cache()
         

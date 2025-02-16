@@ -2,33 +2,91 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# class DensityRegressionDecoder(nn.Module):
+#     def __init__(self, num_exemplars):
+#         """
+#         Progressive up-sampling regression head untuk menghasilkan density map
+#         Args:
+#             num_exemplars: Jumlah exemplars, menentukan jumlah input channels
+#         """
+#         super().__init__()
+        
+#         # Progressive upsampling blocks
+#         self.prog_up1 = nn.Sequential(
+#             nn.Conv2d(num_exemplars, 128, kernel_size=3, padding=1),
+#             nn.BatchNorm2d(128),
+#             nn.ReLU(inplace=True),
+#             nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
+#         )
+        
+#         self.prog_up2 = nn.Sequential(
+#             nn.Conv2d(128, 64, kernel_size=3, padding=1),
+#             nn.BatchNorm2d(64),
+#             nn.ReLU(inplace=True),
+#             nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
+#         )
+        
+#         self.prog_up3 = nn.Sequential(
+#             nn.Conv2d(64, 32, kernel_size=3, padding=1),
+#             nn.BatchNorm2d(32),
+#             nn.ReLU(inplace=True),
+#             nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
+#         )
+        
+#         # Final density prediction
+#         self.final_conv = nn.Sequential(
+#             nn.Conv2d(32, 16, kernel_size=3, padding=1),
+#             nn.ReLU(inplace=True),
+#             nn.Conv2d(16, 1, kernel_size=1),
+#             nn.ReLU(inplace=True)  # Ensure non-negative density values
+#         )
+        
+#     def forward(self, response_maps):
+#         """
+#         Args:
+#             response_maps: Response maps dari exemplar-image matching [B, N, H, W]
+#                          dimana N adalah jumlah exemplars
+#         Returns:
+#             density_map: Predicted density map [B, 1, H*8, W*8]
+#         """
+#         # # Progressive upsampling dan feature processing
+#         # x = self.prog_up1(response_maps)    # 2x upsampling
+#         # x = self.prog_up2(x)                # 4x upsampling
+#         # x = self.prog_up3(x)                # 8x upsampling
+        
+#         print(f"Decoder input shape: {response_maps.shape}")
+        
+#         x = self.prog_up1(response_maps)
+#         print(f"After prog_up1: {x.shape}")
+#         x = self.prog_up2(x)
+#         print(f"After prog_up2: {x.shape}")
+#         x = self.prog_up3(x)
+#         print(f"After prog_up3: {x.shape}")
+        
+#         # Final density prediction
+#         density_map = self.final_conv(x)
+        
+#         return density_map
+    
 class DensityRegressionDecoder(nn.Module):
     def __init__(self, num_exemplars):
-        """
-        Progressive up-sampling regression head untuk menghasilkan density map
-        Args:
-            num_exemplars: Jumlah exemplars, menentukan jumlah input channels
-        """
         super().__init__()
         
-        # Progressive upsampling blocks
+        # Progressive upsampling tanpa batch norm
         self.prog_up1 = nn.Sequential(
             nn.Conv2d(num_exemplars, 128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
         )
         
         self.prog_up2 = nn.Sequential(
             nn.Conv2d(128, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
         )
         
         self.prog_up3 = nn.Sequential(
             nn.Conv2d(64, 32, kernel_size=3, padding=1),
-            nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
             nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
         )
@@ -49,15 +107,27 @@ class DensityRegressionDecoder(nn.Module):
         Returns:
             density_map: Predicted density map [B, 1, H*8, W*8]
         """
-        # Progressive upsampling dan feature processing
-        x = self.prog_up1(response_maps)    # 2x upsampling
-        x = self.prog_up2(x)                # 4x upsampling
-        x = self.prog_up3(x)                # 8x upsampling
-        
-        # Final density prediction
-        density_map = self.final_conv(x)
-        
-        return density_map
+        # Ensure input is in correct format
+        if response_maps.dim() != 4:
+            raise ValueError(f"Expected 4D input (B,N,H,W), got {response_maps.dim()}D")
+            
+        try:
+            # Progressive upsampling dan feature processing
+            x = self.prog_up1(response_maps)    # 2x upsampling
+            x = self.prog_up2(x)                # 4x upsampling
+            x = self.prog_up3(x)                # 8x upsampling
+            
+            # Final density prediction
+            density_map = self.final_conv(x)
+            
+            return density_map
+            
+        except Exception as e:
+            print(f"Error in decoder forward pass:")
+            print(f"Input shape: {response_maps.shape}")
+            print(f"Device: {response_maps.device}")
+            print(f"Dtype: {response_maps.dtype}")
+            raise e   
 
 if __name__ == "__main__":
     # Test implementation

@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from debug_utils import print_tensor_info, print_gpu_usage
 
 class ChannelAttention(nn.Module):
     def __init__(self, in_channels):
@@ -101,9 +102,17 @@ class HybridEncoder(nn.Module):
         )
 
     def forward(self, features):
+
+        print_gpu_usage("Hybrid encoder start")
+        print_tensor_info("Input stage3", features['stage3'])
+        print_tensor_info("Input stage4", features['stage4'])
+
         # Project features to common dimension
         S3 = self.proj_layers['stage3'](features['stage3'])  # 32x32x256
         S4 = self.proj_layers['stage4'](features['stage4'])  # 16x16x256
+
+        print_tensor_info("Projected S3", S3)
+        print_tensor_info("Projected S4", S4)
         
         # Upsample S3 to target size
         S3 = F.interpolate(S3, size=(64, 64), mode='bilinear', align_corners=False)
@@ -115,6 +124,9 @@ class HybridEncoder(nn.Module):
         # Final enhancement
         enhanced_features = self.final_cga(fused_features)
         Fi = self.final_proj(enhanced_features)
+
+        print_tensor_info("Output Fi", Fi)
+        print_gpu_usage("Hybrid encoder end")
         
         return Fi  # Output: 64x64x256
 

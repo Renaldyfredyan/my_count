@@ -67,7 +67,7 @@ class FSC147Dataset(Dataset):
         self.jitter = T.RandomApply([T.ColorJitter(0.4, 0.4, 0.4, 0.1)], p=0.8)
         self.num_objects = num_objects
         self.zero_shot = zero_shot
-        self.return_image_name = return_image_name  # Parameter baru
+        # self.return_image_name = return_image_name  # Parameter baru
 
         with open(
             os.path.join(self.data_path, 'Train_Test_Val_FSC_147.json'), 'rb'
@@ -135,9 +135,9 @@ class FSC147Dataset(Dataset):
             density_map = TVF.hflip(density_map)
             bboxes[:, [0, 2]] = self.img_size - bboxes[:, [2, 0]]
 
-        # Return sesuai kebutuhan
-        if self.return_image_name:
-            return img, bboxes, density_map, self.image_names[idx]
+        # # Return sesuai kebutuhan
+        # if self.return_image_name:
+        #     return img, bboxes, density_map, self.image_names[idx]
         return img, bboxes, density_map
 
     def __len__(self):

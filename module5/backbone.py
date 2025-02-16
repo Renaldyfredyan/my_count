@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from timm.models import create_model
 import os
+from debug_utils import print_tensor_info, print_gpu_usage
 
 def build_swin_transformer(model_path="models/swin_base_patch4_window7_224.ms_in22k.pth"):
     """Build Swin Transformer backbone"""
@@ -61,6 +62,9 @@ class FeatureExtractor(nn.Module):
         orig_size = x.shape[2:]
         if orig_size != (512, 512):
             x = F.interpolate(x, size=(512, 512), mode='bilinear', align_corners=False)
+
+        # print_gpu_usage("Backbone start")
+        # print_tensor_info("Input to backbone", x)
         
         # Get features from backbone
         features = self.backbone(x)
@@ -69,6 +73,10 @@ class FeatureExtractor(nn.Module):
         # Convert from [B, H, W, C] to [B, C, H, W]
         stage3 = features[2].permute(0, 3, 1, 2)  # 512 channels
         stage4 = features[3].permute(0, 3, 1, 2)  # 1024 channels
+
+        # print_tensor_info("Stage3 features", stage3)
+        # print_tensor_info("Stage4 features", stage4)
+        # print_gpu_usage("Backbone end")
         
         extracted_features = {
             'stage3': stage3,  # B x 512 x 32 x 32
