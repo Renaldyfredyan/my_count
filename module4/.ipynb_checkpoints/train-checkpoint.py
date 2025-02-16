@@ -7,77 +7,19 @@ from torch.nn.parallel import DistributedDataParallel
 import os
 import csv
 from time import perf_counter
-from torch.cuda.amp import GradScaler, autocast
+from torch.amp import GradScaler, autocast
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 
 # Import modules
 from swin_transformer_encoder import HybridEncoder
 from feature_enhancer import FeatureEnhancer
 from exemplar_feature_learning import ExemplarFeatureLearning
-from exemplar_image_matching import ExemplarImageMatching
+from similarity_maps import ExemplarImageMatching
 # from density_regression_decoder import DensityRegressionDecoder
 from density_regression_decoder2 import DensityRegressionDecoder
 from data_loader import ObjectCountingDataset
 from custom_loss import CustomLoss
 
-class LowShotObjectCounting(nn.Module):
-    def __init__(self, num_iterations=3):
-        super(LowShotObjectCounting, self).__init__()
-        self.num_iterations = num_iterations
-        self.encoder = HybridEncoder(embed_dim=256)
-        self.enhancer = FeatureEnhancer(embed_dim=256)
-        self.exemplar_learner = ExemplarFeatureLearning(embed_dim=256, num_iterations=num_iterations)
-        self.matcher = ExemplarImageMatching()
-        self.decoders = nn.ModuleList([
-            DensityRegressionDecoder(input_channels=3) for _ in range(num_iterations)
-        ])
-
-    def forward(self, image, exemplars):
-        # Debug shapes
-        # print(f"Input image shape: {image.shape}")
-        # print(f"Input exemplars shape: {exemplars.shape}")
-        
-        image_features = self.encoder(image)
-        # print(f"Encoder output shape: {image_features.shape}")
-        
-        enhanced_image_features = self.enhancer(image_features)
-        # print(f"Enhanced features shape: {enhanced_image_features.shape}")
-
-        # Reshape for exemplar matching
-        B, C, H, W = enhanced_image_features.shape
-        image_features_flat = enhanced_image_features.view(B, C, -1).permute(0, 2, 1)  # [B, H*W, C]
-
-        # Ensure exemplars have correct embedding dimension
-        if exemplars.shape[-1] != 256:
-            exemplars = nn.Linear(exemplars.shape[-1], 256).to(exemplars.device)(exemplars)
-
-        all_density_maps = []
-        current_exemplars = exemplars
-
-        # Iterative feature learning and density prediction
-        for i in range(self.num_iterations):
-            # Update exemplar features - no iteration parameter needed
-            current_exemplars = self.exemplar_learner(image_features_flat, current_exemplars)
-            
-            # Exemplar-image matching
-            similarity_maps = self.matcher(image_features_flat, 
-                                           current_exemplars)  # Already returns [B, N, H, W]
-            
-            similarity_maps = nn.functional.interpolate(
-                similarity_maps, 
-                size=(image.shape[2]//4, image.shape[3]//4),  # Ke ukuran yang lebih reasonable
-                mode="bilinear", 
-                align_corners=False
-            )
-            # Density regression for this iteration
-            density_map = self.decoders[i](similarity_maps)
-            density_map = nn.functional.interpolate(density_map, size=(512, 512), 
-                                                    mode="bilinear", align_corners=False)
-            
-            all_density_maps.append(density_map)
-
-        # Return all density maps for training
-        return all_density_maps
     
 def train():
     # Hyperparameters
@@ -180,7 +122,7 @@ def train():
             exemplars = exemplars.to(device)
             density_maps = density_maps.to(device)
 
-            with autocast():
+            with autocast('cuda'):
                 # Forward pass - get all iterative density maps
                 all_density_maps = model(images, exemplars)
                 
@@ -296,7 +238,7 @@ def train():
                     'scheduler': scheduler.state_dict(),
                     'best_val_mae': best_val_mae
                 }
-                torch.save(checkpoint, os.path.join(checkpoint_dir, "best_model4.pth"))
+                torch.save(checkpoint, os.path.join(checkpoint_dir, "best_model_module4.pth"))
 
             # Log training information
             print(
@@ -309,7 +251,7 @@ def train():
                 "BEST" if is_best else ""
             )
             # Save training info to CSV
-            csv_file = os.path.join(checkpoint_dir, 'training_log1.csv')
+            csv_file = os.path.join(checkpoint_dir, 'training_log_module4.csv')
             file_exists = os.path.isfile(csv_file)
             
             with open(csv_file, mode='a' if file_exists else 'w', newline='') as file:
@@ -318,47 +260,6 @@ def train():
                     writer.writerow(['Epoch', 'Train Loss', 'Val Loss', 'Train MAE', 'Val MAE', 'Best'])
                 writer.writerow([epoch, train_loss, val_loss, train_mae, val_mae, 'Yes' if is_best else 'No'])
 
-
-
-        # # Update learning rate
-        # scheduler.step()
-
-        # # Save best model (only on rank 0)
-        # if local_rank == 0:
-        #     end = perf_counter()
-        #     is_best = val_mae < best_val_mae
-            
-        #     if is_best:
-        #         best_val_mae = val_mae
-        #         checkpoint = {
-        #             'epoch': epoch,
-        #             'model': model.state_dict(),
-        #             'optimizer': optimizer.state_dict(),
-        #             'scheduler': scheduler.state_dict(),
-        #             'best_val_mae': best_val_mae
-        #         }
-        #         torch.save(checkpoint, os.path.join(checkpoint_dir, "best_model.pth"))
-
-        #     # Log training information
-        #     print(
-        #         f"Epoch: {epoch}/{epochs}",
-        #         f"Train loss: {train_loss:.3f}",
-        #         f"Val loss: {val_loss:.3f}",
-        #         f"Train MAE: {train_mae:.3f}",
-        #         f"Val MAE: {val_mae:.3f}",
-        #         f"Time: {end - start:.3f}s",
-        #         "BEST" if is_best else ""
-        #     )
-
-        #     # Save training info to CSV
-        #     csv_file = os.path.join(checkpoint_dir, 'training_log.csv')
-        #     file_exists = os.path.isfile(csv_file)
-            
-        #     with open(csv_file, mode='a' if file_exists else 'w', newline='') as file:
-        #         writer = csv.writer(file)
-        #         if not file_exists:
-        #             writer.writerow(['Epoch', 'Train Loss', 'Val Loss', 'Train MAE', 'Val MAE', 'Best'])
-        #         writer.writerow([epoch, train_loss, val_loss, train_mae, val_mae, 'Yes' if is_best else 'No'])
 
     # Cleanup
     dist.destroy_process_group()

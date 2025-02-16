@@ -7,85 +7,32 @@ from torch.nn.parallel import DistributedDataParallel
 import os
 import csv
 from time import perf_counter
-from torch.cuda.amp import GradScaler, autocast
+from torch.amp import GradScaler, autocast
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 
-# Import modules
-from swin_transformer_encoder import HybridEncoder
-from feature_enhancer import FeatureEnhancer
+# Import updated modules
+from encoder import DensityEncoder
 from exemplar_feature_learning import ExemplarFeatureLearning
-from exemplar_image_matching import ExemplarImageMatching
-# from density_regression_decoder import DensityRegressionDecoder
-from density_regression_decoder2 import DensityRegressionDecoder
+from similarity_maps import ExemplarImageMatching
+from decoder import DensityRegressionDecoder
 from data_loader import ObjectCountingDataset
 from custom_loss import CustomLoss
+from engine import LowShotCounting  # Updated from LowShotObjectCounting
 
-class LowShotObjectCounting(nn.Module):
-    def __init__(self, num_iterations=3):
-        super(LowShotObjectCounting, self).__init__()
-        self.num_iterations = num_iterations
-        self.encoder = HybridEncoder(embed_dim=256)
-        self.enhancer = FeatureEnhancer(embed_dim=256)
-        self.exemplar_learner = ExemplarFeatureLearning(embed_dim=256, num_iterations=num_iterations)
-        self.matcher = ExemplarImageMatching()
-        self.decoders = nn.ModuleList([
-            DensityRegressionDecoder(input_channels=3) for _ in range(num_iterations)
-        ])
-
-    def forward(self, image, exemplars):
-        # Debug shapes
-        # print(f"Input image shape: {image.shape}")
-        # print(f"Input exemplars shape: {exemplars.shape}")
-        
-        image_features = self.encoder(image)
-        # print(f"Encoder output shape: {image_features.shape}")
-        
-        enhanced_image_features = self.enhancer(image_features)
-        # print(f"Enhanced features shape: {enhanced_image_features.shape}")
-
-        # Reshape for exemplar matching
-        B, C, H, W = enhanced_image_features.shape
-        image_features_flat = enhanced_image_features.view(B, C, -1).permute(0, 2, 1)  # [B, H*W, C]
-
-        # Ensure exemplars have correct embedding dimension
-        if exemplars.shape[-1] != 256:
-            exemplars = nn.Linear(exemplars.shape[-1], 256).to(exemplars.device)(exemplars)
-
-        all_density_maps = []
-        current_exemplars = exemplars
-
-        # Iterative feature learning and density prediction
-        for i in range(self.num_iterations):
-            # Update exemplar features - no iteration parameter needed
-            current_exemplars = self.exemplar_learner(image_features_flat, current_exemplars)
-            
-            # Exemplar-image matching
-            similarity_maps = self.matcher(image_features_flat, 
-                                           current_exemplars)  # Already returns [B, N, H, W]
-            
-            similarity_maps = nn.functional.interpolate(
-                similarity_maps, 
-                size=(image.shape[2]//4, image.shape[3]//4),  # Ke ukuran yang lebih reasonable
-                mode="bilinear", 
-                align_corners=False
-            )
-            # Density regression for this iteration
-            density_map = self.decoders[i](similarity_maps)
-            density_map = nn.functional.interpolate(density_map, size=(512, 512), 
-                                                    mode="bilinear", align_corners=False)
-            
-            all_density_maps.append(density_map)
-
-        # Return all density maps for training
-        return all_density_maps
-    
 def train():
+    # Print version info for debugging
+    print(f"PyTorch version: {torch.__version__}")
+    print(f"CUDA available: {torch.cuda.is_available()}")
+    if torch.cuda.is_available():
+        print(f"CUDA device count: {torch.cuda.device_count()}")
+    
     # Hyperparameters
     epochs = 100
     batch_size = 8
     learning_rate = 1e-4
     backbone_learning_rate = 1e-5
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    embed_dim = 256  # Make sure this matches with all modules
+    num_iterations = 3  # Number of iterative refinements
     
     # Initialize distributed training
     torch.distributed.init_process_group(backend="nccl")
@@ -94,10 +41,17 @@ def train():
     torch.cuda.set_device(local_rank)
     device = torch.device("cuda", local_rank)
 
+    if local_rank == 0:
+        print(f"Training with {world_size} GPUs")
+        print("Initializing directories...")
+    
     # Directory to save model checkpoints
     checkpoint_dir = "checkpoints"
     os.makedirs(checkpoint_dir, exist_ok=True)
 
+    if local_rank == 0:
+        print("Setting up datasets...")
+    
     # Data preparation
     train_dataset = ObjectCountingDataset(
         data_path="/home/renaldy_fredyan/PhDResearch/LOCA/Dataset/",
@@ -111,6 +65,10 @@ def train():
         split='val',
         tiling_p=0.0
     )
+
+    if local_rank == 0:
+        print(f"Train dataset size: {len(train_dataset)}")
+        print(f"Val dataset size: {len(val_dataset)}")
 
     # Use DistributedSampler for distributed training
     train_sampler = DistributedSampler(train_dataset)
@@ -131,9 +89,25 @@ def train():
         pin_memory=True
     )
 
-    # Model initialization
-    model = LowShotObjectCounting().to(device)
+    if local_rank == 0:
+        print("Initializing model...")
+    
+    # Model initialization with explicit parameters
+    model = LowShotCounting(
+        num_iterations=num_iterations,
+        embed_dim=embed_dim,
+        temperature=0.1,
+        backbone_type='swin',
+        num_exemplars=3  # Added num_exemplars parameter
+    ).to(device)
+    
     model = DistributedDataParallel(model, device_ids=[local_rank], output_device=local_rank)
+
+    if local_rank == 0:
+        print("Model initialized successfully")
+        # Print model structure for verification
+        print("\nModel Structure:")
+        print(model)
 
     # Separate backbone and non-backbone parameters
     backbone_params = []
@@ -141,7 +115,7 @@ def train():
     for name, param in model.named_parameters():
         if not param.requires_grad:
             continue
-        if "backbone" in name:
+        if "encoder" in name:  # Changed from "backbone" to "encoder"
             backbone_params.append(param)
         else:
             non_backbone_params.append(param)
@@ -156,7 +130,6 @@ def train():
     scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)
 
     # Loss function
-    # criterion = nn.MSELoss()
     criterion = CustomLoss()
     
     # Mixed precision training
@@ -165,6 +138,12 @@ def train():
     # Variables for tracking best model
     best_val_mae = float('inf')
     start_epoch = 0
+
+    if local_rank == 0:
+        print("\nStarting training...")
+        print(f"Total epochs: {epochs}")
+        print(f"Batch size per GPU: {batch_size}")
+        print(f"Total batch size: {batch_size * world_size}")
 
     for epoch in range(start_epoch + 1, epochs + 1):
         if local_rank == 0:
@@ -175,12 +154,13 @@ def train():
         train_loss = 0.0
         train_mae = 0.0
         
-        for images, exemplars, density_maps in train_dataloader:
+        # Training loop
+        for batch_idx, (images, exemplars, density_maps) in enumerate(train_dataloader):
             images = images.to(device)
             exemplars = exemplars.to(device)
             density_maps = density_maps.to(device)
 
-            with autocast():
+            with autocast('cuda'):
                 # Forward pass - get all iterative density maps
                 all_density_maps = model(images, exemplars)
                 
@@ -212,32 +192,19 @@ def train():
             # Update metrics - use final density map for MAE
             train_loss += loss.item()
             train_mae += torch.abs(final_density_map.sum() - density_maps.sum()).item()
-            
-        for batch_idx, (images, exemplars, density_map) in enumerate(train_dataloader):
-            images = images.to(device)
-            exemplars = exemplars.to(device)
-            density_map = density_map.to(device)
 
-            # Get all density maps
-            all_density_maps = model(images, exemplars)
-            final_density_map = all_density_maps[-1]
-
-            # debug
-            if batch_idx == 0 and local_rank == 0:
-                print("\nFirst batch statistics:")
-                print(f"GT density map shape: {density_map.shape}")
-                print(f"Pred density map shape: {final_density_map.shape}")
-                for i in range(min(3, images.size(0))):
-                    gt_sum = density_map[i].sum().item()
-                    pred_sum = final_density_map[i].sum().item()
-                    print(f"Sample {i}: GT count={gt_sum:.2f}, Pred count={pred_sum:.2f}, Diff={abs(gt_sum-pred_sum):.2f}")
+            # Print progress
+            if batch_idx % 20 == 0 and local_rank == 0:
+                print(f"Epoch [{epoch}/{epochs}][{batch_idx}/{len(train_dataloader)}] "
+                      f"Loss: {loss.item():.4f}")
             
             if batch_idx % 100 == 0 and local_rank == 0:
-                    print(f"Density map stats:")
-                    print(f"Min: {final_density_map.min().item():.3f}")
-                    print(f"Max: {final_density_map.max().item():.3f}")
-                    print(f"Mean: {final_density_map.mean().item():.3f}")
-                    print(f"Std: {final_density_map.std().item():.3f}")
+                print(f"\nDensity map stats:")
+                print(f"Min: {final_density_map.min().item():.3f}")
+                print(f"Max: {final_density_map.max().item():.3f}")
+                print(f"Mean: {final_density_map.mean().item():.3f}")
+                print(f"Std: {final_density_map.std().item():.3f}")
+
         # Validation phase
         model.eval()
         val_loss = 0.0
@@ -268,11 +235,9 @@ def train():
             train_metrics = torch.tensor([train_loss, train_mae], device=device)
             val_metrics = torch.tensor([val_loss, val_mae], device=device)
             
-            # All-reduce untuk mengumpulkan dan merata-ratakan metrics dari semua GPU
             dist.all_reduce(train_metrics, op=dist.ReduceOp.SUM)
             dist.all_reduce(val_metrics, op=dist.ReduceOp.SUM)
             
-            # Bagi dengan jumlah GPU untuk mendapatkan rata-rata
             train_metrics /= world_size
             val_metrics /= world_size
             
@@ -282,7 +247,7 @@ def train():
         # Update learning rate
         scheduler.step()
 
-        # Save best model (hanya di rank 0)
+        # Save best model (only on rank 0)
         if local_rank == 0:
             end = perf_counter()
             is_best = val_mae < best_val_mae
@@ -291,12 +256,12 @@ def train():
                 best_val_mae = val_mae
                 checkpoint = {
                     'epoch': epoch,
-                    'model': model.module.state_dict(),  # Ambil state dict dari model asli (bukan DDP)
+                    'model': model.module.state_dict(),
                     'optimizer': optimizer.state_dict(),
                     'scheduler': scheduler.state_dict(),
                     'best_val_mae': best_val_mae
                 }
-                torch.save(checkpoint, os.path.join(checkpoint_dir, "best_model4.pth"))
+                torch.save(checkpoint, os.path.join(checkpoint_dir, "best_model.pth"))
 
             # Log training information
             print(
@@ -308,8 +273,9 @@ def train():
                 f"Time: {end - start:.3f}s",
                 "BEST" if is_best else ""
             )
+            
             # Save training info to CSV
-            csv_file = os.path.join(checkpoint_dir, 'training_log1.csv')
+            csv_file = os.path.join(checkpoint_dir, 'training_log.csv')
             file_exists = os.path.isfile(csv_file)
             
             with open(csv_file, mode='a' if file_exists else 'w', newline='') as file:
@@ -317,48 +283,6 @@ def train():
                 if not file_exists:
                     writer.writerow(['Epoch', 'Train Loss', 'Val Loss', 'Train MAE', 'Val MAE', 'Best'])
                 writer.writerow([epoch, train_loss, val_loss, train_mae, val_mae, 'Yes' if is_best else 'No'])
-
-
-
-        # # Update learning rate
-        # scheduler.step()
-
-        # # Save best model (only on rank 0)
-        # if local_rank == 0:
-        #     end = perf_counter()
-        #     is_best = val_mae < best_val_mae
-            
-        #     if is_best:
-        #         best_val_mae = val_mae
-        #         checkpoint = {
-        #             'epoch': epoch,
-        #             'model': model.state_dict(),
-        #             'optimizer': optimizer.state_dict(),
-        #             'scheduler': scheduler.state_dict(),
-        #             'best_val_mae': best_val_mae
-        #         }
-        #         torch.save(checkpoint, os.path.join(checkpoint_dir, "best_model.pth"))
-
-        #     # Log training information
-        #     print(
-        #         f"Epoch: {epoch}/{epochs}",
-        #         f"Train loss: {train_loss:.3f}",
-        #         f"Val loss: {val_loss:.3f}",
-        #         f"Train MAE: {train_mae:.3f}",
-        #         f"Val MAE: {val_mae:.3f}",
-        #         f"Time: {end - start:.3f}s",
-        #         "BEST" if is_best else ""
-        #     )
-
-        #     # Save training info to CSV
-        #     csv_file = os.path.join(checkpoint_dir, 'training_log.csv')
-        #     file_exists = os.path.isfile(csv_file)
-            
-        #     with open(csv_file, mode='a' if file_exists else 'w', newline='') as file:
-        #         writer = csv.writer(file)
-        #         if not file_exists:
-        #             writer.writerow(['Epoch', 'Train Loss', 'Val Loss', 'Train MAE', 'Val MAE', 'Best'])
-        #         writer.writerow([epoch, train_loss, val_loss, train_mae, val_mae, 'Yes' if is_best else 'No'])
 
     # Cleanup
     dist.destroy_process_group()

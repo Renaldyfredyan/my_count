@@ -1,3 +1,5 @@
 # Ignore model checkpoints
 *.pt
 *.pth
+*.pth
+*.pt
