@@ -2,11 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.ops import roi_align
-from debug_utils import print_tensor_info, print_gpu_usage
 
 class MHCA(nn.Module):
-    """Multi-Head Cross Attention"""
-    def __init__(self, dim, num_heads=8):
+    """Multi-Head Cross Attention sesuai paper"""
+    def __init__(self, dim=256, num_heads=8):
         super().__init__()
         assert dim % num_heads == 0, f'dim {dim} should be divisible by num_heads {num_heads}'
         
@@ -27,15 +26,14 @@ class MHCA(nn.Module):
         k = self.k_proj(key)
         v = self.v_proj(value)
         
-        # Reshape with explicit contiguous
+        # Reshape and scale
         q = q.reshape(B, N, self.num_heads, self.head_dim).permute(0, 2, 1, 3).contiguous()
         k = k.reshape(B, -1, self.num_heads, self.head_dim).permute(0, 2, 1, 3).contiguous()
         v = v.reshape(B, -1, self.num_heads, self.head_dim).permute(0, 2, 1, 3).contiguous()
         
-        # Scale q instead of scaling attention
         q = q * self.scale
         
-        # Compute attention with better numerical stability
+        # Attention
         attn = torch.matmul(q, k.transpose(-2, -1))
         attn = attn.softmax(dim=-1)
         
@@ -46,20 +44,9 @@ class MHCA(nn.Module):
         
         return out
 
-class LinearAttention(nn.Module):
-    def __init__(self, dim):
-        super().__init__()
-        self.linear = nn.Linear(dim, dim)
-        
-    def forward(self, x, Fi):
-        x = self.linear(x)
-        attention = torch.bmm(x, Fi.transpose(1, 2))
-        attention = attention.softmax(dim=-1)
-        out = torch.bmm(attention, Fi)
-        return out
-
 class FeatureFusion(nn.Module):
-    def __init__(self, dim):
+    """Feature Fusion module sesuai paper"""
+    def __init__(self, dim=256):
         super().__init__()
         self.conv = nn.Sequential(
             nn.Linear(dim * 2, dim),
@@ -70,6 +57,7 @@ class FeatureFusion(nn.Module):
         return self.conv(torch.cat([x1, x2], dim=-1))
 
 class ShapeMapper(nn.Module):
+    """Shape mapping MLP sesuai paper"""
     def __init__(self, input_dim=4, embed_dim=256):
         super().__init__()
         self.mlp = nn.Sequential(
@@ -81,19 +69,22 @@ class ShapeMapper(nn.Module):
         )
     
     def forward(self, bboxes):
+        # bboxes: [B, K, 4] -> output: [B, K, embed_dim]
         return self.mlp(bboxes)
 
 class iEFL(nn.Module):
     def __init__(self, dim=256):
         super().__init__()
         
-        # Components for processing exemplars
+        # Shape mapper untuk exemplar boxes
         self.shape_mapper = ShapeMapper(input_dim=4, embed_dim=dim)
-        self.num_exemplars = 3  # Assuming 3 exemplars as in paper
+        self.num_exemplars = 3  # K=3 sesuai paper
         
-        # Iterative adaptation components
-        self.mhca = MHCA(dim=dim)
-        self.linear_attention = LinearAttention(dim=dim)
+        # MHCA modules
+        self.mhca1 = MHCA(dim=dim)  # Untuk F_exm^k
+        self.mhca2 = MHCA(dim=dim)  # Untuk F̂^k
+        
+        # Feature Fusion
         self.feature_fusion = FeatureFusion(dim=dim)
         
         # Layer normalization
@@ -102,91 +93,85 @@ class iEFL(nn.Module):
         self.norm3 = nn.LayerNorm(dim)
 
     def process_roi_features(self, Fi, bboxes):
-        # print_gpu_usage("Before ROI processing")
-        
+        """Extract ROI features with proper spatial scale"""
         B = Fi.shape[0]
-        # Prepare batch indices
         batch_indices = torch.arange(B, device=bboxes.device).repeat_interleave(self.num_exemplars)
         
-        # Combine batch indices with bboxes
         rois = torch.cat([
             batch_indices.view(-1, 1),
             bboxes.reshape(-1, 4)
         ], dim=1)
         
-        print_tensor_info("ROIs", rois)
-        
-        # Single RoI Align operation
+        # RoIAlign dengan spatial_scale=1/8 sesuai paper
         roi_features = roi_align(
-            Fi,
-            boxes=rois,
-            output_size=(7, 7),
-            spatial_scale=1.0/8.0,
+            Fi,                     # [B, 256, 64, 64] dari hybrid encoder
+            boxes=rois,            
+            output_size=(7, 7),     # Output size sesuai paper
+            spatial_scale=1.0/8.0,  # Scale factor karena Fi sudah di-downsample
             aligned=True
         )
         
-        # print_tensor_info("ROI features before pooling", roi_features)
-        
-        # Pool features
-        roi_features = roi_features.mean((2, 3))  # [B*K, C]
-        roi_features = roi_features.view(B, -1, Fi.shape[1])  # [B, K, C]
-        
-        # print_tensor_info("Final ROI features", roi_features)
-        # print_gpu_usage("After ROI processing")
+        # Pool features dan reshape
+        roi_features = roi_features.mean((2, 3))  # [B*K, 256]
+        roi_features = roi_features.view(B, self.num_exemplars, -1)  # [B, K, 256]
         
         return roi_features
-        
+
     def forward(self, Fi, bboxes):
+        """
+        Args:
+            Fi: Image features dari hybrid encoder [B, 256, 64, 64]
+            bboxes: Exemplar bounding boxes [B, K, 4]
+        Returns:
+            List of exemplar features [F_E^1, F_E^2, F_E^3]
+        """
         B = Fi.shape[0]
-        H, W = Fi.shape[2:]
         
-        # Reshape image features for attention
-        Fi_flat = Fi.flatten(2).transpose(1, 2)  # [B, H*W, C]
+        # Reshape image features untuk attention
+        Fi_flat = Fi.flatten(2).transpose(1, 2)  # [B, H*W, 256]
         
         # Get shape embeddings
-        shape_embed = self.shape_mapper(bboxes)  # [B, K, C]
-        # print_tensor_info("Shape embeddings", shape_embed)
+        F_exm_S = self.shape_mapper(bboxes)  # [B, K, 256]
+
+        # Get ROI features
+        F_exm = self.process_roi_features(Fi, bboxes)  # [B, K, 256]
         
-        # Get RoI features with efficient processing
-        roi_features = self.process_roi_features(Fi, bboxes)
-        
-        # Initialize exemplar features
-        F_exm = shape_embed
+        # Store all iterative features
         all_features = []
+        F_exm_k = F_exm_S  # Initialize dengan shape features
         
-        # Perform 2 iterations to get F_E^1, F_E^2, F_E^3
-        for _ in range(2):  # 2 iterations sesuai paper
-            # 1. F_exm^k = MHCA(F_Si_exm, F_exm, F_exm) + F_Si_exm
-            F_tmp = self.norm1(F_exm)
-            F_tmp = self.mhca(F_tmp, roi_features, roi_features)
-            F_exm = F_exm + F_tmp
+        # Perform 2 iterations sesuai paper
+        for _ in range(2):
+            # 1. F_exm^k = MHCA(F_exm^S, F_exm, F_exm) + F_exm^S
+            tmp = self.norm1(F_exm_k)
+            tmp = self.mhca1(tmp, F_exm, F_exm)
+            F_exm_k = F_exm_k + tmp
             
-            # Save intermediate feature
-            all_features.append(F_exm.clone())
+            all_features.append(F_exm_k.clone())
             
-            # 2. F^k = MHCA(F_exm^k, Fi, Fi) + F_exm^k
-            F_tmp = self.norm2(F_exm)
-            F_tmp = self.linear_attention(F_tmp, Fi_flat)
-            F_exm = F_exm + F_tmp
+            # 2. F̂^k = MHCA(F_exm^k, F_I, F_I) + F_exm^k
+            tmp = self.norm2(F_exm_k)
+            tmp = self.mhca2(tmp, Fi_flat, Fi_flat)
+            F_hat_k = F_exm_k + tmp
             
-            # 3. F_exm = FF(F^k) + F^k
-            F_tmp = self.norm3(F_exm)
-            F_tmp = self.feature_fusion(F_tmp, roi_features)
-            F_exm = F_exm + F_tmp
+            # 3. F_exm^S(k+1) = FF(F̂^k) + F̂^k
+            tmp = self.norm3(F_hat_k)
+            tmp = self.feature_fusion(tmp, F_exm)
+            F_exm_k = F_hat_k + tmp
         
-        # Add final feature F_E^3
-        all_features.append(F_exm)
+        # Add final feature
+        all_features.append(F_exm_k)
         
         return all_features  # [F_E^1, F_E^2, F_E^3]
 
 if __name__ == "__main__":
     # Test implementation
-    batch_size = 4  # Try with batch size 4
+    batch_size = 2
     num_exemplars = 3
     dim = 256
     H, W = 64, 64
     
-    # Create dummy inputs
+    # Create dummy inputs yang sesuai dengan output hybrid encoder
     Fi = torch.randn(batch_size, dim, H, W).cuda()
     bboxes = torch.rand(batch_size, num_exemplars, 4).cuda()
     
@@ -197,7 +182,7 @@ if __name__ == "__main__":
     features = iefl(Fi, bboxes)
     
     print(f"\nInput shapes:")
-    print(f"Image features: {Fi.shape}")
+    print(f"Image features (Fi): {Fi.shape}")
     print(f"Bounding boxes: {bboxes.shape}")
     print("\nOutput features:")
     for i, feat in enumerate(features, 1):

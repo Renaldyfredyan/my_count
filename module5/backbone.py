@@ -3,7 +3,20 @@ import torch.nn as nn
 import torch.nn.functional as F
 from timm.models import create_model
 import os
-from debug_utils import print_tensor_info, print_gpu_usage
+from typing import Dict
+
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import os
+from typing import Dict
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import os
+from typing import Dict
 
 def build_swin_transformer(model_path="models/swin_base_patch4_window7_224.ms_in22k.pth"):
     """Build Swin Transformer backbone"""
@@ -37,59 +50,86 @@ def build_swin_transformer(model_path="models/swin_base_patch4_window7_224.ms_in
     return model
 
 class FeatureExtractor(nn.Module):
-    def __init__(self):
+    def __init__(self, pretrained_path="models/swin_base_patch4_window7_224.ms_in22k.pth"):
         super().__init__()
-        self.backbone = build_swin_transformer()
+        # Initialize Swin Transformer backbone using the provided function
+        self.backbone = build_swin_transformer(pretrained_path)
+        
+        # Freeze first two stages
         self._freeze_early_layers()
         
+        # Projectors to match paper dimensions
+        self.proj_s3 = nn.Sequential(
+            nn.Conv2d(512, 192, 1),     # Stage 3: 512 -> 192 channels (paper spec)
+            nn.BatchNorm2d(192),
+            nn.ReLU(inplace=True)
+        )
+        
+        self.proj_s4 = nn.Sequential(
+            nn.Conv2d(1024, 384, 1),    # Stage 4: 1024 -> 384 channels (paper spec)
+            nn.BatchNorm2d(384),
+            nn.ReLU(inplace=True)
+        )
+        
+        self.proj_s5 = nn.Sequential(
+            nn.Conv2d(1024, 768, 1),    # Stage 5: 1024 -> 768 channels (paper spec)
+            nn.BatchNorm2d(768),
+            nn.ReLU(inplace=True)
+        )
+
     def _freeze_early_layers(self):
-        """Freeze first two stages of Swin-T"""
+        """Freeze first two stages of Swin"""
         for i in range(2):
             layer_name = f'layers_{i}'
             if hasattr(self.backbone, layer_name):
                 for param in getattr(self.backbone, layer_name).parameters():
                     param.requires_grad = False
-    
-    def forward(self, x):
+
+    def forward(self, x: torch.Tensor) -> dict:
         """
         Extract multi-scale features from input image
         Args:
             x: Input tensor [B, 3, H, W]
         Returns:
-            Dictionary of features from different stages
+            Dictionary containing features matching paper specifications:
+            - 'stage3': tensor of shape [B, 192, 64, 64]
+            - 'stage4': tensor of shape [B, 384, 32, 32]
+            - 'stage5': tensor of shape [B, 768, 16, 16]
         """
-        # Resize input to 512x512 if needed
-        orig_size = x.shape[2:]
-        if orig_size != (512, 512):
-            x = F.interpolate(x, size=(512, 512), mode='bilinear', align_corners=False)
-
-        # print_gpu_usage("Backbone start")
-        # print_tensor_info("Input to backbone", x)
-        
         # Get features from backbone
         features = self.backbone(x)
-        
-        # Extract and process features from relevant stages
+            
         # Convert from [B, H, W, C] to [B, C, H, W]
-        stage3 = features[2].permute(0, 3, 1, 2)  # 512 channels
-        stage4 = features[3].permute(0, 3, 1, 2)  # 1024 channels
-
-        # print_tensor_info("Stage3 features", stage3)
-        # print_tensor_info("Stage4 features", stage4)
-        # print_gpu_usage("Backbone end")
+        s3 = features[2].permute(0, 3, 1, 2)  # Stage 3 features
+        s4 = features[3].permute(0, 3, 1, 2)  # Stage 4 features
+        s5 = F.avg_pool2d(s4, kernel_size=2, stride=2)  # Stage 5 derived from Stage 4
         
-        extracted_features = {
-            'stage3': stage3,  # B x 512 x 32 x 32
-            'stage4': stage4,  # B x 1024 x 16 x 16
+        # Project features to match paper dimensions
+        s3 = self.proj_s3(s3)  # [B, 192, H, W]
+        s4 = self.proj_s4(s4)  # [B, 384, H/2, W/2]
+        s5 = self.proj_s5(s5)  # [B, 768, H/4, W/4]
+        
+        # Interpolate to desired output sizes
+        s3 = F.interpolate(s3, size=(64, 64), mode='bilinear', align_corners=False)
+        s4 = F.interpolate(s4, size=(32, 32), mode='bilinear', align_corners=False)
+        s5 = F.interpolate(s5, size=(16, 16), mode='bilinear', align_corners=False)
+        
+        return {
+            'stage3': s3,  # [B, 192, 64, 64]
+            'stage4': s4,  # [B, 384, 32, 32]
+            'stage5': s5   # [B, 768, 16, 16]
         }
-        
-        return extracted_features
+
+def build_backbone(pretrained_path="models/swin_base_patch4_window7_224.ms_in22k.pth"):
+    """Build and return the feature extractor"""
+    return FeatureExtractor(pretrained_path)
 
 if __name__ == "__main__":
     # Test code
     extractor = FeatureExtractor()
     dummy_input = torch.randn(2, 3, 512, 512)
-    
     features = extractor(dummy_input)
+    
+    # Print shapes for verification
     for stage_name, feat in features.items():
         print(f"{stage_name} shape: {feat.shape}")

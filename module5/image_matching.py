@@ -7,40 +7,6 @@ class ExemplarImageMatching(nn.Module):
         super().__init__()
         self.feature_dim = feature_dim
         
-    # def conv_with_exemplar(self, image_features, exemplar_features):
-    #     """
-    #     Implement convolution dengan exemplar features sebagai kernel
-    #     Args:
-    #         image_features: [B, C, H, W]
-    #         exemplar_features: [B, N, C]  # N adalah jumlah exemplars
-    #     Returns:
-    #         response_maps: [B, N, H, W]
-    #     """
-    #     B, C, H, W = image_features.shape
-    #     N = exemplar_features.shape[1]
-        
-    #     # Reshape exemplar features untuk dijadikan kernel
-    #     # [B, N, C] -> [B*N, C, 1, 1]
-    #     kernel = exemplar_features.view(B*N, C, 1, 1)
-        
-    #     # Reshape image features untuk group convolution
-    #     # [B, C, H, W] -> [1, B*C, H, W]
-    #     img = image_features.view(1, B*C, H, W)
-        
-    #     # Perform group convolution
-    #     # Setiap exemplar akan beroperasi pada channel group yang sesuai
-    #     response = F.conv2d(
-    #         img,
-    #         kernel,
-    #         groups=B,  # Setiap batch diproses secara independen
-    #         stride=1,
-    #         padding=0
-    #     )
-        
-    #     # Reshape hasil kembali ke format [B, N, H, W]
-    #     response = response.view(B, N, H, W)
-    #     return response
-
     def conv_with_exemplar(self, image_features, exemplar_features):
         """
         Implement convolution dengan exemplar features sebagai kernel
@@ -48,34 +14,34 @@ class ExemplarImageMatching(nn.Module):
             image_features: [B, C, H, W]
             exemplar_features: [B, N, C]  # N adalah jumlah exemplars
         Returns:
-            response_maps: [B, N, H, W]
+            response_maps: [B, N, H, W]  # Harus mempertahankan spatial dimensions H,W
         """
-        B, C, H, W = image_features.shape
+        B, C, H, W = image_features.shape  # H,W digunakan untuk memastikan output shape benar
         N = exemplar_features.shape[1]
         
-        # Reshape exemplar features untuk dijadikan kernel
-        # [B, N, C] -> [B*N, C, 1, 1]
-        kernel = exemplar_features.reshape(-1, C, 1, 1)
+        # Normalize features
+        image_features = F.normalize(image_features, dim=1)
+        exemplar_features = F.normalize(exemplar_features, dim=2)
         
-        # Process each batch separately to avoid view issues
+        kernel = exemplar_features.reshape(-1, C, 1, 1)
         response_maps = []
+        
         for b in range(B):
-            # Extract single batch
             img_b = image_features[b:b+1]  # [1, C, H, W]
             kernel_b = kernel[b*N:(b+1)*N]  # [N, C, 1, 1]
             
-            # Compute response maps for this batch
-            resp = F.conv2d(
-                img_b,      # [1, C, H, W]
-                kernel_b,   # [N, C, 1, 1]
-                groups=1    # No grouping needed as we process per batch
-            )  # Output: [1, N, H, W]
+            # Response map akan memiliki shape [1, N, H, W]
+            # mempertahankan spatial dimensions H,W dari input
+            resp = F.conv2d(img_b, kernel_b)  # Output harus [1, N, H, W]
+            
+            # Verifikasi output shape
+            assert resp.shape == (1, N, H, W), f"Expected shape (1,{N},{H},{W}), got {resp.shape}"
+            
             response_maps.append(resp)
         
-        # Concatenate all batches
-        response_maps = torch.cat(response_maps, dim=0)  # [B, N, H, W]
+        # Final shape: [B, N, H, W]
+        response_maps = torch.cat(response_maps, dim=0)
         return response_maps
-    
     def forward(self, image_features, exemplar_features):
         """
         Mengimplementasikan alur sesuai paper:

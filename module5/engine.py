@@ -3,7 +3,6 @@ from hybrid_encoder import HybridEncoder
 from iefl import iEFL
 from image_matching import ExemplarImageMatching
 from decoder import DensityRegressionDecoder
-from loss import FSCLoss
 
 import torch
 import torch.nn as nn
@@ -18,6 +17,7 @@ class FSCModel(nn.Module):
         self.backbone = FeatureExtractor()
         self.hybrid_encoder = HybridEncoder()
         self.iefl = iEFL(dim=256)  # Removed num_iterations karena fixed di iEFL
+        self.dropout = nn.Dropout(0.1)
         
         # Create matcher dan decoder untuk setiap iterasi
         self.matchers = nn.ModuleList([
@@ -29,64 +29,22 @@ class FSCModel(nn.Module):
             for _ in range(3)
         ])
         
-    # def forward(self, image, bboxes):
-    #     """
-    #     Args:
-    #         image: Input image [B, 3, H, W]
-    #         bboxes: Exemplar bounding boxes [B, K, 4]
-    #     Returns:
-    #         density_maps: List of density maps untuk setiap iterasi
-    #     """
-    #     # 1. Feature extraction
-    #     backbone_features = self.backbone(image)
-        
-    #     # 2. Feature enhancement dengan hybrid encoder
-    #     Fi = self.hybrid_encoder(backbone_features)
-        
-    #     # 3. Get exemplar features for all iterations
-    #     # iEFL sekarang mengembalikan [F_E^1, F_E^2, F_E^3]
-    #     exemplar_features = self.iefl(Fi, bboxes)
-        
-    #     # Simpan semua density maps untuk auxiliary loss
-    #     density_maps = []
-        
-    #     # Iterative process - menggunakan feature yang sesuai untuk setiap iterasi
-    #     for i in range(3):  # 3 iterasi (0,1,2)
-    #         # Exemplar-Image Matching dengan Fi dan F_E^(i+1)
-    #         response_maps = self.matchers[i](Fi, exemplar_features[i])
-
-    #         print(f"Response maps shape before decoder: {response_maps.shape}")
-    #         if torch.isnan(response_maps).any():
-    #             print("Warning: NaN values in response maps")
-    #         if torch.isinf(response_maps).any():
-    #             print("Warning: Inf values in response maps")
-            
-    #         # Generate density map
-    #         density_map = self.decoders[i](response_maps)
-    #         density_maps.append(density_map)
-        
-    #     return density_maps
+ 
 
     def forward(self, image, bboxes):
-        # Track memory dan device di setiap step
-        # print(f"Input image: shape={image.shape}, device={image.device}")
-        # print(f"Input bboxes: shape={bboxes.shape}, device={bboxes.device}")
-        
+
         # 1. Feature extraction
         backbone_features = self.backbone(image)
-        # print(f"Backbone features:")
-        # for stage, feat in backbone_features.items():
-        #     print(f"- {stage}: shape={feat.shape}, device={feat.device}")
+
         
         # 2. Feature enhancement
         Fi = self.hybrid_encoder(backbone_features)
-        # print(f"Enhanced features (Fi): shape={Fi.shape}, device={Fi.device}")
+        Fi = self.dropout(Fi)
+
         
         # 3. Get exemplar features
         exemplar_features = self.iefl(Fi, bboxes)
-        # print(f"Exemplar features: length={len(exemplar_features)}")
-        # for i, feat in enumerate(exemplar_features):
-        #     print(f"- F_E^{i+1}: shape={feat.shape}, device={feat.device}")
+
             
         # Simpan semua density maps
         density_maps = []
@@ -98,12 +56,10 @@ class FSCModel(nn.Module):
             
             # Exemplar-Image Matching
             response_maps = self.matchers[i](Fi, curr_feat)
-            # print(f"Iter {i} - Response maps: shape={response_maps.shape}, device={response_maps.device}")
-            
+   
             # Generate density map
             density_map = self.decoders[i](response_maps)
-            # print(f"Iter {i} - Density map: shape={density_map.shape}, device={density_map.device}")
-            
+
             density_maps.append(density_map)
         
         return density_maps
