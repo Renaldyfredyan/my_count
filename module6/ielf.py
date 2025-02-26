@@ -31,6 +31,7 @@ class iEFLModule(nn.Module):
         self.num_objects = num_objects
         self.emb_dim = emb_dim
         self.reduction = reduction
+        self.norm_first = norm_first
 
         # Shape mapping network
         if not self.zero_shot:
@@ -47,19 +48,34 @@ class iEFLModule(nn.Module):
             )
             nn.init.normal_(self.shape_mapping)
 
-        # Create iterative adaptation layers for feature refinement
-        self.iterative_adaptation = IterativeAdaptationModule(
-            num_layers=num_iterative_steps,
-            emb_dim=emb_dim,
-            num_heads=num_heads,
-            dropout=dropout,
-            layer_norm_eps=layer_norm_eps,
-            mlp_factor=mlp_factor,
-            norm_first=norm_first,
-            activation=activation,
-            norm=norm,
-            zero_shot=zero_shot
+        # Multi-head cross attention for exemplar and shape fusion
+        self.exemplar_attention = nn.MultiheadAttention(
+            emb_dim, num_heads, dropout=dropout, batch_first=False
         )
+        
+        # Feed-forward networks
+        self.ff_network = nn.Sequential(
+            nn.Linear(emb_dim, mlp_factor * emb_dim),
+            activation(),
+            nn.Linear(mlp_factor * emb_dim, emb_dim)
+        )
+        
+        # Linear attention for exemplar-image interaction
+        self.linear_attention = LinearAttention(
+            emb_dim, 
+            dropout=dropout,
+            norm_first=norm_first
+        )
+        
+        # Normalization layers
+        self.norm1 = nn.LayerNorm(emb_dim, eps=layer_norm_eps) if norm else nn.Identity()
+        self.norm2 = nn.LayerNorm(emb_dim, eps=layer_norm_eps) if norm else nn.Identity()
+        self.norm3 = nn.LayerNorm(emb_dim, eps=layer_norm_eps) if norm else nn.Identity()
+        
+        # Dropout layers
+        self.dropout1 = nn.Dropout(dropout)
+        self.dropout2 = nn.Dropout(dropout)
+        self.dropout3 = nn.Dropout(dropout)
 
         # Positional encoding
         self.pos_emb = PositionalEncodingsFixed(emb_dim)
@@ -74,11 +90,11 @@ class iEFLModule(nn.Module):
             box_hw[:, :, 1] = bboxes[:, :, 3] - bboxes[:, :, 1]  # height
             shape_emb = self.shape_mapping(box_hw).reshape(
                 bs, -1, self.kernel_dim ** 2, self.emb_dim
-            ).flatten(1, 2).transpose(0, 1)
+            ).flatten(1, 2).transpose(0, 1)  # [N, B, E]
         else:
             shape_emb = self.shape_mapping.expand(
                 bs, -1, -1, -1
-            ).flatten(1, 2).transpose(0, 1)
+            ).flatten(1, 2).transpose(0, 1)  # [N, B, E]
 
         # Extract exemplar features using RoIAlign if not zero-shot
         if not self.zero_shot:
@@ -88,7 +104,7 @@ class iEFLModule(nn.Module):
                 ).reshape(-1, 1),
                 bboxes.flatten(0, 1),
             ], dim=1)
-            appearance = roi_align(
+            exemplar_features = roi_align(
                 f_e,
                 boxes=boxes_flat, 
                 output_size=self.kernel_dim,
@@ -96,159 +112,153 @@ class iEFLModule(nn.Module):
                 aligned=True
             ).permute(0, 2, 3, 1).reshape(
                 bs, self.num_objects * self.kernel_dim ** 2, -1
-            ).transpose(0, 1).contiguous()
+            ).transpose(0, 1).contiguous()  # [N, B, E]
         else:
-            appearance = None
+            exemplar_features = None
 
         # Generate positional encodings for queries
         query_pos_emb = self.pos_emb(
             bs, self.kernel_dim, self.kernel_dim, f_e.device
-        ).flatten(2).permute(2, 0, 1).repeat(self.num_objects, 1, 1).contiguous()
+        ).flatten(2).permute(2, 0, 1).repeat(self.num_objects, 1, 1).contiguous()  # [N, B, E]
 
         # Prepare memory (image features)
-        memory = f_e.flatten(2).permute(2, 0, 1).contiguous()
+        memory = f_e.flatten(2).permute(2, 0, 1).contiguous()  # [HW, B, E]
 
-        # Apply iterative adaptation
-        all_prototypes = self.iterative_adaptation(
-            shape_emb, appearance, memory, pos_emb, query_pos_emb
-        )
-
-        return all_prototypes
-
-
-class IterativeAdaptationModule(nn.Module):
-    def __init__(
-        self,
-        num_layers: int,
-        emb_dim: int,
-        num_heads: int,
-        dropout: float,
-        layer_norm_eps: float,
-        mlp_factor: int,
-        norm_first: bool,
-        activation: nn.Module,
-        norm: bool,
-        zero_shot: bool
-    ):
-        super().__init__()
-
-        self.layers = nn.ModuleList([
-            IterativeAdaptationLayer(
-                emb_dim, num_heads, dropout, layer_norm_eps,
-                mlp_factor, norm_first, activation, zero_shot
-            ) for _ in range(num_layers)
-        ])
-
-        self.norm = nn.LayerNorm(emb_dim, layer_norm_eps) if norm else nn.Identity()
-
-    def forward(
-        self, tgt, appearance, memory, pos_emb, query_pos_emb, tgt_mask=None, memory_mask=None,
-        tgt_key_padding_mask=None, memory_key_padding_mask=None
-    ):
-        output = tgt
-        outputs = []
-        for layer in self.layers:
-            output = layer(
-                output, appearance, memory, pos_emb, query_pos_emb, tgt_mask, memory_mask,
-                tgt_key_padding_mask, memory_key_padding_mask
-            )
-            outputs.append(self.norm(output))
-
-        return torch.stack(outputs)
-
-
-class IterativeAdaptationLayer(nn.Module):
-    def __init__(
-        self,
-        emb_dim: int,
-        num_heads: int,
-        dropout: float,
-        layer_norm_eps: float,
-        mlp_factor: int,
-        norm_first: bool,
-        activation: nn.Module,
-        zero_shot: bool
-    ):
-        super().__init__()
-
-        self.norm_first = norm_first
-        self.zero_shot = zero_shot
-
-        # Normalization layers
-        if not self.zero_shot:
-            self.norm1 = nn.LayerNorm(emb_dim, layer_norm_eps)
-        self.norm2 = nn.LayerNorm(emb_dim, layer_norm_eps)
-        self.norm3 = nn.LayerNorm(emb_dim, layer_norm_eps)
+        # Iterative feature learning
+        all_prototypes = []
         
-        # Dropout layers
-        if not self.zero_shot:
-            self.dropout1 = nn.Dropout(dropout)
-        self.dropout2 = nn.Dropout(dropout)
-        self.dropout3 = nn.Dropout(dropout)
+        # Initialize F_k with shape_emb or exemplar_features
+        F_k = exemplar_features if exemplar_features is not None else shape_emb
+        
+        for k in range(self.num_iterative_steps):
+            # Step 1: Fuse shape and appearance information
+            if not self.zero_shot:
+                if self.norm_first:
+                    # Pre-norm for Step 1
+                    F_k_norm = self.norm1(F_k)
+                    attn_output = self.exemplar_attention(
+                        query=F_k_norm + query_pos_emb,
+                        key=shape_emb,
+                        value=shape_emb
+                    )[0]
+                    F_k = F_k + self.dropout1(attn_output)
+                else:
+                    # Post-norm for Step 1
+                    attn_output = self.exemplar_attention(
+                        query=F_k + query_pos_emb,
+                        key=shape_emb,
+                        value=shape_emb
+                    )[0]
+                    F_k = self.norm1(F_k + self.dropout1(attn_output))
+            
+            # Step 2: Learn from image features using linear attention
+            if self.norm_first:
+                # Pre-norm for Step 2
+                F_k_norm = self.norm2(F_k)
+                F_k_flat = F_k_norm.reshape(-1, self.emb_dim)  # [N*B, E]
+                memory_flat = memory.reshape(-1, self.emb_dim)  # [HW*B, E]
+                
+                # Apply linear attention
+                attn_output = self.linear_attention(
+                    query=F_k_flat,
+                    key_value=memory_flat,
+                    query_pos=query_pos_emb.reshape(-1, self.emb_dim),
+                    key_pos=pos_emb.reshape(-1, self.emb_dim) if pos_emb is not None else None
+                )
+                
+                # Reshape back to [N, B, E]
+                attn_output = attn_output.reshape(F_k.shape)
+                F_k = F_k + self.dropout2(attn_output)
+            else:
+                # Post-norm for Step 2
+                F_k_flat = F_k.reshape(-1, self.emb_dim)  # [N*B, E]
+                memory_flat = memory.reshape(-1, self.emb_dim)  # [HW*B, E]
+                
+                # Apply linear attention
+                attn_output = self.linear_attention(
+                    query=F_k_flat,
+                    key_value=memory_flat,
+                    query_pos=query_pos_emb.reshape(-1, self.emb_dim),
+                    key_pos=pos_emb.reshape(-1, self.emb_dim) if pos_emb is not None else None
+                )
+                
+                # Reshape back to [N, B, E]
+                attn_output = attn_output.reshape(F_k.shape)
+                F_k = self.norm2(F_k + self.dropout2(attn_output))
+            
+            # Step 3: Feed-forward transformation
+            if self.norm_first:
+                # Pre-norm for Step 3
+                F_k_norm = self.norm3(F_k)
+                ff_output = self.ff_network(F_k_norm)
+                F_k = F_k + self.dropout3(ff_output)
+            else:
+                # Post-norm for Step 3
+                ff_output = self.ff_network(F_k)
+                F_k = self.norm3(F_k + self.dropout3(ff_output))
+            
+            # Add to the list of all prototypes
+            all_prototypes.append(F_k)
 
-        # Attention layers
-        if not self.zero_shot:
-            self.self_attn = nn.MultiheadAttention(emb_dim, num_heads, dropout)
-        self.cross_attn = nn.MultiheadAttention(emb_dim, num_heads, dropout)
+        # Stack all iterations of prototype features
+        return torch.stack(all_prototypes)  # [T, N, B, E]
 
-        # Feed-forward network
-        self.mlp = MLP(emb_dim, mlp_factor * emb_dim, dropout, activation)
 
-    def with_emb(self, x, emb):
-        return x if emb is None else x + emb
-
-    def forward(
-        self, tgt, appearance, memory, pos_emb, query_pos_emb, tgt_mask=None, memory_mask=None,
-        tgt_key_padding_mask=None, memory_key_padding_mask=None
-    ):
+class LinearAttention(nn.Module):
+    def __init__(self, emb_dim, dropout=0.1, norm_first=False):
+        super().__init__()
+        self.emb_dim = emb_dim
+        self.scale = emb_dim ** -0.5
+        self.norm_first = norm_first
+        
+        self.q_proj = nn.Linear(emb_dim, emb_dim)
+        self.k_proj = nn.Linear(emb_dim, emb_dim)
+        self.v_proj = nn.Linear(emb_dim, emb_dim)
+        
+        self.dropout = nn.Dropout(dropout)
+        
+        # Normalization layer for pre-norm variant
+        self.norm = nn.LayerNorm(emb_dim)
+        
+    def forward(self, query, key_value, query_pos=None, key_pos=None):
+        """
+        Efficient linear attention implementation
+        Args:
+            query: [N*B, E] tensor of query features
+            key_value: [HW*B, E] tensor of key/value features
+            query_pos: Optional positional encoding for query
+            key_pos: Optional positional encoding for key
+        Returns:
+            output: [N*B, E] tensor of updated query features
+        """
+        # Apply positional encodings if provided
+        q = query
+        if query_pos is not None:
+            q = q + query_pos
+            
+        k = key_value
+        if key_pos is not None:
+            k = k + key_pos
+        
+        # Apply normalization if using pre-norm
         if self.norm_first:
-            # Pre-norm architecture
-            if not self.zero_shot:
-                # Self-attention for feature refinement
-                tgt_norm = self.norm1(tgt)
-                tgt = tgt + self.dropout1(self.self_attn(
-                    query=self.with_emb(tgt_norm, query_pos_emb),
-                    key=self.with_emb(appearance, query_pos_emb),
-                    value=appearance,
-                    attn_mask=tgt_mask,
-                    key_padding_mask=tgt_key_padding_mask
-                )[0])
-
-            # Cross-attention with image features
-            tgt_norm = self.norm2(tgt)
-            tgt = tgt + self.dropout2(self.cross_attn(
-                query=self.with_emb(tgt_norm, query_pos_emb),
-                key=self.with_emb(memory, pos_emb),
-                value=memory,
-                attn_mask=memory_mask,
-                key_padding_mask=memory_key_padding_mask
-            )[0])
-            
-            # Feed-forward network
-            tgt_norm = self.norm3(tgt)
-            tgt = tgt + self.dropout3(self.mlp(tgt_norm))
-        else:
-            # Post-norm architecture
-            if not self.zero_shot:
-                # Self-attention for feature refinement
-                tgt = self.norm1(tgt + self.dropout1(self.self_attn(
-                    query=self.with_emb(tgt, query_pos_emb),
-                    key=self.with_emb(appearance, query_pos_emb),
-                    value=appearance,
-                    attn_mask=tgt_mask,
-                    key_padding_mask=tgt_key_padding_mask
-                )[0]))
-
-            # Cross-attention with image features
-            tgt = self.norm2(tgt + self.dropout2(self.cross_attn(
-                query=self.with_emb(tgt, query_pos_emb),
-                key=self.with_emb(memory, pos_emb),
-                value=memory,
-                attn_mask=memory_mask,
-                key_padding_mask=memory_key_padding_mask
-            )[0]))
-            
-            # Feed-forward network
-            tgt = self.norm3(tgt + self.dropout3(self.mlp(tgt)))
-
-        return tgt
+            q = self.norm(q)
+            k = self.norm(k)
+        
+        # Linear projections
+        q = self.q_proj(q) * self.scale  # [N*B, E]
+        k = self.k_proj(k)  # [HW*B, E]
+        v = self.v_proj(key_value)  # [HW*B, E]
+        
+        # Apply softmax along feature dimension
+        q = q.softmax(dim=-1)  # [N*B, E]
+        k = k.softmax(dim=0)    # [HW*B, E]
+        
+        # Linear attention computation
+        # First compute context: k^T * v
+        context = torch.einsum('be,be->e', k, v)  # [E]
+        
+        # Then compute output: q * context
+        out = torch.einsum('be,e->be', q, context)  # [N*B, E]
+        
+        return out

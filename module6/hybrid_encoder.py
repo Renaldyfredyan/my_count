@@ -1,7 +1,8 @@
-from mlp import MLP
 import torch
 from torch import nn
 import torch.nn.functional as F
+from mlp import MLP
+from positional_encoding import PositionalEncodingsFixed
 
 class ContentGuidedAttention(nn.Module):
     def __init__(self, channels, num_heads=8, dropout=0.1, norm_first=False):
@@ -23,90 +24,67 @@ class ContentGuidedAttention(nn.Module):
         
         # Normalization layers
         self.norm1 = nn.LayerNorm([channels])
-        self.norm2 = nn.LayerNorm([channels])
-        self.norm3 = nn.LayerNorm([channels])
         
         # Dropout
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, s3, s4, s5):
+    def forward(self, low_features, high_features):
         # Get dimensions
-        B, C, H, W = s3.shape
+        B, C, H, W = low_features.shape
+        _, _, H_high, W_high = high_features.shape
         
-        # Pre-process with proper reshape + normalization
-        s3_flat = s3.flatten(2).transpose(-1, -2).contiguous()  # [B, H*W, C]
-        s4_flat = s4.flatten(2).transpose(-1, -2).contiguous()  # [B, H*W, C]
-        s5_flat = s5.flatten(2).transpose(-1, -2).contiguous()  # [B, H*W, C]
+        # Ensure high_features has the same spatial dimensions as low_features
+        if H_high != H or W_high != W:
+            high_features = F.interpolate(high_features, size=(H, W), mode='bilinear', align_corners=True)
         
         if self.norm_first:
-            # Pre-norm
-            s3_norm = self.norm1(s3_flat)
-            s4_norm = self.norm2(s4_flat)
-            s5_norm = self.norm3(s5_flat)
+            # Pre-norm approach
+            low_flat = low_features.flatten(2).transpose(-1, -2).contiguous()  # [B, H*W, C]
+            high_flat = high_features.flatten(2).transpose(-1, -2).contiguous()  # [B, H*W, C]
             
-            # Reshape back for conv operations
-            s3_norm = s3_norm.transpose(-1, -2).reshape(B, C, H, W).contiguous()
-            s4_norm = s4_norm.transpose(-1, -2).reshape(B, C, s4.shape[2], s4.shape[3]).contiguous()
-            s5_norm = s5_norm.transpose(-1, -2).reshape(B, C, s5.shape[2], s5.shape[3]).contiguous()
+            low_norm = self.norm1(low_flat)
+            high_norm = self.norm1(high_flat)
             
-            # Apply projections to normalized features
-            q = self.q_proj(s3_norm)
-            k = torch.cat([self.k_proj(s4_norm), self.k_proj(s5_norm)], dim=2)
-            v = torch.cat([self.v_proj(s4_norm), self.v_proj(s5_norm)], dim=2)
+            low_norm = low_norm.transpose(-1, -2).reshape(B, C, H, W).contiguous()
+            high_norm = high_norm.transpose(-1, -2).reshape(B, C, H, W).contiguous()
+            
+            # Apply projections
+            q = self.q_proj(low_norm)
+            k = self.k_proj(high_norm)
+            v = self.v_proj(high_norm)
         else:
-            # Apply projections directly
-            q = self.q_proj(s3)
-            k = torch.cat([self.k_proj(s4), self.k_proj(s5)], dim=2)
-            v = torch.cat([self.v_proj(s4), self.v_proj(s5)], dim=2)
+            # Direct projection
+            q = self.q_proj(low_features)
+            k = self.k_proj(high_features)
+            v = self.v_proj(high_features)
         
         # Reshape for attention computation
-        q = q.flatten(2).transpose(-1, -2).contiguous()   # [B, H*W, C]
-        k = k.flatten(2).transpose(-1, -2).contiguous()   # [B, 2*H*W, C]
-        v = v.flatten(2).transpose(-1, -2).contiguous()   # [B, 2*H*W, C]
-        
-        # Multi-head attention split
-        head_dim = C // self.num_heads
-        q = q.reshape(B, -1, self.num_heads, head_dim).permute(0, 2, 1, 3)  # [B, num_heads, H*W, head_dim]
-        k = k.reshape(B, -1, self.num_heads, head_dim).permute(0, 2, 1, 3)  # [B, num_heads, 2*H*W, head_dim]
-        v = v.reshape(B, -1, self.num_heads, head_dim).permute(0, 2, 1, 3)  # [B, num_heads, 2*H*W, head_dim]
+        q_flat = q.flatten(2).permute(0, 2, 1).contiguous()  # [B, H*W, C]
+        k_flat = k.flatten(2).contiguous()  # [B, C, H*W]
+        v_flat = v.flatten(2).permute(0, 2, 1).contiguous()  # [B, H*W, C]
         
         # Compute attention scores
-        attn = torch.matmul(q, k.transpose(-1, -2)) * self.scale  # [B, num_heads, H*W, 2*H*W]
+        attn = torch.bmm(q_flat, k_flat) * self.scale  # [B, H*W, H*W]
         attn = F.softmax(attn, dim=-1)
         attn = self.dropout(attn)
         
-        # Apply attention
-        out = torch.matmul(attn, v)  # [B, num_heads, H*W, head_dim]
+        # Apply attention to values
+        out = torch.bmm(attn, v_flat)  # [B, H*W, C]
+        out = out.permute(0, 2, 1).reshape(B, C, H, W).contiguous()  # [B, C, H, W]
         
-        # Reshape back
-        out = out.permute(0, 2, 1, 3).reshape(B, H*W, C)  # [B, H*W, C]
+        # Output projection
+        out = self.out_proj(out)
         
-        # Apply output projection
-        if self.norm_first:
-            # For pre-norm, reshape, project, and then add to input
-            out = out.transpose(-1, -2).reshape(B, C, H, W).contiguous()
-            out = self.out_proj(out)
-            out = out.flatten(2).transpose(-1, -2).contiguous()  # [B, H*W, C]
-            
-            # Skip connection back to input space
-            s3_flat = s3_flat + out
-            
-            # Reshape to original format
-            out = s3_flat.transpose(-1, -2).reshape(B, C, H, W).contiguous()
-        else:
-            # For post-norm, reshape and project
-            out = out.transpose(-1, -2).reshape(B, C, H, W).contiguous()
-            out = self.out_proj(out)
-            
-            # Skip connection directly in spatial domain
-            out = s3 + out
-            
-            # Apply normalization after skip connection
-            out_flat = out.flatten(2).transpose(-1, -2).contiguous()
-            out_flat = self.norm1(out_flat)
-            out = out_flat.transpose(-1, -2).reshape(B, C, H, W).contiguous()
-            
-        return out
+        # Add skip connection
+        output = low_features + out
+        
+        # Apply normalization after residual if post-norm
+        if not self.norm_first:
+            output_flat = output.flatten(2).transpose(-1, -2).contiguous()
+            output_flat = self.norm1(output_flat)
+            output = output_flat.transpose(-1, -2).reshape(B, C, H, W).contiguous()
+        
+        return output
 
 
 class HybridEncoder(nn.Module):
@@ -124,8 +102,10 @@ class HybridEncoder(nn.Module):
     ):
         super().__init__()
         
-        # Add projection layers for different feature levels
-        self.conv_high = nn.Conv2d(768, emb_dim, 1)  # Project S5 to emb_dim
+        # Projections for different feature levels
+        self.conv_low = nn.Conv2d(192, emb_dim, 1)  # S3
+        self.conv_mid = nn.Conv2d(384, emb_dim, 1)  # S4
+        self.conv_high = nn.Conv2d(768, emb_dim, 1)  # S5
         
         # Self-attention for high-level features
         self.self_attention = nn.MultiheadAttention(
@@ -133,105 +113,125 @@ class HybridEncoder(nn.Module):
         )
         
         # Cross-scale Fusion Module
-        self.fusion_module = CrossScaleFusion(
-            low_channels=192,   # S3
-            mid_channels=384,   # S4 
-            high_channels=768,  # S5
-            out_channels=emb_dim,
-            norm_first=norm_first,
-            num_heads=num_heads,
-            dropout=dropout
-        )
-        
-        # Normalization layers
-        self.norm1 = nn.LayerNorm(emb_dim) if norm else nn.Identity()
-        self.norm2 = nn.LayerNorm(emb_dim) if norm else nn.Identity()
-        
-        # MLP block
-        self.mlp = MLP(emb_dim, mlp_factor * emb_dim, dropout, activation)
-        
-        self.dropout = nn.Dropout(dropout)
-        self.norm_first = norm_first
-
-    def forward(self, s3, s4, s5, pos_emb=None):
-        # s5 shape: [B, H, W, C]
-        # Transpose to format BCHW
-        bs = s5.size(0)
-        s5 = s5.permute(0, 3, 1, 2).contiguous()  # [B, H, W, C] -> [B, C, H, W]
-        
-        # Project to embedding dimension
-        s5 = self.conv_high(s5)  # [B, 768, H, W] -> [B, emb_dim, H, W]
-        
-        # Reshape for self-attention
-        h, w = s5.shape[-2:]
-        s5 = s5.flatten(2).transpose(1, 2).contiguous()  # [B, C, H*W] -> [B, H*W, C]
-        s5 = s5.transpose(0, 1).contiguous()  # [B, H*W, C] -> [H*W, B, C]
-
-        # Apply self-attention with proper pre-norm/post-norm
-        if self.norm_first:
-            # Pre-norm architecture
-            s5_norm = self.norm1(s5)
-            attn_output = self.dropout(self.self_attention(
-                s5_norm, s5_norm, s5_norm
-            )[0])
-            s5 = s5 + attn_output
-            
-            # Feed-forward with pre-norm
-            s5_norm = self.norm2(s5)
-            ff_output = self.dropout(self.mlp(s5_norm))
-            s5 = s5 + ff_output
-        else:
-            # Post-norm architecture
-            attn_output = self.dropout(self.self_attention(
-                s5, s5, s5
-            )[0])
-            s5 = self.norm1(s5 + attn_output)
-            
-            # Feed-forward with post-norm
-            ff_output = self.dropout(self.mlp(s5))
-            s5 = self.norm2(s5 + ff_output)
-
-        # Reshape back
-        s5 = s5.transpose(0, 1).contiguous()  # [H*W, B, C] -> [B, H*W, C]
-        s5 = s5.transpose(1, 2).contiguous()  # [B, H*W, C] -> [B, C, H*W]
-        s5 = s5.reshape(bs, -1, h, w).contiguous()  # [B, C, H*W] -> [B, C, H, W]
-                
-        # Cross-scale fusion
-        out = self.fusion_module(s3, s4, s5)
-            
-        return out
-
-
-class CrossScaleFusion(nn.Module):
-    def __init__(self, low_channels, mid_channels, high_channels, out_channels, norm_first=False, num_heads=8, dropout=0.1):
-        super().__init__()
-        
-        # Conv layers to adjust channel dimensions
-        self.conv_low = nn.Conv2d(low_channels, out_channels, 1)
-        self.conv_mid = nn.Conv2d(mid_channels, out_channels, 1)
-        
-        # Content-Guided Attention (CGA)
-        self.cga = ContentGuidedAttention(
-            out_channels,
+        self.fusion_s4_s5 = ContentGuidedAttention(
+            emb_dim,
             num_heads=num_heads,
             dropout=dropout,
             norm_first=norm_first
         )
         
-    def forward(self, s3, s4, s5):
-        # Ensure consistent format
-        s3 = s3.permute(0, 3, 1, 2).contiguous()
-        s4 = s4.permute(0, 3, 1, 2).contiguous()
+        self.fusion_s3_s4 = ContentGuidedAttention(
+            emb_dim,
+            num_heads=num_heads,
+            dropout=dropout,
+            norm_first=norm_first
+        )
         
-        # Project to same dimension
+        # Normalization layers for self-attention
+        self.norm1 = nn.LayerNorm(emb_dim) if norm else nn.Identity()
+        self.norm2 = nn.LayerNorm(emb_dim) if norm else nn.Identity()
+        
+        # MLP for self-attention
+        self.mlp = MLP(emb_dim, mlp_factor * emb_dim, dropout, activation)
+        
+        # Final projection
+        self.final_proj = nn.Conv2d(emb_dim * 3, emb_dim, 1)
+        
+        self.dropout = nn.Dropout(dropout)
+        self.norm_first = norm_first
+        self.emb_dim = emb_dim
+
+    def forward(self, s3, s4, s5):
+        """
+        Forward pass through the hybrid encoder.
+        
+        Args:
+            s3: Low-level features [B, C, H, W]
+            s4: Mid-level features [B, C, H, W]
+            s5: High-level features [B, C, H, W]
+            
+        Returns:
+            Enhanced features [B, C, H, W]
+        """
+        # Convert S3, S4, S5 to BCHW format if they aren't already
+        if len(s3.shape) == 4 and s3.shape[1] != s3.shape[3]:  # BHWC format
+            s3 = s3.permute(0, 3, 1, 2).contiguous()  # [B, H, W, C] -> [B, C, H, W]
+            s4 = s4.permute(0, 3, 1, 2).contiguous()  # [B, H, W, C] -> [B, C, H, W]
+            s5 = s5.permute(0, 3, 1, 2).contiguous()  # [B, H, W, C] -> [B, C, H, W]
+        
+        # Get batch size
+        bs = s3.size(0)
+        
+        # Project features to embedding dimension
         s3 = self.conv_low(s3)
         s4 = self.conv_mid(s4)
+        s5 = self.conv_high(s5)
         
-        # Upsample with consistent format
-        s4 = F.interpolate(s4, size=s3.shape[-2:], mode='bilinear', align_corners=True)
-        s5 = F.interpolate(s5, size=s3.shape[-2:], mode='bilinear', align_corners=True)
+        # Process S5 with self-attention
+        h5, w5 = s5.shape[-2:]
+        s5_flat = s5.flatten(2).permute(1, 0, 2).contiguous()  # [B, C, H*W] -> [C, B, H*W]
+        s5_flat = s5_flat.reshape(self.emb_dim, bs, h5*w5).contiguous()  # Ensure shape is correct
+        s5_flat = s5_flat.permute(2, 1, 0).contiguous()  # [C, B, H*W] -> [H*W, B, C]
+
+        # Generate positional embeddings internally
+        pos_encoder = PositionalEncodingsFixed(self.emb_dim)
+        pos_emb_spatial = pos_encoder(bs, h5, w5, s5.device)
+        pos_emb = pos_emb_spatial.flatten(2).permute(2, 0, 1).contiguous()  # [B, C, H*W] -> [H*W, B, C]
         
-        # Content-guided attention fusion
-        out = self.cga(s3, s4, s5)
+        # Apply self-attention with proper pre-norm/post-norm
+        if self.norm_first:
+            # Pre-norm approach
+            s5_norm = self.norm1(s5_flat)
+            # Add positional embeddings to normalized input for q and k
+            q = k = s5_norm + pos_emb
+            # Self attention call
+            s5_attn = self.self_attention(
+                query=q,
+                key=k,
+                value=s5_norm,  # No position embeddings for value
+                need_weights=False
+            )[0]
+            s5_flat = s5_flat + self.dropout(s5_attn)
+            
+            # Feed-forward
+            s5_norm = self.norm2(s5_flat)
+            s5_ff = self.mlp(s5_norm)
+            s5_flat = s5_flat + self.dropout(s5_ff)
+        else:
+            # Post-norm approach
+            # Add positional embeddings to input for q and k
+            q = k = s5_flat + pos_emb
+            # Self attention call
+            s5_attn = self.self_attention(
+                query=q,
+                key=k,
+                value=s5_flat,  # No position embeddings for value
+                need_weights=False
+            )[0]
+            s5_flat = self.norm1(s5_flat + self.dropout(s5_attn))
+            
+            # Feed-forward
+            s5_ff = self.mlp(s5_flat)
+            s5_flat = self.norm2(s5_flat + self.dropout(s5_ff))
+
+        # Reshape back to spatial
+        s5 = s5_flat.permute(1, 2, 0).contiguous()  # [H*W, B, C] -> [B, C, H*W]
+        s5 = s5.reshape(bs, self.emb_dim, h5, w5).contiguous()  # [B, C, H*W] -> [B, C, H, W]
         
-        return out.contiguous()
+        # Apply cross-scale fusion (top-down pathway)
+        # Fuse S5 and S4
+        s4_fused = self.fusion_s4_s5(s4, s5)
+        
+        # Fuse S4 and S3
+        s3_fused = self.fusion_s3_s4(s3, s4_fused)
+        
+        # Upsample all features to same resolution (S3's resolution)
+        s3_size = s3.shape[-2:]
+        s4_out = F.interpolate(s4_fused, size=s3_size, mode='bilinear', align_corners=True)
+        s5_out = F.interpolate(s5, size=s3_size, mode='bilinear', align_corners=True)
+        
+        # Concatenate and project
+        concat_features = torch.cat([s3_fused, s4_out, s5_out], dim=1)
+        output = self.final_proj(concat_features)
+        
+        return output

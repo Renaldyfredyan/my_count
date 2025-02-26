@@ -94,8 +94,7 @@ class efficient(nn.Module):
         
         # Jika ada encoder, lakukan hybrid encoding
         if hasattr(self, 'encoder'):
-            image_features = self.encoder(s3, s4, s5)
-                                        #   None)
+            image_features = self.encoder(s3, s4, s5, None)
         else:
             # Jika tidak ada encoder, concat dan project features
             backbone_features = self.backbone.forward_concatenated(x)
