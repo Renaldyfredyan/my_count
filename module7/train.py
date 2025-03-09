@@ -61,6 +61,9 @@ def train(args):
         weight_decay=args.weight_decay,
     )
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.25)
+    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', 
+    #                                                        factor=0.25, patience=10, 
+    #                                                        verbose=True)
     if args.resume_training:
         checkpoint = torch.load(os.path.join(args.model_path, f'{args.model_name}.pt'))
         model.load_state_dict(checkpoint['model'])
@@ -204,6 +207,7 @@ def train(args):
                     os.path.join(args.model_path, f'{args.model_name}.pt')
                 )
                 best_epoch = True
+
 
             print(
                 f"Epoch: {epoch}",

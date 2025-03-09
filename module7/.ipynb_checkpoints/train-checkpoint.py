@@ -1,12 +1,11 @@
-from engine import build_model
-from data import FSC147Dataset
-from arg_parser import get_argparser
-from losses import ObjectNormalizedL2Loss
+from models.loca import build_model
+from utils.data import FSC147Dataset
+from utils.arg_parser import get_argparser
+from utils.losses import ObjectNormalizedL2Loss
 
 from time import perf_counter
 import argparse
 import os
-import csv
 
 import torch
 from torch import nn
@@ -24,9 +23,15 @@ np.random.seed(0)
 
 def train(args):
 
-    world_size = int(os.environ['WORLD_SIZE'])
-    rank = int(os.environ['RANK'])
-    gpu = int(os.environ['LOCAL_RANK'])
+    if 'SLURM_PROCID' in os.environ:
+        world_size = int(os.environ['SLURM_NTASKS'])
+        rank = int(os.environ['SLURM_PROCID'])
+        gpu = rank % torch.cuda.device_count()
+        print("Running on SLURM", world_size, rank, gpu)
+    else:
+        world_size = int(os.environ['WORLD_SIZE'])
+        rank = int(os.environ['RANK'])
+        gpu = int(os.environ['LOCAL_RANK'])
 
     torch.cuda.set_device(gpu)
     device = torch.device(gpu)
@@ -128,7 +133,7 @@ def train(args):
             # obtain the number of objects in batch
             with torch.no_grad():
                 num_objects = density_map.sum()
-                dist.all_reduce(num_objects)
+                dist.all_reduce_multigpu([num_objects])
 
             main_loss = criterion(out, density_map, num_objects)
             aux_loss = sum([
@@ -136,15 +141,6 @@ def train(args):
             ])
             loss = main_loss + aux_loss
             loss.backward()
-
-            # ------------------------------------------------------------------------
-            # if rank == 0:  # Hanya print di rank 0 untuk menghindari output berulang
-            #     for name, param in model.named_parameters():
-            #         if param.grad is None:
-            #             print(f"Parameter {name} has no gradient")
-            # ------------------------------------------------------------------------
-
-
             if args.max_grad_norm > 0:
                 nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
             optimizer.step()
@@ -164,7 +160,7 @@ def train(args):
                 out, aux_out = model(img, bboxes)
                 with torch.no_grad():
                     num_objects = density_map.sum()
-                    dist.all_reduce(num_objects)
+                    dist.all_reduce_multigpu([num_objects])
 
                 main_loss = criterion(out, density_map, num_objects)
                 aux_loss = sum([
@@ -178,12 +174,12 @@ def train(args):
                     density_map.flatten(1).sum(dim=1) - out.flatten(1).sum(dim=1)
                 ).sum()
 
-        dist.all_reduce(train_loss)
-        dist.all_reduce(val_loss)
-        dist.all_reduce(aux_train_loss)
-        dist.all_reduce(aux_val_loss)
-        dist.all_reduce(train_ae)
-        dist.all_reduce(val_ae)
+        dist.all_reduce_multigpu([train_loss])
+        dist.all_reduce_multigpu([val_loss])
+        dist.all_reduce_multigpu([aux_train_loss])
+        dist.all_reduce_multigpu([aux_val_loss])
+        dist.all_reduce_multigpu([train_ae])
+        dist.all_reduce_multigpu([val_ae])
 
         scheduler.step()
 
@@ -217,25 +213,10 @@ def train(args):
                 'best' if best_epoch else ''
             )
 
-            # Save training info to CSV
-            csv_file = os.path.join(args.model_path, f'{args.model_name}.csv')
-            file_exists = os.path.isfile(csv_file)
-            with open(csv_file, mode='a' if file_exists else 'w', newline='') as file:
-                writer = csv.writer(file)
-                if not file_exists:
-                    writer.writerow(['Epoch', 'Training Loss', 'Validation Loss', 
-                                     'Aux train loss', 'Aux val loss',
-                                     'Train MAE', 'Validation MAE', 'Best Epoch'])
-                writer.writerow([epoch, train_loss.item(), val_loss.item(),
-                                 aux_train_loss.item(), aux_val_loss.item(),
-                                 train_ae.item() / len(train), 
-                                 val_ae.item() / len(val), 
-                                 'Yes' if best_epoch else 'No'])
-
     dist.destroy_process_group()
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser('Efficient', parents=[get_argparser()])
+    parser = argparse.ArgumentParser('LOCA', parents=[get_argparser()])
     args = parser.parse_args()
     train(args)
