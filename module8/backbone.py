@@ -4,7 +4,7 @@ from torch import nn
 import timm
 from transformers import AutoModelForZeroShotObjectDetection
 
-class SwinBackboneWithGroundingDINO(nn.Module):
+class SwinBackbone(nn.Module):
     def __init__(
         self,
         reduction: int = 8,
@@ -39,82 +39,82 @@ class SwinBackboneWithGroundingDINO(nn.Module):
         # Load parameter mapping if it exists, otherwise create new mapping
         if os.path.exists(model_path):
             print(f"Loading pre-mapped weights from {model_path}")
-            self.backbone.load_state_dict(torch.load(model_path))
+            self.backbone.load_state_dict(torch.load(model_path, weights_only=True))
         else:
-            print("Creating new parameter mapping from GroundingDINO...")
-            # Load GroundingDINO
-            gd_model = AutoModelForZeroShotObjectDetection.from_pretrained("IDEA-Research/grounding-dino-tiny")
-            gd_backbone = gd_model.model.backbone.conv_encoder.model
+            print("Error...")
+            # # Load GroundingDINO
+            # gd_model = AutoModelForZeroShotObjectDetection.from_pretrained("IDEA-Research/grounding-dino-tiny")
+            # gd_backbone = gd_model.model.backbone.conv_encoder.model
             
-            # Get state dicts
-            timm_state_dict = self.backbone.state_dict()
-            gd_state_dict = gd_backbone.state_dict()
+            # # Get state dicts
+            # timm_state_dict = self.backbone.state_dict()
+            # gd_state_dict = gd_backbone.state_dict()
             
-            # Define parameter mapping
-            # This is a starting point and may need adjustment
-            layer_mapping = {
-                # Patch embedding mappings
-                "embeddings.patch_embeddings.projection": "patch_embed.proj",
-                "embeddings.norm": "patch_embed.norm",
+            # # Define parameter mapping
+            # # This is a starting point and may need adjustment
+            # layer_mapping = {
+            #     # Patch embedding mappings
+            #     "embeddings.patch_embeddings.projection": "patch_embed.proj",
+            #     "embeddings.norm": "patch_embed.norm",
                 
-                # Layer mappings - adjust as needed
-                "encoder.layers.0": "layers.0",
-                "encoder.layers.1": "layers.1",
-                "encoder.layers.2": "layers.2",
-                "encoder.layers.3": "layers.3",
+            #     # Layer mappings - adjust as needed
+            #     "encoder.layers.0": "layers.0",
+            #     "encoder.layers.1": "layers.1",
+            #     "encoder.layers.2": "layers.2",
+            #     "encoder.layers.3": "layers.3",
                 
-                # Attention block mappings
-                "attention.self.query": "blocks.0.attn.qkv",  # Note: in Swin, qkv is combined
-                "attention.self.key": "blocks.0.attn.qkv",
-                "attention.self.value": "blocks.0.attn.qkv",
-                "attention.output.dense": "blocks.0.attn.proj",
-                "attention.output.LayerNorm": "blocks.0.norm1",
+            #     # Attention block mappings
+            #     "attention.self.query": "blocks.0.attn.qkv",  # Note: in Swin, qkv is combined
+            #     "attention.self.key": "blocks.0.attn.qkv",
+            #     "attention.self.value": "blocks.0.attn.qkv",
+            #     "attention.output.dense": "blocks.0.attn.proj",
+            #     "attention.output.LayerNorm": "blocks.0.norm1",
                 
-                # MLP mappings
-                "intermediate.dense": "blocks.0.mlp.fc1",
-                "output.dense": "blocks.0.mlp.fc2",
-                "output.LayerNorm": "blocks.0.norm2",
+            #     # MLP mappings
+            #     "intermediate.dense": "blocks.0.mlp.fc1",
+            #     "output.dense": "blocks.0.mlp.fc2",
+            #     "output.LayerNorm": "blocks.0.norm2",
                 
-                # Norm layers
-                "hidden_states_norms.stage1": "norm",
-                "hidden_states_norms.stage2": "norm",
-                "hidden_states_norms.stage3": "norm",
-                "hidden_states_norms.stage4": "norm",
-            }
+            #     # Norm layers
+            #     "hidden_states_norms.stage1": "norm",
+            #     "hidden_states_norms.stage2": "norm",
+            #     "hidden_states_norms.stage3": "norm",
+            #     "hidden_states_norms.stage4": "norm",
+            # }
             
-            # Map and load parameters where possible
-            loaded_params = 0
-            total_params = len(timm_state_dict)
+            # # Map and load parameters where possible
+            # loaded_params = 0
+            # total_params = len(timm_state_dict)
             
-            for timm_name in timm_state_dict.keys():
-                for gd_prefix, timm_prefix in layer_mapping.items():
-                    # Check if current timm parameter matches any mapped prefix
-                    if timm_name.startswith(timm_prefix):
-                        # Try to find corresponding parameter in GroundingDINO
-                        potential_gd_name = timm_name.replace(timm_prefix, gd_prefix)
+            # for timm_name in timm_state_dict.keys():
+            #     for gd_prefix, timm_prefix in layer_mapping.items():
+            #         # Check if current timm parameter matches any mapped prefix
+            #         if timm_name.startswith(timm_prefix):
+            #             # Try to find corresponding parameter in GroundingDINO
+            #             potential_gd_name = timm_name.replace(timm_prefix, gd_prefix)
                         
-                        # Special handling for attention parameters which are structured differently
-                        if "qkv" in timm_name:
-                            # Swin combines Q, K, V into one parameter, need special handling
-                            continue
+            #             # Special handling for attention parameters which are structured differently
+            #             if "qkv" in timm_name:
+            #                 # Swin combines Q, K, V into one parameter, need special handling
+            #                 continue
                         
-                        # Check if parameter exists in GroundingDINO state dict
-                        if potential_gd_name in gd_state_dict:
-                            # Check if shapes match
-                            if gd_state_dict[potential_gd_name].shape == timm_state_dict[timm_name].shape:
-                                timm_state_dict[timm_name] = gd_state_dict[potential_gd_name]
-                                loaded_params += 1
-                                break
+            #             # Check if parameter exists in GroundingDINO state dict
+            #             if potential_gd_name in gd_state_dict:
+            #                 # Check if shapes match
+            #                 if gd_state_dict[potential_gd_name].shape == timm_state_dict[timm_name].shape:
+            #                     timm_state_dict[timm_name] = gd_state_dict[potential_gd_name]
+            #                     loaded_params += 1
+            #                     break
             
-            print(f"Mapped {loaded_params}/{total_params} parameters successfully")
+            # print(f"Mapped {loaded_params}/{total_params} parameters successfully")
             
-            # Save mapped parameters for future use
-            if loaded_params > 0:
-                self.backbone.load_state_dict(timm_state_dict, strict=False)
-                torch.save(self.backbone.state_dict(), model_path)
-                print(f"Saved mapped parameters to {model_path}")
-            else:
-                print("Warning: No parameters were successfully mapped!")
+            # # Save mapped parameters for future use
+            # if loaded_params > 0:
+            #     self.backbone.load_state_dict(timm_state_dict, strict=False)
+            #     torch.save(self.backbone.state_dict(), model_path)
+            #     print(f"Saved mapped parameters to {model_path}")
+            # else:
+            #     print("Warning: No parameters were successfully mapped!")
 
         # Set requires_grad
         for param in self.backbone.parameters():
@@ -128,6 +128,12 @@ class SwinBackboneWithGroundingDINO(nn.Module):
     
     def forward_concatenated(self, x):
         s3, s4, s5 = self.forward_multiscale(x)
+        
+        # Permute dari BHWC ke BCHW jika diperlukan
+        if s3.shape[1] != self.num_channels['stage3']:
+            s3 = s3.permute(0, 3, 1, 2)  # [B, H, W, C] -> [B, C, H, W]
+            s4 = s4.permute(0, 3, 1, 2)
+            s5 = s5.permute(0, 3, 1, 2)
         
         # Get target size based on reduction factor
         size = x.size(-2) // self.reduction, x.size(-1) // self.reduction
@@ -149,7 +155,7 @@ class SwinBackboneWithGroundingDINO(nn.Module):
 
 def test_backbone():
     """Test function for the backbone"""
-    backbone = SwinBackboneWithGroundingDINO(reduction=8, requires_grad=False)
+    backbone = SwinBackbone(reduction=8, requires_grad=False)
     
     # Create dummy input tensor
     x = torch.randn(2, 3, 512, 512)
