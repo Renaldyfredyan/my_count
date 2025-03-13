@@ -1,0 +1,1927 @@
+[
+  {
+    "name": "backbone.patch_embed.proj.weight",
+    "shape": [
+      96,
+      3,
+      4,
+      4
+    ],
+    "min": -0.3134364187717438,
+    "max": 0.2847660183906555,
+    "mean": 0.0005235369899310172,
+    "std": 0.05321374908089638,
+    "trainable": true
+  },
+  {
+    "name": "backbone.patch_embed.proj.bias",
+    "shape": [
+      96
+    ],
+    "min": -1.2024000883102417,
+    "max": 0.939148485660553,
+    "mean": 0.00873211957514286,
+    "std": 0.2247772067785263,
+    "trainable": true
+  },
+  {
+    "name": "backbone.patch_embed.norm.weight",
+    "shape": [
+      96
+    ],
+    "min": -0.024819156154990196,
+    "max": 3.242326259613037,
+    "mean": 1.4194526672363281,
+    "std": 0.961033046245575,
+    "trainable": true
+  },
+  {
+    "name": "backbone.patch_embed.norm.bias",
+    "shape": [
+      96
+    ],
+    "min": -0.9716274738311768,
+    "max": 1.563889741897583,
+    "mean": 0.05527910962700844,
+    "std": 0.48643958568573,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.norm1.weight",
+    "shape": [
+      96
+    ],
+    "min": -0.0005849826848134398,
+    "max": 1.5117536783218384,
+    "mean": 0.832097053527832,
+    "std": 0.4346585273742676,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.norm1.bias",
+    "shape": [
+      96
+    ],
+    "min": -0.7705371379852295,
+    "max": 0.9198901057243347,
+    "mean": 0.01727783866226673,
+    "std": 0.3890761137008667,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      3
+    ],
+    "min": -10.71123218536377,
+    "max": 4.397721290588379,
+    "mean": -1.0059382915496826,
+    "std": 1.8113534450531006,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.attn.qkv.weight",
+    "shape": [
+      288,
+      96
+    ],
+    "min": -0.6712095141410828,
+    "max": 0.6387000679969788,
+    "mean": -0.00013682615826837718,
+    "std": 0.06324709951877594,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.attn.qkv.bias",
+    "shape": [
+      288
+    ],
+    "min": -1.7841731309890747,
+    "max": 1.6552937030792236,
+    "mean": -0.0010270476341247559,
+    "std": 0.3960171043872833,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.attn.proj.weight",
+    "shape": [
+      96,
+      96
+    ],
+    "min": -0.2844098210334778,
+    "max": 0.21175172924995422,
+    "mean": 0.0008876554202288389,
+    "std": 0.050758153200149536,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.attn.proj.bias",
+    "shape": [
+      96
+    ],
+    "min": -0.6487916707992554,
+    "max": 0.6758232116699219,
+    "mean": 0.00469541409984231,
+    "std": 0.2500735819339752,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.norm2.weight",
+    "shape": [
+      96
+    ],
+    "min": 0.538878321647644,
+    "max": 3.5176587104797363,
+    "mean": 2.011834144592285,
+    "std": 0.6749441027641296,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.norm2.bias",
+    "shape": [
+      96
+    ],
+    "min": -1.0761218070983887,
+    "max": 1.2803726196289062,
+    "mean": -0.013363830745220184,
+    "std": 0.5248286724090576,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.mlp.fc1.weight",
+    "shape": [
+      384,
+      96
+    ],
+    "min": -0.45494577288627625,
+    "max": 0.8273462057113647,
+    "mean": 0.0006053890101611614,
+    "std": 0.053306013345718384,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.mlp.fc1.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.8831175565719604,
+    "max": 0.7326163053512573,
+    "mean": -0.38322028517723083,
+    "std": 0.3799925744533539,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.mlp.fc2.weight",
+    "shape": [
+      96,
+      384
+    ],
+    "min": -0.4141840636730194,
+    "max": 0.4295295774936676,
+    "mean": 0.00017675886920187622,
+    "std": 0.04456841200590134,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.0.mlp.fc2.bias",
+    "shape": [
+      96
+    ],
+    "min": -1.9780118465423584,
+    "max": 0.6877312064170837,
+    "mean": 0.0033656004816293716,
+    "std": 0.2779351472854614,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.norm1.weight",
+    "shape": [
+      96
+    ],
+    "min": 0.311539888381958,
+    "max": 1.8491047620773315,
+    "mean": 1.259983777999878,
+    "std": 0.22720852494239807,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.norm1.bias",
+    "shape": [
+      96
+    ],
+    "min": -1.2989031076431274,
+    "max": 1.6592388153076172,
+    "mean": -0.04180440679192543,
+    "std": 0.3684380352497101,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      3
+    ],
+    "min": -8.276989936828613,
+    "max": 3.6691977977752686,
+    "mean": -0.9545956254005432,
+    "std": 1.5064798593521118,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.attn.qkv.weight",
+    "shape": [
+      288,
+      96
+    ],
+    "min": -0.3941282033920288,
+    "max": 0.4217546284198761,
+    "mean": 1.6208978195209056e-05,
+    "std": 0.06676336377859116,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.attn.qkv.bias",
+    "shape": [
+      288
+    ],
+    "min": -1.6811834573745728,
+    "max": 1.8550599813461304,
+    "mean": 0.02187163755297661,
+    "std": 0.47433048486709595,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.attn.proj.weight",
+    "shape": [
+      96,
+      96
+    ],
+    "min": -0.2862617075443268,
+    "max": 0.2357264757156372,
+    "mean": -0.0005468064919114113,
+    "std": 0.05013680085539818,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.attn.proj.bias",
+    "shape": [
+      96
+    ],
+    "min": -0.43130382895469666,
+    "max": 0.43440335988998413,
+    "mean": 0.0007417835295200348,
+    "std": 0.18766231834888458,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.norm2.weight",
+    "shape": [
+      96
+    ],
+    "min": 0.4965205192565918,
+    "max": 3.099163770675659,
+    "mean": 2.188600540161133,
+    "std": 0.39633703231811523,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.norm2.bias",
+    "shape": [
+      96
+    ],
+    "min": -0.8499735593795776,
+    "max": 0.7657759189605713,
+    "mean": -0.09040509909391403,
+    "std": 0.2805916666984558,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.mlp.fc1.weight",
+    "shape": [
+      384,
+      96
+    ],
+    "min": -0.37704306840896606,
+    "max": 0.450959175825119,
+    "mean": 0.0005763989756815135,
+    "std": 0.053099218755960464,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.mlp.fc1.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.5157246589660645,
+    "max": 0.04104008898139,
+    "mean": -0.5342580676078796,
+    "std": 0.3011426329612732,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.mlp.fc2.weight",
+    "shape": [
+      96,
+      384
+    ],
+    "min": -0.5296939015388489,
+    "max": 0.3734547197818756,
+    "mean": -0.00015059212455525994,
+    "std": 0.05572909489274025,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_0.blocks.1.mlp.fc2.bias",
+    "shape": [
+      96
+    ],
+    "min": -1.3586797714233398,
+    "max": 0.3352183997631073,
+    "mean": -0.0008499287068843842,
+    "std": 0.21104773879051208,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.downsample.norm.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.31392282247543335,
+    "max": 1.6182466745376587,
+    "mean": 0.6618882417678833,
+    "std": 0.20171582698822021,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.downsample.norm.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.8292823433876038,
+    "max": 1.1760739088058472,
+    "mean": -0.047622110694646835,
+    "std": 0.23968268930912018,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.downsample.reduction.weight",
+    "shape": [
+      192,
+      384
+    ],
+    "min": -0.2508860230445862,
+    "max": 0.254824161529541,
+    "mean": 4.206840094411746e-05,
+    "std": 0.04051199555397034,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.norm1.weight",
+    "shape": [
+      192
+    ],
+    "min": 0.27788957953453064,
+    "max": 0.8630300760269165,
+    "mean": 0.6754488348960876,
+    "std": 0.1210872158408165,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.norm1.bias",
+    "shape": [
+      192
+    ],
+    "min": -1.1435452699661255,
+    "max": 0.42942360043525696,
+    "mean": 0.006020271684974432,
+    "std": 0.19597119092941284,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      6
+    ],
+    "min": -6.35951042175293,
+    "max": 7.232644081115723,
+    "mean": -0.7424620389938354,
+    "std": 1.2412223815917969,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.attn.qkv.weight",
+    "shape": [
+      576,
+      192
+    ],
+    "min": -0.34708237648010254,
+    "max": 0.40428057312965393,
+    "mean": 2.9405648092506453e-05,
+    "std": 0.05991874262690544,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.attn.qkv.bias",
+    "shape": [
+      576
+    ],
+    "min": -1.9310544729232788,
+    "max": 2.181638479232788,
+    "mean": -0.0012573442654684186,
+    "std": 0.36290082335472107,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.attn.proj.weight",
+    "shape": [
+      192,
+      192
+    ],
+    "min": -0.20524924993515015,
+    "max": 0.21088410913944244,
+    "mean": -0.00014176679542288184,
+    "std": 0.042191773653030396,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.attn.proj.bias",
+    "shape": [
+      192
+    ],
+    "min": -0.5401768684387207,
+    "max": 1.4576835632324219,
+    "mean": 0.0016603743424639106,
+    "std": 0.22231772541999817,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.norm2.weight",
+    "shape": [
+      192
+    ],
+    "min": 0.28282010555267334,
+    "max": 1.6391631364822388,
+    "mean": 1.2756602764129639,
+    "std": 0.2743166387081146,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.norm2.bias",
+    "shape": [
+      192
+    ],
+    "min": -1.2435133457183838,
+    "max": 0.44426730275154114,
+    "mean": 0.025447333231568336,
+    "std": 0.18832270801067352,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.mlp.fc1.weight",
+    "shape": [
+      768,
+      192
+    ],
+    "min": -0.624714195728302,
+    "max": 0.35235199332237244,
+    "mean": -0.00034949168912135065,
+    "std": 0.04880829527974129,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.mlp.fc1.bias",
+    "shape": [
+      768
+    ],
+    "min": -1.6550103425979614,
+    "max": -0.1316044181585312,
+    "mean": -0.609269917011261,
+    "std": 0.24104776978492737,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.mlp.fc2.weight",
+    "shape": [
+      192,
+      768
+    ],
+    "min": -0.3240925967693329,
+    "max": 0.49807658791542053,
+    "mean": 0.0004303593887016177,
+    "std": 0.046600520610809326,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.0.mlp.fc2.bias",
+    "shape": [
+      192
+    ],
+    "min": -0.5968978404998779,
+    "max": 1.6622133255004883,
+    "mean": -0.00047712711966596544,
+    "std": 0.260301798582077,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.norm1.weight",
+    "shape": [
+      192
+    ],
+    "min": 0.34911519289016724,
+    "max": 1.2519314289093018,
+    "mean": 0.9783332347869873,
+    "std": 0.11177600920200348,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.norm1.bias",
+    "shape": [
+      192
+    ],
+    "min": -1.8882488012313843,
+    "max": 0.7750154733657837,
+    "mean": 0.013068217784166336,
+    "std": 0.2998465895652771,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      6
+    ],
+    "min": -9.105796813964844,
+    "max": 5.172211647033691,
+    "mean": -0.7074142694473267,
+    "std": 1.2256566286087036,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.attn.qkv.weight",
+    "shape": [
+      576,
+      192
+    ],
+    "min": -0.4373662769794464,
+    "max": 0.45736420154571533,
+    "mean": 7.977225322974846e-05,
+    "std": 0.05664977803826332,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.attn.qkv.bias",
+    "shape": [
+      576
+    ],
+    "min": -1.8868093490600586,
+    "max": 1.6359297037124634,
+    "mean": 0.0006895744008943439,
+    "std": 0.3522481918334961,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.attn.proj.weight",
+    "shape": [
+      192,
+      192
+    ],
+    "min": -0.21552254259586334,
+    "max": 0.2044195681810379,
+    "mean": 0.00026263680774718523,
+    "std": 0.044543348252773285,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.attn.proj.bias",
+    "shape": [
+      192
+    ],
+    "min": -0.5746919512748718,
+    "max": 1.2383595705032349,
+    "mean": 0.002553079277276993,
+    "std": 0.23266424238681793,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.norm2.weight",
+    "shape": [
+      192
+    ],
+    "min": 0.740197479724884,
+    "max": 1.7409664392471313,
+    "mean": 1.4259834289550781,
+    "std": 0.16033129394054413,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.norm2.bias",
+    "shape": [
+      192
+    ],
+    "min": -1.7043439149856567,
+    "max": 0.9076558947563171,
+    "mean": 0.02021864615380764,
+    "std": 0.33113786578178406,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.mlp.fc1.weight",
+    "shape": [
+      768,
+      192
+    ],
+    "min": -0.4552030861377716,
+    "max": 0.26140087842941284,
+    "mean": 0.00038499158108606935,
+    "std": 0.050057411193847656,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.mlp.fc1.bias",
+    "shape": [
+      768
+    ],
+    "min": -1.6393704414367676,
+    "max": 0.05962406471371651,
+    "mean": -0.5820856094360352,
+    "std": 0.1931738257408142,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.mlp.fc2.weight",
+    "shape": [
+      192,
+      768
+    ],
+    "min": -0.4126321077346802,
+    "max": 0.6587137579917908,
+    "mean": 0.0002979530836455524,
+    "std": 0.05446425452828407,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_1.blocks.1.mlp.fc2.bias",
+    "shape": [
+      192
+    ],
+    "min": -0.7235631346702576,
+    "max": 2.935225009918213,
+    "mean": 0.0019373459508642554,
+    "std": 0.2997016906738281,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.downsample.norm.weight",
+    "shape": [
+      768
+    ],
+    "min": 0.19463305175304413,
+    "max": 0.7609956860542297,
+    "mean": 0.347718209028244,
+    "std": 0.07960984110832214,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.downsample.norm.bias",
+    "shape": [
+      768
+    ],
+    "min": -1.0559492111206055,
+    "max": 0.7106797099113464,
+    "mean": 0.018282629549503326,
+    "std": 0.17952464520931244,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.downsample.reduction.weight",
+    "shape": [
+      384,
+      768
+    ],
+    "min": -0.22734180092811584,
+    "max": 0.23745757341384888,
+    "mean": -1.6335705367964692e-05,
+    "std": 0.0410740002989769,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.norm1.weight",
+    "shape": [
+      384
+    ],
+    "min": -0.00021792623738292605,
+    "max": 0.7201415300369263,
+    "mean": 0.4634194076061249,
+    "std": 0.14778952300548553,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.norm1.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.7633177042007446,
+    "max": 0.2984820604324341,
+    "mean": 0.0021283573005348444,
+    "std": 0.12380383908748627,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      12
+    ],
+    "min": -10.228830337524414,
+    "max": 4.458992958068848,
+    "mean": -0.7876865267753601,
+    "std": 1.9860068559646606,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.attn.qkv.weight",
+    "shape": [
+      1152,
+      384
+    ],
+    "min": -0.3562784492969513,
+    "max": 0.40407320857048035,
+    "mean": 0.00011596785770962015,
+    "std": 0.05593970790505409,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.attn.qkv.bias",
+    "shape": [
+      1152
+    ],
+    "min": -2.230036973953247,
+    "max": 1.9551035165786743,
+    "mean": -0.006158312316983938,
+    "std": 0.33532220125198364,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.attn.proj.weight",
+    "shape": [
+      384,
+      384
+    ],
+    "min": -0.371052622795105,
+    "max": 0.2114580273628235,
+    "mean": -4.16081675211899e-05,
+    "std": 0.04111123085021973,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.attn.proj.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.088271141052246,
+    "max": 2.8952810764312744,
+    "mean": -0.00038528721779584885,
+    "std": 0.25090885162353516,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.norm2.weight",
+    "shape": [
+      384
+    ],
+    "min": -0.00197533774189651,
+    "max": 1.0815107822418213,
+    "mean": 0.7595987915992737,
+    "std": 0.1760225147008896,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.norm2.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.615082025527954,
+    "max": 0.5627211928367615,
+    "mean": 0.006850751582533121,
+    "std": 0.20421071350574493,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.mlp.fc1.weight",
+    "shape": [
+      1536,
+      384
+    ],
+    "min": -0.2916634678840637,
+    "max": 0.33905982971191406,
+    "mean": 9.026041516335681e-05,
+    "std": 0.04738350212574005,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.mlp.fc1.bias",
+    "shape": [
+      1536
+    ],
+    "min": -1.7160221338272095,
+    "max": -0.12248189747333527,
+    "mean": -0.667302131652832,
+    "std": 0.22353897988796234,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.mlp.fc2.weight",
+    "shape": [
+      384,
+      1536
+    ],
+    "min": -0.28712961077690125,
+    "max": 0.35234302282333374,
+    "mean": 7.868479201533773e-07,
+    "std": 0.03906658664345741,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.0.mlp.fc2.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.0275425910949707,
+    "max": 1.9069724082946777,
+    "mean": -0.0007749404758214951,
+    "std": 0.2369624376296997,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.norm1.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.273017019033432,
+    "max": 0.7424176931381226,
+    "mean": 0.5447713732719421,
+    "std": 0.08732671290636063,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.norm1.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.1040672063827515,
+    "max": 0.496258407831192,
+    "mean": 0.004159420728683472,
+    "std": 0.12370330095291138,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      12
+    ],
+    "min": -10.565464973449707,
+    "max": 4.748323917388916,
+    "mean": -0.8687306046485901,
+    "std": 1.9328049421310425,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.attn.qkv.weight",
+    "shape": [
+      1152,
+      384
+    ],
+    "min": -0.5358690023422241,
+    "max": 0.4612868130207062,
+    "mean": -3.3423188142478466e-05,
+    "std": 0.05649450048804283,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.attn.qkv.bias",
+    "shape": [
+      1152
+    ],
+    "min": -2.033667802810669,
+    "max": 2.0373268127441406,
+    "mean": -0.0032196296378970146,
+    "std": 0.3169865608215332,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.attn.proj.weight",
+    "shape": [
+      384,
+      384
+    ],
+    "min": -0.2315867394208908,
+    "max": 0.1987358182668686,
+    "mean": 4.101953891222365e-05,
+    "std": 0.03887256979942322,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.attn.proj.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.5458452701568604,
+    "max": 1.7385945320129395,
+    "mean": -0.0004045199602842331,
+    "std": 0.18417493999004364,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.norm2.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.2958104908466339,
+    "max": 0.9660174250602722,
+    "mean": 0.8109393119812012,
+    "std": 0.07781889289617538,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.norm2.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.6260513067245483,
+    "max": 0.6767088174819946,
+    "mean": 0.004201176576316357,
+    "std": 0.20761261880397797,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.mlp.fc1.weight",
+    "shape": [
+      1536,
+      384
+    ],
+    "min": -0.2967943549156189,
+    "max": 0.3416387140750885,
+    "mean": 0.00028159355861134827,
+    "std": 0.04739730432629585,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.mlp.fc1.bias",
+    "shape": [
+      1536
+    ],
+    "min": -1.5716776847839355,
+    "max": -0.15986552834510803,
+    "mean": -0.6362859606742859,
+    "std": 0.20794501900672913,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.mlp.fc2.weight",
+    "shape": [
+      384,
+      1536
+    ],
+    "min": -0.7227678298950195,
+    "max": 0.45300689339637756,
+    "mean": 2.2872049157740548e-05,
+    "std": 0.042545441538095474,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.1.mlp.fc2.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.5268264412879944,
+    "max": 1.6571859121322632,
+    "mean": -0.0015679927309975028,
+    "std": 0.2045411914587021,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.norm1.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.29814255237579346,
+    "max": 1.0069998502731323,
+    "mean": 0.6950111389160156,
+    "std": 0.10916741192340851,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.norm1.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.175545573234558,
+    "max": 0.6526548862457275,
+    "mean": 0.004580068401992321,
+    "std": 0.15032145380973816,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      12
+    ],
+    "min": -11.5151948928833,
+    "max": 3.1872661113739014,
+    "mean": -0.48943597078323364,
+    "std": 1.8888733386993408,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.attn.qkv.weight",
+    "shape": [
+      1152,
+      384
+    ],
+    "min": -0.44883254170417786,
+    "max": 0.39585229754447937,
+    "mean": 1.2635872735700104e-05,
+    "std": 0.05125033110380173,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.attn.qkv.bias",
+    "shape": [
+      1152
+    ],
+    "min": -2.0105199813842773,
+    "max": 1.5445228815078735,
+    "mean": -0.00836452841758728,
+    "std": 0.29631349444389343,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.attn.proj.weight",
+    "shape": [
+      384,
+      384
+    ],
+    "min": -0.2235313206911087,
+    "max": 0.2902887463569641,
+    "mean": 3.672265620480175e-06,
+    "std": 0.042393896728754044,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.attn.proj.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.8925835490226746,
+    "max": 3.4859445095062256,
+    "mean": 0.001253729104064405,
+    "std": 0.27412670850753784,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.norm2.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.2825383245944977,
+    "max": 1.1447547674179077,
+    "mean": 0.8748324513435364,
+    "std": 0.06392741948366165,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.norm2.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.7077252864837646,
+    "max": 0.8288917541503906,
+    "mean": 0.007028966676443815,
+    "std": 0.224082350730896,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.mlp.fc1.weight",
+    "shape": [
+      1536,
+      384
+    ],
+    "min": -0.27609845995903015,
+    "max": 0.32082033157348633,
+    "mean": 8.626535418443382e-05,
+    "std": 0.04760301485657692,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.mlp.fc1.bias",
+    "shape": [
+      1536
+    ],
+    "min": -1.4522452354431152,
+    "max": -0.02610313706099987,
+    "mean": -0.6264387965202332,
+    "std": 0.1909257024526596,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.mlp.fc2.weight",
+    "shape": [
+      384,
+      1536
+    ],
+    "min": -1.4584647417068481,
+    "max": 0.8067069053649902,
+    "mean": 2.8008424123981968e-05,
+    "std": 0.04659077897667885,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.2.mlp.fc2.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.4791164696216583,
+    "max": 1.0739331245422363,
+    "mean": -0.00088551826775074,
+    "std": 0.18478533625602722,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.norm1.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.29183587431907654,
+    "max": 0.95157790184021,
+    "mean": 0.6852483153343201,
+    "std": 0.09167400002479553,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.norm1.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.4583628177642822,
+    "max": 0.9181748032569885,
+    "mean": 0.004637671634554863,
+    "std": 0.16671235859394073,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      12
+    ],
+    "min": -7.507290363311768,
+    "max": 3.69653582572937,
+    "mean": -0.49934661388397217,
+    "std": 1.5422890186309814,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.attn.qkv.weight",
+    "shape": [
+      1152,
+      384
+    ],
+    "min": -0.46367987990379333,
+    "max": 0.4624103307723999,
+    "mean": -2.0682260583271272e-05,
+    "std": 0.05387543886899948,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.attn.qkv.bias",
+    "shape": [
+      1152
+    ],
+    "min": -1.9677592515945435,
+    "max": 1.6457587480545044,
+    "mean": -0.0006660439539700747,
+    "std": 0.3177844285964966,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.attn.proj.weight",
+    "shape": [
+      384,
+      384
+    ],
+    "min": -0.27919504046440125,
+    "max": 0.41460683941841125,
+    "mean": 1.9443663404672407e-05,
+    "std": 0.040708426386117935,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.attn.proj.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.5470207333564758,
+    "max": 3.606163263320923,
+    "mean": 0.0035051938612014055,
+    "std": 0.2457113116979599,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.norm2.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.2506537139415741,
+    "max": 1.4826403856277466,
+    "mean": 0.9544773101806641,
+    "std": 0.09268809109926224,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.norm2.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.6259781122207642,
+    "max": 0.826717734336853,
+    "mean": 0.006642976775765419,
+    "std": 0.22607679665088654,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.mlp.fc1.weight",
+    "shape": [
+      1536,
+      384
+    ],
+    "min": -0.2683185935020447,
+    "max": 0.3060474693775177,
+    "mean": 0.00010315916006220505,
+    "std": 0.04785742983222008,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.mlp.fc1.bias",
+    "shape": [
+      1536
+    ],
+    "min": -2.0405633449554443,
+    "max": 0.027123844251036644,
+    "mean": -0.6114872097969055,
+    "std": 0.20496419072151184,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.mlp.fc2.weight",
+    "shape": [
+      384,
+      1536
+    ],
+    "min": -2.388489007949829,
+    "max": 0.9050919413566589,
+    "mean": -7.46018884001387e-07,
+    "std": 0.052302438765764236,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.3.mlp.fc2.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.5863212943077087,
+    "max": 0.88429856300354,
+    "mean": -0.0011253394186496735,
+    "std": 0.1661773920059204,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.norm1.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.2541162669658661,
+    "max": 1.2168478965759277,
+    "mean": 0.8564029335975647,
+    "std": 0.1069430485367775,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.norm1.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.5653678178787231,
+    "max": 1.2158997058868408,
+    "mean": 0.00850753579288721,
+    "std": 0.21109774708747864,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      12
+    ],
+    "min": -10.59405517578125,
+    "max": 3.738840341567993,
+    "mean": -0.15787804126739502,
+    "std": 0.9270943403244019,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.attn.qkv.weight",
+    "shape": [
+      1152,
+      384
+    ],
+    "min": -0.35946518182754517,
+    "max": 0.32619136571884155,
+    "mean": -1.3529967191061587e-07,
+    "std": 0.050130899995565414,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.attn.qkv.bias",
+    "shape": [
+      1152
+    ],
+    "min": -2.862431764602661,
+    "max": 2.3698713779449463,
+    "mean": 0.012118658050894737,
+    "std": 0.3506258428096771,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.attn.proj.weight",
+    "shape": [
+      384,
+      384
+    ],
+    "min": -0.4057094156742096,
+    "max": 0.4186718761920929,
+    "mean": 1.1772468496928923e-05,
+    "std": 0.04670891538262367,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.attn.proj.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.0313907861709595,
+    "max": 6.852929592132568,
+    "mean": 0.009591502137482166,
+    "std": 0.42056596279144287,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.norm2.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.23897597193717957,
+    "max": 1.8952194452285767,
+    "mean": 1.1081219911575317,
+    "std": 0.12359108775854111,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.norm2.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.83383309841156,
+    "max": 0.7443294525146484,
+    "mean": 0.0069908746518194675,
+    "std": 0.24971987307071686,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.mlp.fc1.weight",
+    "shape": [
+      1536,
+      384
+    ],
+    "min": -0.5203820466995239,
+    "max": 0.3317309021949768,
+    "mean": 0.00028370117070153356,
+    "std": 0.048427414149045944,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.mlp.fc1.bias",
+    "shape": [
+      1536
+    ],
+    "min": -2.7625889778137207,
+    "max": 0.3196215033531189,
+    "mean": -0.5978245139122009,
+    "std": 0.21215665340423584,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.mlp.fc2.weight",
+    "shape": [
+      384,
+      1536
+    ],
+    "min": -2.9167160987854004,
+    "max": 0.9591261148452759,
+    "mean": -6.896688137203455e-05,
+    "std": 0.05978133901953697,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.4.mlp.fc2.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.7963498830795288,
+    "max": 4.003176689147949,
+    "mean": 0.00430674385279417,
+    "std": 0.26853206753730774,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.norm1.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.22493915259838104,
+    "max": 1.2691107988357544,
+    "mean": 0.9402933716773987,
+    "std": 0.10760670900344849,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.norm1.bias",
+    "shape": [
+      384
+    ],
+    "min": -1.9605079889297485,
+    "max": 1.3027896881103516,
+    "mean": 0.013696846552193165,
+    "std": 0.2448691576719284,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      12
+    ],
+    "min": -13.141166687011719,
+    "max": 3.2806427478790283,
+    "mean": -0.5297152400016785,
+    "std": 1.1731958389282227,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.attn.qkv.weight",
+    "shape": [
+      1152,
+      384
+    ],
+    "min": -0.3648360073566437,
+    "max": 0.30801767110824585,
+    "mean": -3.862356606987305e-06,
+    "std": 0.0524744875729084,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.attn.qkv.bias",
+    "shape": [
+      1152
+    ],
+    "min": -1.843306064605713,
+    "max": 2.1446640491485596,
+    "mean": 0.014355978928506374,
+    "std": 0.3495227098464966,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.attn.proj.weight",
+    "shape": [
+      384,
+      384
+    ],
+    "min": -0.4802502989768982,
+    "max": 0.8207888603210449,
+    "mean": 3.1935582228470594e-05,
+    "std": 0.04601513221859932,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.attn.proj.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.8704918622970581,
+    "max": 8.139174461364746,
+    "mean": 0.011492319405078888,
+    "std": 0.46481773257255554,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.norm2.weight",
+    "shape": [
+      384
+    ],
+    "min": 0.25016993284225464,
+    "max": 2.404897928237915,
+    "mean": 1.3889516592025757,
+    "std": 0.15437522530555725,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.norm2.bias",
+    "shape": [
+      384
+    ],
+    "min": -2.2348201274871826,
+    "max": 0.8351038098335266,
+    "mean": 0.011271909810602665,
+    "std": 0.3008787930011749,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.mlp.fc1.weight",
+    "shape": [
+      1536,
+      384
+    ],
+    "min": -0.767617404460907,
+    "max": 0.750598669052124,
+    "mean": 0.0004149847954977304,
+    "std": 0.05131174251437187,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.mlp.fc1.bias",
+    "shape": [
+      1536
+    ],
+    "min": -3.7997360229492188,
+    "max": 0.5681402683258057,
+    "mean": -0.5966740846633911,
+    "std": 0.24185052514076233,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.mlp.fc2.weight",
+    "shape": [
+      384,
+      1536
+    ],
+    "min": -1.5468329191207886,
+    "max": 1.7712332010269165,
+    "mean": 0.00022740144049748778,
+    "std": 0.06684322655200958,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_2.blocks.5.mlp.fc2.bias",
+    "shape": [
+      384
+    ],
+    "min": -0.7713136672973633,
+    "max": 5.3928422927856445,
+    "mean": 0.00812452007085085,
+    "std": 0.33827394247055054,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.downsample.norm.weight",
+    "shape": [
+      1536
+    ],
+    "min": 0.05796181038022041,
+    "max": 1.1943854093551636,
+    "mean": 0.33670106530189514,
+    "std": 0.045547954738140106,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.downsample.norm.bias",
+    "shape": [
+      1536
+    ],
+    "min": -0.6553950905799866,
+    "max": 0.7379010915756226,
+    "mean": 0.02163948118686676,
+    "std": 0.10857272148132324,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.downsample.reduction.weight",
+    "shape": [
+      768,
+      1536
+    ],
+    "min": -0.8465800285339355,
+    "max": 1.2859703302383423,
+    "mean": -7.195854323072126e-06,
+    "std": 0.04053526371717453,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.norm1.weight",
+    "shape": [
+      768
+    ],
+    "min": -0.00024299908545799553,
+    "max": 0.9399062991142273,
+    "mean": 0.373180627822876,
+    "std": 0.10118092596530914,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.norm1.bias",
+    "shape": [
+      768
+    ],
+    "min": -1.8330256938934326,
+    "max": 2.165191173553467,
+    "mean": -0.001850301749072969,
+    "std": 0.12843270599842072,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      24
+    ],
+    "min": -15.1433744430542,
+    "max": 2.625516891479492,
+    "mean": 0.01928945630788803,
+    "std": 1.1109312772750854,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.attn.qkv.weight",
+    "shape": [
+      2304,
+      768
+    ],
+    "min": -0.26930996775627136,
+    "max": 0.343517929315567,
+    "mean": -1.265126502403291e-05,
+    "std": 0.04926051199436188,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.attn.qkv.bias",
+    "shape": [
+      2304
+    ],
+    "min": -2.8265838623046875,
+    "max": 2.777198553085327,
+    "mean": 0.004221876617521048,
+    "std": 0.47904354333877563,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.attn.proj.weight",
+    "shape": [
+      768,
+      768
+    ],
+    "min": -1.0759282112121582,
+    "max": 1.0063111782073975,
+    "mean": 4.191082553006709e-06,
+    "std": 0.04360899701714516,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.attn.proj.bias",
+    "shape": [
+      768
+    ],
+    "min": -4.927385330200195,
+    "max": 4.856322765350342,
+    "mean": -0.0024704423267394304,
+    "std": 0.30174604058265686,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.norm2.weight",
+    "shape": [
+      768
+    ],
+    "min": -0.32046040892601013,
+    "max": 3.8560009002685547,
+    "mean": 1.9838420152664185,
+    "std": 0.3358083665370941,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.norm2.bias",
+    "shape": [
+      768
+    ],
+    "min": -3.4198455810546875,
+    "max": 4.277423858642578,
+    "mean": -0.004426982253789902,
+    "std": 0.6796348094940186,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.mlp.fc1.weight",
+    "shape": [
+      3072,
+      768
+    ],
+    "min": -0.5395954847335815,
+    "max": 0.7034615278244019,
+    "mean": 0.00012079405132681131,
+    "std": 0.047919370234012604,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.mlp.fc1.bias",
+    "shape": [
+      3072
+    ],
+    "min": -1.0736199617385864,
+    "max": 0.8867072463035583,
+    "mean": -0.6052417755126953,
+    "std": 0.16946235299110413,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.mlp.fc2.weight",
+    "shape": [
+      768,
+      3072
+    ],
+    "min": -1.7045913934707642,
+    "max": 1.2903811931610107,
+    "mean": 7.926849502837285e-05,
+    "std": 0.05128249153494835,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.0.mlp.fc2.bias",
+    "shape": [
+      768
+    ],
+    "min": -2.1899924278259277,
+    "max": 3.0281550884246826,
+    "mean": -0.0011314685689285398,
+    "std": 0.2541523575782776,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.norm1.weight",
+    "shape": [
+      768
+    ],
+    "min": 0.02488929219543934,
+    "max": 1.3302619457244873,
+    "mean": 0.5779378414154053,
+    "std": 0.10967878252267838,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.norm1.bias",
+    "shape": [
+      768
+    ],
+    "min": -2.9613561630249023,
+    "max": 3.6653409004211426,
+    "mean": -0.0023243746254593134,
+    "std": 0.22322393953800201,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.attn.relative_position_bias_table",
+    "shape": [
+      169,
+      24
+    ],
+    "min": -15.512070655822754,
+    "max": 2.2799558639526367,
+    "mean": 0.07751284539699554,
+    "std": 1.0086557865142822,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.attn.qkv.weight",
+    "shape": [
+      2304,
+      768
+    ],
+    "min": -0.41889604926109314,
+    "max": 0.4819392263889313,
+    "mean": -9.030251931108069e-06,
+    "std": 0.04964185878634453,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.attn.qkv.bias",
+    "shape": [
+      2304
+    ],
+    "min": -2.857192039489746,
+    "max": 2.9564430713653564,
+    "mean": 0.011251839809119701,
+    "std": 0.4400472939014435,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.attn.proj.weight",
+    "shape": [
+      768,
+      768
+    ],
+    "min": -0.9196401238441467,
+    "max": 0.9474620819091797,
+    "mean": 9.368898645334411e-06,
+    "std": 0.04608577862381935,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.attn.proj.bias",
+    "shape": [
+      768
+    ],
+    "min": -11.836113929748535,
+    "max": 10.564933776855469,
+    "mean": -0.010637596249580383,
+    "std": 0.7014774680137634,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.norm2.weight",
+    "shape": [
+      768
+    ],
+    "min": 0.0020134819205850363,
+    "max": 6.125522613525391,
+    "mean": 2.7031524181365967,
+    "std": 0.4742662012577057,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.norm2.bias",
+    "shape": [
+      768
+    ],
+    "min": -1.9827897548675537,
+    "max": 2.4256818294525146,
+    "mean": 0.006075835321098566,
+    "std": 0.5292304754257202,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.mlp.fc1.weight",
+    "shape": [
+      3072,
+      768
+    ],
+    "min": -0.4707365334033966,
+    "max": 0.5885307788848877,
+    "mean": -0.0003183690132573247,
+    "std": 0.04806508868932724,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.mlp.fc1.bias",
+    "shape": [
+      3072
+    ],
+    "min": -1.619744062423706,
+    "max": 0.5429837107658386,
+    "mean": -0.6021556258201599,
+    "std": 0.22792795300483704,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.mlp.fc2.weight",
+    "shape": [
+      768,
+      3072
+    ],
+    "min": -1.782510757446289,
+    "max": 1.6345946788787842,
+    "mean": -7.69029702496482e-06,
+    "std": 0.05453980714082718,
+    "trainable": true
+  },
+  {
+    "name": "backbone.layers_3.blocks.1.mlp.fc2.bias",
+    "shape": [
+      768
+    ],
+    "min": -7.726351261138916,
+    "max": 7.515902996063232,
+    "mean": -0.0022815298289060593,
+    "std": 0.5209411382675171,
+    "trainable": true
+  }
+]
