@@ -1,0 +1,7 @@
+{
+  "name": "backbone_frozen",
+  "description": "Frozen backbone weights",
+  "val_mae": 16.512929916381836,
+  "test_mae": 15.008528098739497,
+  "test_rmse": 92.2080307006836
+}

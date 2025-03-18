@@ -1,0 +1,7 @@
+{
+  "name": "no_encoder",
+  "description": "No hybrid encoder layers",
+  "val_mae": 15.230447769165039,
+  "test_mae": 17.73628381039916,
+  "test_rmse": 84.75611877441406
+}

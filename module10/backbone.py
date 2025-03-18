@@ -15,7 +15,7 @@ class SwinBackbone(nn.Module):
         
         # Setup path untuk menyimpan model
         os.makedirs(cache_dir, exist_ok=True)
-        model_path = os.path.join(cache_dir, 'timm_standard_swin_t_weights.pth')
+        model_path = os.path.join(cache_dir, 'timm_swin_with_gdino_weights.pth')
         
         # Buat model Swin-T dari timm
         self.backbone = timm.create_model(

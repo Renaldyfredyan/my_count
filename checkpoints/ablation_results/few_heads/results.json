@@ -1,0 +1,7 @@
+{
+  "name": "few_heads",
+  "description": "Fewer attention heads (4)",
+  "val_mae": 14.208041191101074,
+  "test_mae": 14.344739692752102,
+  "test_rmse": 68.68911743164062
+}

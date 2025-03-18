@@ -26,6 +26,7 @@ def analyze_counting_errors(args):
     model.eval()
     
     # Daftar gambar yang ingin dikecualikan
+    # excluded_images = ['']
     excluded_images = ['7171.jpg', '7611.jpg', '1123.jpg', '865.jpg', '935.jpg', '7656.jpg']
     
     results = {}

@@ -1,0 +1,7 @@
+{
+  "name": "five_iefl_steps",
+  "description": "Five iEFL iterative steps",
+  "val_mae": 14.84095287322998,
+  "test_mae": 13.29362362132353,
+  "test_rmse": 71.54744720458984
+}

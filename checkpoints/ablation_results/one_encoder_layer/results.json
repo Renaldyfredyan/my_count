@@ -1,0 +1,7 @@
+{
+  "name": "one_encoder_layer",
+  "description": "One hybrid encoder layer",
+  "val_mae": 15.703765869140625,
+  "test_mae": 12.804442128413866,
+  "test_rmse": 72.90913391113281
+}

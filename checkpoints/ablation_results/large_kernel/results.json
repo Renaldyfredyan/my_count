@@ -1,0 +1,7 @@
+{
+  "name": "large_kernel",
+  "description": "Larger kernel dimension (5x5)",
+  "val_mae": 16.25528335571289,
+  "test_mae": 14.899574908088235,
+  "test_rmse": 76.4181900024414
+}

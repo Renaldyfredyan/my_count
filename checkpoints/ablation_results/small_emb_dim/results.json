@@ -1,0 +1,7 @@
+{
+  "name": "small_emb_dim",
+  "description": "Smaller embedding dimension (128)",
+  "val_mae": 16.67040252685547,
+  "test_mae": 16.485177586659663,
+  "test_rmse": 87.52101135253906
+}

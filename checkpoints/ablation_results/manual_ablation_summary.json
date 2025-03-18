@@ -1,0 +1,122 @@
+{
+  "experiments": {
+    "five_iefl_steps": {
+      "name": "five_iefl_steps",
+      "description": "Five iEFL iterative steps",
+      "val_mae": 14.84095287322998,
+      "test_mae": 13.29362362132353,
+      "test_rmse": 71.54744720458984,
+      "relative_improvement": 16.99392053467977
+    },
+    "no_encoder": {
+      "name": "no_encoder",
+      "description": "No hybrid encoder layers",
+      "val_mae": 15.230447769165039,
+      "test_mae": 17.73628381039916,
+      "test_rmse": 84.75611877441406,
+      "relative_improvement": -10.746281474673609
+    },
+    "five_encoder_layers": {
+      "name": "five_encoder_layers",
+      "description": "Five hybrid encoder layers",
+      "val_mae": 14.831551551818848,
+      "test_mae": 12.990140001313025,
+      "test_rmse": 71.13375091552734,
+      "relative_improvement": 18.88888809180299
+    },
+    "one_iefl_step": {
+      "name": "one_iefl_step",
+      "description": "One iEFL iterative step",
+      "val_mae": 14.089510917663574,
+      "test_mae": 15.201953125,
+      "test_rmse": 89.12065124511719,
+      "relative_improvement": 5.07821154965185
+    },
+    "small_emb_dim": {
+      "name": "small_emb_dim",
+      "description": "Smaller embedding dimension (128)",
+      "val_mae": 16.67040252685547,
+      "test_mae": 16.485177586659663,
+      "test_rmse": 87.52101135253906,
+      "relative_improvement": -2.934308939156756
+    },
+    "small_kernel": {
+      "name": "small_kernel",
+      "description": "Smaller kernel dimension (1x1)",
+      "val_mae": 14.432204246520996,
+      "test_mae": 14.29298023897059,
+      "test_rmse": 78.91661834716797,
+      "relative_improvement": 10.753885674241422
+    },
+    "backbone_frozen": {
+      "name": "backbone_frozen",
+      "description": "Frozen backbone weights",
+      "val_mae": 16.512929916381836,
+      "test_mae": 15.008528098739497,
+      "test_rmse": 92.2080307006836,
+      "relative_improvement": 6.285967505267092
+    },
+    "many_heads": {
+      "name": "many_heads",
+      "description": "More attention heads (16)",
+      "val_mae": 15.264915466308594,
+      "test_mae": 14.078008469012605,
+      "test_rmse": 89.11365509033203,
+      "relative_improvement": 12.096180621670992
+    },
+    "baseline": {
+      "name": "baseline",
+      "description": "Full model with all components",
+      "val_mae": 12.391815185546875,
+      "test_mae": 16.015240940126052,
+      "test_rmse": 85.2137451171875
+    },
+    "few_heads": {
+      "name": "few_heads",
+      "description": "Fewer attention heads (4)",
+      "val_mae": 14.208041191101074,
+      "test_mae": 14.344739692752102,
+      "test_rmse": 68.68911743164062,
+      "relative_improvement": 10.430696944362063
+    },
+    "large_emb_dim": {
+      "name": "large_emb_dim",
+      "description": "Larger embedding dimension (512)",
+      "val_mae": 14.900562286376953,
+      "test_mae": 14.057205225840336,
+      "test_rmse": 85.2060546875,
+      "relative_improvement": 12.226077157414931
+    },
+    "large_kernel": {
+      "name": "large_kernel",
+      "description": "Larger kernel dimension (5x5)",
+      "val_mae": 16.25528335571289,
+      "test_mae": 14.899574908088235,
+      "test_rmse": 76.4181900024414,
+      "relative_improvement": 6.9662769121538775
+    },
+    "one_encoder_layer": {
+      "name": "one_encoder_layer",
+      "description": "One hybrid encoder layer",
+      "val_mae": 15.703765869140625,
+      "test_mae": 12.804442128413866,
+      "test_rmse": 72.90913391113281,
+      "relative_improvement": 20.048395298678003
+    },
+    "backbone_trainable": {
+      "name": "backbone_trainable",
+      "description": "Trainable backbone weights",
+      "val_mae": 15.539280891418457,
+      "test_mae": 13.994314600840337,
+      "test_rmse": 87.0492935180664,
+      "relative_improvement": 12.61876950113377
+    }
+  },
+  "baseline": {
+    "name": "baseline",
+    "description": "Full model with all components",
+    "val_mae": 12.391815185546875,
+    "test_mae": 16.015240940126052,
+    "test_rmse": 85.2137451171875
+  }
+}

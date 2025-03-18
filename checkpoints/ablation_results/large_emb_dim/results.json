@@ -1,0 +1,7 @@
+{
+  "name": "large_emb_dim",
+  "description": "Larger embedding dimension (512)",
+  "val_mae": 14.900562286376953,
+  "test_mae": 14.057205225840336,
+  "test_rmse": 85.2060546875
+}

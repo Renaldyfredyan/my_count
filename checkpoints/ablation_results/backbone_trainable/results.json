@@ -1,0 +1,7 @@
+{
+  "name": "backbone_trainable",
+  "description": "Trainable backbone weights",
+  "val_mae": 15.539280891418457,
+  "test_mae": 13.994314600840337,
+  "test_rmse": 87.0492935180664
+}

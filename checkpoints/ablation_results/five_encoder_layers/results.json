@@ -1,0 +1,7 @@
+{
+  "name": "five_encoder_layers",
+  "description": "Five hybrid encoder layers",
+  "val_mae": 14.831551551818848,
+  "test_mae": 12.990140001313025,
+  "test_rmse": 71.13375091552734
+}

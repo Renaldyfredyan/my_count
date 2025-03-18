@@ -1,0 +1,7 @@
+{
+  "name": "many_heads",
+  "description": "More attention heads (16)",
+  "val_mae": 15.264915466308594,
+  "test_mae": 14.078008469012605,
+  "test_rmse": 89.11365509033203
+}

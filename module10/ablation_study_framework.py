@@ -13,7 +13,7 @@ from torch import distributed as dist
 from data import FSC147Dataset
 from arg_parser import get_argparser
 from losses import ObjectNormalizedL2Loss
-from engine import build_model
+from engine_modified import build_model
 
 # For reproducibility
 def seed_everything(seed=0):
@@ -70,7 +70,8 @@ class AblationStudy:
         model = DistributedDataParallel(
             build_model(args).to(device),
             device_ids=[gpu],
-            output_device=gpu
+            output_device=gpu,
+            find_unused_parameters=True
         )
         
         # Set up optimizer
@@ -147,10 +148,11 @@ class AblationStudy:
         best_val_mae = float('inf')
         start_epoch = 0
         
-        # Create experiment directory
+        # Semua proses harus mendapatkan eksperimen_dir
+        experiment_dir = os.path.join(args.model_path, 'ablation_results', experiment_name)
+
         if rank == 0:
             os.makedirs(os.path.join(args.model_path, 'ablation_results'), exist_ok=True)
-            experiment_dir = os.path.join(args.model_path, 'ablation_results', experiment_name)
             os.makedirs(experiment_dir, exist_ok=True)
             
             # Save experiment config
@@ -294,6 +296,11 @@ class AblationStudy:
                 with open(os.path.join(experiment_dir, 'metrics.json'), 'w') as f:
                     json.dump(epoch_metrics, f, indent=2)
             
+        # Sinkronkan best_val_mae ke semua proses
+        best_val_tensor = torch.tensor([best_val_mae], device=device)
+        dist.broadcast(best_val_tensor, 0)
+        best_val_mae = best_val_tensor.item()
+        
         # Final evaluation on test set after training
         test_ae = torch.tensor(0.0).to(device)
         test_se = torch.tensor(0.0).to(device)
@@ -304,7 +311,7 @@ class AblationStudy:
         
         best_model_path = os.path.join(experiment_dir, f'{args.model_name}.pt')
         if os.path.exists(best_model_path):
-            checkpoint = torch.load(best_model_path, map_location=device)
+            checkpoint = torch.load(best_model_path, weights_only=True, map_location=device)
             model.load_state_dict(checkpoint['model'])
         
         model.eval()
@@ -329,16 +336,17 @@ class AblationStudy:
         test_mae = test_ae.item() / len(test)
         test_rmse = torch.sqrt(test_se / len(test)).item()
         
-        # Save final results
+        # Inisialisasi final_results untuk semua proses
+        final_results = {
+            'name': experiment_name,
+            'description': description,
+            'val_mae': best_val_mae,
+            'test_mae': test_mae,
+            'test_rmse': test_rmse
+        }
+        
+        # Save final results (hanya rank 0)
         if rank == 0:
-            final_results = {
-                'name': experiment_name,
-                'description': description,
-                'val_mae': best_val_mae,
-                'test_mae': test_mae,
-                'test_rmse': test_rmse
-            }
-            
             with open(os.path.join(experiment_dir, 'results.json'), 'w') as f:
                 json.dump(final_results, f, indent=2)
             

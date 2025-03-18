@@ -1,0 +1,7 @@
+{
+  "name": "baseline",
+  "description": "Full model with all components",
+  "val_mae": 12.391815185546875,
+  "test_mae": 16.015240940126052,
+  "test_rmse": 85.2137451171875
+}

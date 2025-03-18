@@ -1,0 +1,7 @@
+{
+  "name": "small_kernel",
+  "description": "Smaller kernel dimension (1x1)",
+  "val_mae": 14.432204246520996,
+  "test_mae": 14.29298023897059,
+  "test_rmse": 78.91661834716797
+}
