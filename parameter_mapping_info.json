@@ -1,5 +1,1013 @@
 [
   {
+    "timm_name": "layers_0.blocks.0.attn.qkv.weight",
+    "gd_name": "encoder.layers.0.blocks.0.attention.self.query.weight, encoder.layers.0.blocks.0.attention.self.key.weight, encoder.layers.0.blocks.0.attention.self.value.weight",
+    "timm_shape": [
+      384,
+      128
+    ],
+    "gd_shape": [
+      [
+        128,
+        128
+      ],
+      [
+        128,
+        128
+      ],
+      [
+        128,
+        128
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.attn.qkv.bias",
+    "gd_name": "encoder.layers.0.blocks.0.attention.self.query.bias, encoder.layers.0.blocks.0.attention.self.key.bias, encoder.layers.0.blocks.0.attention.self.value.bias",
+    "timm_shape": [
+      384
+    ],
+    "gd_shape": [
+      [
+        128
+      ],
+      [
+        128
+      ],
+      [
+        128
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.attn.qkv.weight",
+    "gd_name": "encoder.layers.0.blocks.1.attention.self.query.weight, encoder.layers.0.blocks.1.attention.self.key.weight, encoder.layers.0.blocks.1.attention.self.value.weight",
+    "timm_shape": [
+      384,
+      128
+    ],
+    "gd_shape": [
+      [
+        128,
+        128
+      ],
+      [
+        128,
+        128
+      ],
+      [
+        128,
+        128
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.attn.qkv.bias",
+    "gd_name": "encoder.layers.0.blocks.1.attention.self.query.bias, encoder.layers.0.blocks.1.attention.self.key.bias, encoder.layers.0.blocks.1.attention.self.value.bias",
+    "timm_shape": [
+      384
+    ],
+    "gd_shape": [
+      [
+        128
+      ],
+      [
+        128
+      ],
+      [
+        128
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.attn.qkv.weight",
+    "gd_name": "encoder.layers.1.blocks.0.attention.self.query.weight, encoder.layers.1.blocks.0.attention.self.key.weight, encoder.layers.1.blocks.0.attention.self.value.weight",
+    "timm_shape": [
+      768,
+      256
+    ],
+    "gd_shape": [
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.attn.qkv.bias",
+    "gd_name": "encoder.layers.1.blocks.0.attention.self.query.bias, encoder.layers.1.blocks.0.attention.self.key.bias, encoder.layers.1.blocks.0.attention.self.value.bias",
+    "timm_shape": [
+      768
+    ],
+    "gd_shape": [
+      [
+        256
+      ],
+      [
+        256
+      ],
+      [
+        256
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.attn.qkv.weight",
+    "gd_name": "encoder.layers.1.blocks.1.attention.self.query.weight, encoder.layers.1.blocks.1.attention.self.key.weight, encoder.layers.1.blocks.1.attention.self.value.weight",
+    "timm_shape": [
+      768,
+      256
+    ],
+    "gd_shape": [
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.attn.qkv.bias",
+    "gd_name": "encoder.layers.1.blocks.1.attention.self.query.bias, encoder.layers.1.blocks.1.attention.self.key.bias, encoder.layers.1.blocks.1.attention.self.value.bias",
+    "timm_shape": [
+      768
+    ],
+    "gd_shape": [
+      [
+        256
+      ],
+      [
+        256
+      ],
+      [
+        256
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.0.attention.self.query.weight, encoder.layers.2.blocks.0.attention.self.key.weight, encoder.layers.2.blocks.0.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.0.attention.self.query.bias, encoder.layers.2.blocks.0.attention.self.key.bias, encoder.layers.2.blocks.0.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.1.attention.self.query.weight, encoder.layers.2.blocks.1.attention.self.key.weight, encoder.layers.2.blocks.1.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.1.attention.self.query.bias, encoder.layers.2.blocks.1.attention.self.key.bias, encoder.layers.2.blocks.1.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.2.attention.self.query.weight, encoder.layers.2.blocks.2.attention.self.key.weight, encoder.layers.2.blocks.2.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.2.attention.self.query.bias, encoder.layers.2.blocks.2.attention.self.key.bias, encoder.layers.2.blocks.2.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.3.attention.self.query.weight, encoder.layers.2.blocks.3.attention.self.key.weight, encoder.layers.2.blocks.3.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.3.attention.self.query.bias, encoder.layers.2.blocks.3.attention.self.key.bias, encoder.layers.2.blocks.3.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.4.attention.self.query.weight, encoder.layers.2.blocks.4.attention.self.key.weight, encoder.layers.2.blocks.4.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.4.attention.self.query.bias, encoder.layers.2.blocks.4.attention.self.key.bias, encoder.layers.2.blocks.4.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.5.attention.self.query.weight, encoder.layers.2.blocks.5.attention.self.key.weight, encoder.layers.2.blocks.5.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.5.attention.self.query.bias, encoder.layers.2.blocks.5.attention.self.key.bias, encoder.layers.2.blocks.5.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.6.attention.self.query.weight, encoder.layers.2.blocks.6.attention.self.key.weight, encoder.layers.2.blocks.6.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.6.attention.self.query.bias, encoder.layers.2.blocks.6.attention.self.key.bias, encoder.layers.2.blocks.6.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.7.attention.self.query.weight, encoder.layers.2.blocks.7.attention.self.key.weight, encoder.layers.2.blocks.7.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.7.attention.self.query.bias, encoder.layers.2.blocks.7.attention.self.key.bias, encoder.layers.2.blocks.7.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.8.attention.self.query.weight, encoder.layers.2.blocks.8.attention.self.key.weight, encoder.layers.2.blocks.8.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.8.attention.self.query.bias, encoder.layers.2.blocks.8.attention.self.key.bias, encoder.layers.2.blocks.8.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.9.attention.self.query.weight, encoder.layers.2.blocks.9.attention.self.key.weight, encoder.layers.2.blocks.9.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.9.attention.self.query.bias, encoder.layers.2.blocks.9.attention.self.key.bias, encoder.layers.2.blocks.9.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.10.attention.self.query.weight, encoder.layers.2.blocks.10.attention.self.key.weight, encoder.layers.2.blocks.10.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.10.attention.self.query.bias, encoder.layers.2.blocks.10.attention.self.key.bias, encoder.layers.2.blocks.10.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.11.attention.self.query.weight, encoder.layers.2.blocks.11.attention.self.key.weight, encoder.layers.2.blocks.11.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.11.attention.self.query.bias, encoder.layers.2.blocks.11.attention.self.key.bias, encoder.layers.2.blocks.11.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.12.attention.self.query.weight, encoder.layers.2.blocks.12.attention.self.key.weight, encoder.layers.2.blocks.12.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.12.attention.self.query.bias, encoder.layers.2.blocks.12.attention.self.key.bias, encoder.layers.2.blocks.12.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.13.attention.self.query.weight, encoder.layers.2.blocks.13.attention.self.key.weight, encoder.layers.2.blocks.13.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.13.attention.self.query.bias, encoder.layers.2.blocks.13.attention.self.key.bias, encoder.layers.2.blocks.13.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.14.attention.self.query.weight, encoder.layers.2.blocks.14.attention.self.key.weight, encoder.layers.2.blocks.14.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.14.attention.self.query.bias, encoder.layers.2.blocks.14.attention.self.key.bias, encoder.layers.2.blocks.14.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.15.attention.self.query.weight, encoder.layers.2.blocks.15.attention.self.key.weight, encoder.layers.2.blocks.15.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.15.attention.self.query.bias, encoder.layers.2.blocks.15.attention.self.key.bias, encoder.layers.2.blocks.15.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.16.attention.self.query.weight, encoder.layers.2.blocks.16.attention.self.key.weight, encoder.layers.2.blocks.16.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.16.attention.self.query.bias, encoder.layers.2.blocks.16.attention.self.key.bias, encoder.layers.2.blocks.16.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.attn.qkv.weight",
+    "gd_name": "encoder.layers.2.blocks.17.attention.self.query.weight, encoder.layers.2.blocks.17.attention.self.key.weight, encoder.layers.2.blocks.17.attention.self.value.weight",
+    "timm_shape": [
+      1536,
+      512
+    ],
+    "gd_shape": [
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.attn.qkv.bias",
+    "gd_name": "encoder.layers.2.blocks.17.attention.self.query.bias, encoder.layers.2.blocks.17.attention.self.key.bias, encoder.layers.2.blocks.17.attention.self.value.bias",
+    "timm_shape": [
+      1536
+    ],
+    "gd_shape": [
+      [
+        512
+      ],
+      [
+        512
+      ],
+      [
+        512
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.attn.qkv.weight",
+    "gd_name": "encoder.layers.3.blocks.0.attention.self.query.weight, encoder.layers.3.blocks.0.attention.self.key.weight, encoder.layers.3.blocks.0.attention.self.value.weight",
+    "timm_shape": [
+      3072,
+      1024
+    ],
+    "gd_shape": [
+      [
+        1024,
+        1024
+      ],
+      [
+        1024,
+        1024
+      ],
+      [
+        1024,
+        1024
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.attn.qkv.bias",
+    "gd_name": "encoder.layers.3.blocks.0.attention.self.query.bias, encoder.layers.3.blocks.0.attention.self.key.bias, encoder.layers.3.blocks.0.attention.self.value.bias",
+    "timm_shape": [
+      3072
+    ],
+    "gd_shape": [
+      [
+        1024
+      ],
+      [
+        1024
+      ],
+      [
+        1024
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.attn.qkv.weight",
+    "gd_name": "encoder.layers.3.blocks.1.attention.self.query.weight, encoder.layers.3.blocks.1.attention.self.key.weight, encoder.layers.3.blocks.1.attention.self.value.weight",
+    "timm_shape": [
+      3072,
+      1024
+    ],
+    "gd_shape": [
+      [
+        1024,
+        1024
+      ],
+      [
+        1024,
+        1024
+      ],
+      [
+        1024,
+        1024
+      ]
+    ],
+    "status": "QKV mapped successfully"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.attn.qkv.bias",
+    "gd_name": "encoder.layers.3.blocks.1.attention.self.query.bias, encoder.layers.3.blocks.1.attention.self.key.bias, encoder.layers.3.blocks.1.attention.self.value.bias",
+    "timm_shape": [
+      3072
+    ],
+    "gd_shape": [
+      [
+        1024
+      ],
+      [
+        1024
+      ],
+      [
+        1024
+      ]
+    ],
+    "status": "QKV bias mapped successfully"
+  },
+  {
     "timm_name": "patch_embed.proj.weight",
     "gd_name": "embeddings.patch_embeddings.projection.weight",
     "timm_shape": [
@@ -51,2558 +1059,2891 @@
   },
   {
     "timm_name": "layers_0.blocks.0.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.layernorm_before.weight",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.layernorm_before.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_0.blocks.0.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      4
+    "gd_shape": [
+      128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.attention.output.dense.weight",
     "timm_shape": [
       128,
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128,
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.attention.output.dense.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.layernorm_after.weight",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.layernorm_after.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.intermediate.dense.weight",
     "timm_shape": [
       512,
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.intermediate.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.output.dense.weight",
     "timm_shape": [
       128,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.0.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.0.output.dense.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.layernorm_before.weight",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.layernorm_before.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_0.blocks.1.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      4
+    "gd_shape": [
+      128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.attention.output.dense.weight",
     "timm_shape": [
       128,
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128,
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.attention.output.dense.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.layernorm_after.weight",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.layernorm_after.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.intermediate.dense.weight",
     "timm_shape": [
       512,
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.intermediate.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.output.dense.weight",
     "timm_shape": [
       128,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_0.blocks.1.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.blocks.1.output.dense.bias",
     "timm_shape": [
       128
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.downsample.norm.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.downsample.norm.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.downsample.norm.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.downsample.norm.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.downsample.reduction.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.0.downsample.reduction.weight",
     "timm_shape": [
       256,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.layernorm_before.weight",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.layernorm_before.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_1.blocks.0.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      8
+    "gd_shape": [
+      256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.attention.output.dense.weight",
     "timm_shape": [
       256,
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256,
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.attention.output.dense.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.layernorm_after.weight",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.layernorm_after.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.intermediate.dense.weight",
     "timm_shape": [
       1024,
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024,
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.intermediate.dense.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.output.dense.weight",
     "timm_shape": [
       256,
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256,
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.0.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.0.output.dense.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.layernorm_before.weight",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.layernorm_before.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_1.blocks.1.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      8
+    "gd_shape": [
+      256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.attention.output.dense.weight",
     "timm_shape": [
       256,
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256,
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.attention.output.dense.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.layernorm_after.weight",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.layernorm_after.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.intermediate.dense.weight",
     "timm_shape": [
       1024,
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024,
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.intermediate.dense.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.output.dense.weight",
     "timm_shape": [
       256,
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256,
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_1.blocks.1.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.blocks.1.output.dense.bias",
     "timm_shape": [
       256
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      256
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.downsample.norm.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.downsample.norm.weight",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.downsample.norm.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.downsample.norm.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.downsample.reduction.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.1.downsample.reduction.weight",
     "timm_shape": [
       512,
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.0.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.0.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.0.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.1.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.1.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.1.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.2.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.2.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.2.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.3.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.3.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.3.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.4.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.4.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.4.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.5.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.5.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.5.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.6.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.6.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.6.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.7.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.7.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.7.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.8.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.8.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.8.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.9.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.9.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.9.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.10.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.10.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.10.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.11.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.11.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.11.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.12.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.12.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.12.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.13.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.13.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.13.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.14.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.14.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.14.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.15.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.15.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.15.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.16.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.16.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.16.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.layernorm_before.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.layernorm_before.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_2.blocks.17.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      16
+    "gd_shape": [
+      512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.attention.output.dense.weight",
     "timm_shape": [
       512,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.attention.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.layernorm_after.weight",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.layernorm_after.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.intermediate.dense.weight",
     "timm_shape": [
       2048,
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048,
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.intermediate.dense.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.output.dense.weight",
     "timm_shape": [
       512,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_2.blocks.17.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.blocks.17.output.dense.bias",
     "timm_shape": [
       512
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      512
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.downsample.norm.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.downsample.norm.weight",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.downsample.norm.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.downsample.norm.bias",
     "timm_shape": [
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.downsample.reduction.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.2.downsample.reduction.weight",
     "timm_shape": [
       1024,
       2048
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024,
+      2048
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.layernorm_before.weight",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.layernorm_before.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_3.blocks.0.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      32
+    "gd_shape": [
+      1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.attention.output.dense.weight",
     "timm_shape": [
       1024,
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024,
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.attention.output.dense.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.layernorm_after.weight",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.layernorm_after.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.intermediate.dense.weight",
     "timm_shape": [
       4096,
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      4096,
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.intermediate.dense.bias",
     "timm_shape": [
       4096
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      4096
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.output.dense.weight",
     "timm_shape": [
       1024,
       4096
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024,
+      4096
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.0.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.0.output.dense.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.norm1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.layernorm_before.weight",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.norm1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.layernorm_before.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
-  },
-  {
-    "timm_name": "layers_3.blocks.1.attn.relative_position_bias_table",
-    "gd_name": "No match found",
-    "timm_shape": [
-      169,
-      32
+    "gd_shape": [
+      1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.attn.proj.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.attention.output.dense.weight",
     "timm_shape": [
       1024,
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024,
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.attn.proj.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.attention.output.dense.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.norm2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.layernorm_after.weight",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.norm2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.layernorm_after.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.mlp.fc1.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.intermediate.dense.weight",
     "timm_shape": [
       4096,
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      4096,
+      1024
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.mlp.fc1.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.intermediate.dense.bias",
     "timm_shape": [
       4096
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      4096
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.mlp.fc2.weight",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.output.dense.weight",
     "timm_shape": [
       1024,
       4096
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024,
+      4096
+    ],
+    "status": "Mapped successfully"
   },
   {
     "timm_name": "layers_3.blocks.1.mlp.fc2.bias",
-    "gd_name": "No match found",
+    "gd_name": "encoder.layers.3.blocks.1.output.dense.bias",
     "timm_shape": [
       1024
     ],
-    "gd_shape": null,
-    "status": "No mapping rule"
+    "gd_shape": [
+      1024
+    ],
+    "status": "Mapped successfully"
   }
 ]

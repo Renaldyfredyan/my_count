@@ -85,9 +85,9 @@ class SwinBackbone(nn.Module):
         
         # Channel dimensions untuk Swin Base
         self.num_channels = {
-            'stage3': 512,  # S3
-            'stage4': 1024,  # S4
-            'stage5': 2048   # S5
+            'stage3': 256,  # S3
+            'stage4': 512,  # S4
+            'stage5': 1024   # S5
         }
         self.total_channels = sum(self.num_channels.values())
         self.reduction = reduction
@@ -98,6 +98,18 @@ class SwinBackbone(nn.Module):
             for name, module in self.backbone.named_modules():
                 if len(list(module.children())) == 0:  # Hanya cetak leaf modules
                     print(f"  {name}: {module}")
+            
+            # Cari pola penamaan yang benar untuk layers
+            layer_names = []
+            for name in self.backbone.state_dict().keys():
+                if name.startswith('layers'):
+                    parts = name.split('.')
+                    layer_prefix = parts[0]
+                    if layer_prefix not in layer_names:
+                        layer_names.append(layer_prefix)
+            
+            if layer_names:
+                print(f"\nDetected layer name pattern: {', '.join(layer_names)}")
         
         # Load parameter mapping if it exists, otherwise create new mapping
         if os.path.exists(model_path):
@@ -107,8 +119,8 @@ class SwinBackbone(nn.Module):
                 stats = print_param_stats(self.backbone, "backbone")
         else:
             print("Creating new parameter mapping from GroundingDINO...")
-            # Load GroundingDINO (gunakan model base jika tersedia)
-            gd_model = AutoModelForZeroShotObjectDetection.from_pretrained("IDEA-Research/grounding-dino-base")  # Gunakan 'base' model
+            # Load GroundingDINO (gunakan model base)
+            gd_model = AutoModelForZeroShotObjectDetection.from_pretrained("IDEA-Research/grounding-dino-base")
             gd_backbone = gd_model.model.backbone.conv_encoder.model
             
             # Debug: Bandingkan arsitektur
@@ -138,127 +150,172 @@ class SwinBackbone(nn.Module):
                         print(f"  {k}: {gd_state_dict[k].shape}")
             
             # Define parameter mapping
-            # This is a starting point and may need adjustment for Swin Base
+            # Sesuaikan format penamaan dengan yang ditemukan dalam model
             layer_mapping = {
                 # Patch embedding
                 "patch_embed.proj": "embeddings.patch_embeddings.projection",
                 "patch_embed.norm": "embeddings.norm",
                 
                 # Layer normalization mapping - layer 0
-                "layers.0.blocks.0.norm1": "encoder.layers.0.blocks.0.layernorm_before",
-                "layers.0.blocks.0.norm2": "encoder.layers.0.blocks.0.layernorm_after",
-                "layers.0.blocks.1.norm1": "encoder.layers.0.blocks.1.layernorm_before",
-                "layers.0.blocks.1.norm2": "encoder.layers.0.blocks.1.layernorm_after",
+                "layers_0.blocks.0.norm1": "encoder.layers.0.blocks.0.layernorm_before",
+                "layers_0.blocks.0.norm2": "encoder.layers.0.blocks.0.layernorm_after",
+                "layers_0.blocks.1.norm1": "encoder.layers.0.blocks.1.layernorm_before",
+                "layers_0.blocks.1.norm2": "encoder.layers.0.blocks.1.layernorm_after",
                 
                 # Layer normalization mapping - layer 1
-                "layers.1.blocks.0.norm1": "encoder.layers.1.blocks.0.layernorm_before",
-                "layers.1.blocks.0.norm2": "encoder.layers.1.blocks.0.layernorm_after",
-                "layers.1.blocks.1.norm1": "encoder.layers.1.blocks.1.layernorm_before",
-                "layers.1.blocks.1.norm2": "encoder.layers.1.blocks.1.layernorm_after",
+                "layers_1.blocks.0.norm1": "encoder.layers.1.blocks.0.layernorm_before",
+                "layers_1.blocks.0.norm2": "encoder.layers.1.blocks.0.layernorm_after",
+                "layers_1.blocks.1.norm1": "encoder.layers.1.blocks.1.layernorm_before",
+                "layers_1.blocks.1.norm2": "encoder.layers.1.blocks.1.layernorm_after",
                 
-                # Layer normalization mapping - layer 2 (Swin Base memiliki lebih banyak blok)
-                "layers.2.blocks.0.norm1": "encoder.layers.2.blocks.0.layernorm_before",
-                "layers.2.blocks.0.norm2": "encoder.layers.2.blocks.0.layernorm_after",
-                "layers.2.blocks.1.norm1": "encoder.layers.2.blocks.1.layernorm_before",
-                "layers.2.blocks.1.norm2": "encoder.layers.2.blocks.1.layernorm_after",
-                "layers.2.blocks.2.norm1": "encoder.layers.2.blocks.2.layernorm_before",
-                "layers.2.blocks.2.norm2": "encoder.layers.2.blocks.2.layernorm_after",
-                "layers.2.blocks.3.norm1": "encoder.layers.2.blocks.3.layernorm_before",
-                "layers.2.blocks.3.norm2": "encoder.layers.2.blocks.3.layernorm_after",
-                "layers.2.blocks.4.norm1": "encoder.layers.2.blocks.4.layernorm_before",
-                "layers.2.blocks.4.norm2": "encoder.layers.2.blocks.4.layernorm_after",
-                "layers.2.blocks.5.norm1": "encoder.layers.2.blocks.5.layernorm_before",
-                "layers.2.blocks.5.norm2": "encoder.layers.2.blocks.5.layernorm_after",
-                "layers.2.blocks.6.norm1": "encoder.layers.2.blocks.6.layernorm_before",  # Tambahan untuk Swin Base
-                "layers.2.blocks.6.norm2": "encoder.layers.2.blocks.6.layernorm_after",   # Tambahan untuk Swin Base
-                "layers.2.blocks.7.norm1": "encoder.layers.2.blocks.7.layernorm_before",  # Tambahan untuk Swin Base
-                "layers.2.blocks.7.norm2": "encoder.layers.2.blocks.7.layernorm_after",   # Tambahan untuk Swin Base
-                "layers.2.blocks.8.norm1": "encoder.layers.2.blocks.8.layernorm_before",  # Tambahan untuk Swin Base
-                "layers.2.blocks.8.norm2": "encoder.layers.2.blocks.8.layernorm_after",   # Tambahan untuk Swin Base
+                # Layer normalization mapping - layer 2 (Swin Base memiliki 18 blok)
+                "layers_2.blocks.0.norm1": "encoder.layers.2.blocks.0.layernorm_before",
+                "layers_2.blocks.0.norm2": "encoder.layers.2.blocks.0.layernorm_after",
+                "layers_2.blocks.1.norm1": "encoder.layers.2.blocks.1.layernorm_before",
+                "layers_2.blocks.1.norm2": "encoder.layers.2.blocks.1.layernorm_after",
+                "layers_2.blocks.2.norm1": "encoder.layers.2.blocks.2.layernorm_before",
+                "layers_2.blocks.2.norm2": "encoder.layers.2.blocks.2.layernorm_after",
+                "layers_2.blocks.3.norm1": "encoder.layers.2.blocks.3.layernorm_before",
+                "layers_2.blocks.3.norm2": "encoder.layers.2.blocks.3.layernorm_after",
+                "layers_2.blocks.4.norm1": "encoder.layers.2.blocks.4.layernorm_before",
+                "layers_2.blocks.4.norm2": "encoder.layers.2.blocks.4.layernorm_after",
+                "layers_2.blocks.5.norm1": "encoder.layers.2.blocks.5.layernorm_before",
+                "layers_2.blocks.5.norm2": "encoder.layers.2.blocks.5.layernorm_after",
+                "layers_2.blocks.6.norm1": "encoder.layers.2.blocks.6.layernorm_before",
+                "layers_2.blocks.6.norm2": "encoder.layers.2.blocks.6.layernorm_after",
+                "layers_2.blocks.7.norm1": "encoder.layers.2.blocks.7.layernorm_before",
+                "layers_2.blocks.7.norm2": "encoder.layers.2.blocks.7.layernorm_after",
+                "layers_2.blocks.8.norm1": "encoder.layers.2.blocks.8.layernorm_before",
+                "layers_2.blocks.8.norm2": "encoder.layers.2.blocks.8.layernorm_after",
+                "layers_2.blocks.9.norm1": "encoder.layers.2.blocks.9.layernorm_before",
+                "layers_2.blocks.9.norm2": "encoder.layers.2.blocks.9.layernorm_after",
+                "layers_2.blocks.10.norm1": "encoder.layers.2.blocks.10.layernorm_before",
+                "layers_2.blocks.10.norm2": "encoder.layers.2.blocks.10.layernorm_after",
+                "layers_2.blocks.11.norm1": "encoder.layers.2.blocks.11.layernorm_before",
+                "layers_2.blocks.11.norm2": "encoder.layers.2.blocks.11.layernorm_after",
+                "layers_2.blocks.12.norm1": "encoder.layers.2.blocks.12.layernorm_before",
+                "layers_2.blocks.12.norm2": "encoder.layers.2.blocks.12.layernorm_after",
+                "layers_2.blocks.13.norm1": "encoder.layers.2.blocks.13.layernorm_before",
+                "layers_2.blocks.13.norm2": "encoder.layers.2.blocks.13.layernorm_after",
+                "layers_2.blocks.14.norm1": "encoder.layers.2.blocks.14.layernorm_before",
+                "layers_2.blocks.14.norm2": "encoder.layers.2.blocks.14.layernorm_after",
+                "layers_2.blocks.15.norm1": "encoder.layers.2.blocks.15.layernorm_before",
+                "layers_2.blocks.15.norm2": "encoder.layers.2.blocks.15.layernorm_after",
+                "layers_2.blocks.16.norm1": "encoder.layers.2.blocks.16.layernorm_before",
+                "layers_2.blocks.16.norm2": "encoder.layers.2.blocks.16.layernorm_after",
+                "layers_2.blocks.17.norm1": "encoder.layers.2.blocks.17.layernorm_before",
+                "layers_2.blocks.17.norm2": "encoder.layers.2.blocks.17.layernorm_after",
                 
                 # Layer normalization mapping - layer 3
-                "layers.3.blocks.0.norm1": "encoder.layers.3.blocks.0.layernorm_before",
-                "layers.3.blocks.0.norm2": "encoder.layers.3.blocks.0.layernorm_after",
-                "layers.3.blocks.1.norm1": "encoder.layers.3.blocks.1.layernorm_before",
-                "layers.3.blocks.1.norm2": "encoder.layers.3.blocks.1.layernorm_after",
+                "layers_3.blocks.0.norm1": "encoder.layers.3.blocks.0.layernorm_before",
+                "layers_3.blocks.0.norm2": "encoder.layers.3.blocks.0.layernorm_after",
+                "layers_3.blocks.1.norm1": "encoder.layers.3.blocks.1.layernorm_before",
+                "layers_3.blocks.1.norm2": "encoder.layers.3.blocks.1.layernorm_after",
                 
                 # Projection mapping - layer 0
-                "layers.0.blocks.0.attn.proj": "encoder.layers.0.blocks.0.attention.output.dense",
-                "layers.0.blocks.1.attn.proj": "encoder.layers.0.blocks.1.attention.output.dense",
+                "layers_0.blocks.0.attn.proj": "encoder.layers.0.blocks.0.attention.output.dense",
+                "layers_0.blocks.1.attn.proj": "encoder.layers.0.blocks.1.attention.output.dense",
                 
                 # Projection mapping - layer 1
-                "layers.1.blocks.0.attn.proj": "encoder.layers.1.blocks.0.attention.output.dense",
-                "layers.1.blocks.1.attn.proj": "encoder.layers.1.blocks.1.attention.output.dense",
+                "layers_1.blocks.0.attn.proj": "encoder.layers.1.blocks.0.attention.output.dense",
+                "layers_1.blocks.1.attn.proj": "encoder.layers.1.blocks.1.attention.output.dense",
                 
-                # Projection mapping - layer 2 (tambahan untuk Swin Base)
-                "layers.2.blocks.0.attn.proj": "encoder.layers.2.blocks.0.attention.output.dense",
-                "layers.2.blocks.1.attn.proj": "encoder.layers.2.blocks.1.attention.output.dense",
-                "layers.2.blocks.2.attn.proj": "encoder.layers.2.blocks.2.attention.output.dense",
-                "layers.2.blocks.3.attn.proj": "encoder.layers.2.blocks.3.attention.output.dense",
-                "layers.2.blocks.4.attn.proj": "encoder.layers.2.blocks.4.attention.output.dense",
-                "layers.2.blocks.5.attn.proj": "encoder.layers.2.blocks.5.attention.output.dense",
-                "layers.2.blocks.6.attn.proj": "encoder.layers.2.blocks.6.attention.output.dense",  # Tambahan untuk Swin Base
-                "layers.2.blocks.7.attn.proj": "encoder.layers.2.blocks.7.attention.output.dense",  # Tambahan untuk Swin Base
-                "layers.2.blocks.8.attn.proj": "encoder.layers.2.blocks.8.attention.output.dense",  # Tambahan untuk Swin Base
+                # Projection mapping - layer 2 (semua 18 blok)
+                "layers_2.blocks.0.attn.proj": "encoder.layers.2.blocks.0.attention.output.dense",
+                "layers_2.blocks.1.attn.proj": "encoder.layers.2.blocks.1.attention.output.dense",
+                "layers_2.blocks.2.attn.proj": "encoder.layers.2.blocks.2.attention.output.dense",
+                "layers_2.blocks.3.attn.proj": "encoder.layers.2.blocks.3.attention.output.dense",
+                "layers_2.blocks.4.attn.proj": "encoder.layers.2.blocks.4.attention.output.dense",
+                "layers_2.blocks.5.attn.proj": "encoder.layers.2.blocks.5.attention.output.dense",
+                "layers_2.blocks.6.attn.proj": "encoder.layers.2.blocks.6.attention.output.dense",
+                "layers_2.blocks.7.attn.proj": "encoder.layers.2.blocks.7.attention.output.dense",
+                "layers_2.blocks.8.attn.proj": "encoder.layers.2.blocks.8.attention.output.dense",
+                "layers_2.blocks.9.attn.proj": "encoder.layers.2.blocks.9.attention.output.dense",
+                "layers_2.blocks.10.attn.proj": "encoder.layers.2.blocks.10.attention.output.dense",
+                "layers_2.blocks.11.attn.proj": "encoder.layers.2.blocks.11.attention.output.dense",
+                "layers_2.blocks.12.attn.proj": "encoder.layers.2.blocks.12.attention.output.dense",
+                "layers_2.blocks.13.attn.proj": "encoder.layers.2.blocks.13.attention.output.dense",
+                "layers_2.blocks.14.attn.proj": "encoder.layers.2.blocks.14.attention.output.dense",
+                "layers_2.blocks.15.attn.proj": "encoder.layers.2.blocks.15.attention.output.dense",
+                "layers_2.blocks.16.attn.proj": "encoder.layers.2.blocks.16.attention.output.dense",
+                "layers_2.blocks.17.attn.proj": "encoder.layers.2.blocks.17.attention.output.dense",
                 
                 # Projection mapping - layer 3
-                "layers.3.blocks.0.attn.proj": "encoder.layers.3.blocks.0.attention.output.dense",
-                "layers.3.blocks.1.attn.proj": "encoder.layers.3.blocks.1.attention.output.dense",
+                "layers_3.blocks.0.attn.proj": "encoder.layers.3.blocks.0.attention.output.dense",
+                "layers_3.blocks.1.attn.proj": "encoder.layers.3.blocks.1.attention.output.dense",
                 
                 # MLP mapping - layer 0
-                "layers.0.blocks.0.mlp.fc1": "encoder.layers.0.blocks.0.intermediate.dense",
-                "layers.0.blocks.0.mlp.fc2": "encoder.layers.0.blocks.0.output.dense",
-                "layers.0.blocks.1.mlp.fc1": "encoder.layers.0.blocks.1.intermediate.dense",
-                "layers.0.blocks.1.mlp.fc2": "encoder.layers.0.blocks.1.output.dense",
+                "layers_0.blocks.0.mlp.fc1": "encoder.layers.0.blocks.0.intermediate.dense",
+                "layers_0.blocks.0.mlp.fc2": "encoder.layers.0.blocks.0.output.dense",
+                "layers_0.blocks.1.mlp.fc1": "encoder.layers.0.blocks.1.intermediate.dense",
+                "layers_0.blocks.1.mlp.fc2": "encoder.layers.0.blocks.1.output.dense",
                 
                 # MLP mapping - layer 1
-                "layers.1.blocks.0.mlp.fc1": "encoder.layers.1.blocks.0.intermediate.dense",
-                "layers.1.blocks.0.mlp.fc2": "encoder.layers.1.blocks.0.output.dense",
-                "layers.1.blocks.1.mlp.fc1": "encoder.layers.1.blocks.1.intermediate.dense",
-                "layers.1.blocks.1.mlp.fc2": "encoder.layers.1.blocks.1.output.dense",
+                "layers_1.blocks.0.mlp.fc1": "encoder.layers.1.blocks.0.intermediate.dense",
+                "layers_1.blocks.0.mlp.fc2": "encoder.layers.1.blocks.0.output.dense",
+                "layers_1.blocks.1.mlp.fc1": "encoder.layers.1.blocks.1.intermediate.dense",
+                "layers_1.blocks.1.mlp.fc2": "encoder.layers.1.blocks.1.output.dense",
                 
-                # MLP mapping - layer 2 (tambahan untuk Swin Base)
-                "layers.2.blocks.0.mlp.fc1": "encoder.layers.2.blocks.0.intermediate.dense",
-                "layers.2.blocks.0.mlp.fc2": "encoder.layers.2.blocks.0.output.dense",
-                "layers.2.blocks.1.mlp.fc1": "encoder.layers.2.blocks.1.intermediate.dense",
-                "layers.2.blocks.1.mlp.fc2": "encoder.layers.2.blocks.1.output.dense",
-                "layers.2.blocks.2.mlp.fc1": "encoder.layers.2.blocks.2.intermediate.dense",
-                "layers.2.blocks.2.mlp.fc2": "encoder.layers.2.blocks.2.output.dense",
-                "layers.2.blocks.3.mlp.fc1": "encoder.layers.2.blocks.3.intermediate.dense",
-                "layers.2.blocks.3.mlp.fc2": "encoder.layers.2.blocks.3.output.dense",
-                "layers.2.blocks.4.mlp.fc1": "encoder.layers.2.blocks.4.intermediate.dense",
-                "layers.2.blocks.4.mlp.fc2": "encoder.layers.2.blocks.4.output.dense",
-                "layers.2.blocks.5.mlp.fc1": "encoder.layers.2.blocks.5.intermediate.dense",
-                "layers.2.blocks.5.mlp.fc2": "encoder.layers.2.blocks.5.output.dense",
-                "layers.2.blocks.6.mlp.fc1": "encoder.layers.2.blocks.6.intermediate.dense",  # Tambahan untuk Swin Base
-                "layers.2.blocks.6.mlp.fc2": "encoder.layers.2.blocks.6.output.dense",        # Tambahan untuk Swin Base
-                "layers.2.blocks.7.mlp.fc1": "encoder.layers.2.blocks.7.intermediate.dense",  # Tambahan untuk Swin Base
-                "layers.2.blocks.7.mlp.fc2": "encoder.layers.2.blocks.7.output.dense",        # Tambahan untuk Swin Base
-                "layers.2.blocks.8.mlp.fc1": "encoder.layers.2.blocks.8.intermediate.dense",  # Tambahan untuk Swin Base
-                "layers.2.blocks.8.mlp.fc2": "encoder.layers.2.blocks.8.output.dense",        # Tambahan untuk Swin Base
+                # MLP mapping - layer 2 (semua 18 blok)
+                "layers_2.blocks.0.mlp.fc1": "encoder.layers.2.blocks.0.intermediate.dense",
+                "layers_2.blocks.0.mlp.fc2": "encoder.layers.2.blocks.0.output.dense",
+                "layers_2.blocks.1.mlp.fc1": "encoder.layers.2.blocks.1.intermediate.dense",
+                "layers_2.blocks.1.mlp.fc2": "encoder.layers.2.blocks.1.output.dense",
+                "layers_2.blocks.2.mlp.fc1": "encoder.layers.2.blocks.2.intermediate.dense",
+                "layers_2.blocks.2.mlp.fc2": "encoder.layers.2.blocks.2.output.dense",
+                "layers_2.blocks.3.mlp.fc1": "encoder.layers.2.blocks.3.intermediate.dense",
+                "layers_2.blocks.3.mlp.fc2": "encoder.layers.2.blocks.3.output.dense",
+                "layers_2.blocks.4.mlp.fc1": "encoder.layers.2.blocks.4.intermediate.dense",
+                "layers_2.blocks.4.mlp.fc2": "encoder.layers.2.blocks.4.output.dense",
+                "layers_2.blocks.5.mlp.fc1": "encoder.layers.2.blocks.5.intermediate.dense",
+                "layers_2.blocks.5.mlp.fc2": "encoder.layers.2.blocks.5.output.dense",
+                "layers_2.blocks.6.mlp.fc1": "encoder.layers.2.blocks.6.intermediate.dense",
+                "layers_2.blocks.6.mlp.fc2": "encoder.layers.2.blocks.6.output.dense",
+                "layers_2.blocks.7.mlp.fc1": "encoder.layers.2.blocks.7.intermediate.dense",
+                "layers_2.blocks.7.mlp.fc2": "encoder.layers.2.blocks.7.output.dense",
+                "layers_2.blocks.8.mlp.fc1": "encoder.layers.2.blocks.8.intermediate.dense",
+                "layers_2.blocks.8.mlp.fc2": "encoder.layers.2.blocks.8.output.dense",
+                "layers_2.blocks.9.mlp.fc1": "encoder.layers.2.blocks.9.intermediate.dense",
+                "layers_2.blocks.9.mlp.fc2": "encoder.layers.2.blocks.9.output.dense",
+                "layers_2.blocks.10.mlp.fc1": "encoder.layers.2.blocks.10.intermediate.dense",
+                "layers_2.blocks.10.mlp.fc2": "encoder.layers.2.blocks.10.output.dense",
+                "layers_2.blocks.11.mlp.fc1": "encoder.layers.2.blocks.11.intermediate.dense",
+                "layers_2.blocks.11.mlp.fc2": "encoder.layers.2.blocks.11.output.dense",
+                "layers_2.blocks.12.mlp.fc1": "encoder.layers.2.blocks.12.intermediate.dense",
+                "layers_2.blocks.12.mlp.fc2": "encoder.layers.2.blocks.12.output.dense",
+                "layers_2.blocks.13.mlp.fc1": "encoder.layers.2.blocks.13.intermediate.dense",
+                "layers_2.blocks.13.mlp.fc2": "encoder.layers.2.blocks.13.output.dense",
+                "layers_2.blocks.14.mlp.fc1": "encoder.layers.2.blocks.14.intermediate.dense",
+                "layers_2.blocks.14.mlp.fc2": "encoder.layers.2.blocks.14.output.dense",
+                "layers_2.blocks.15.mlp.fc1": "encoder.layers.2.blocks.15.intermediate.dense",
+                "layers_2.blocks.15.mlp.fc2": "encoder.layers.2.blocks.15.output.dense",
+                "layers_2.blocks.16.mlp.fc1": "encoder.layers.2.blocks.16.intermediate.dense",
+                "layers_2.blocks.16.mlp.fc2": "encoder.layers.2.blocks.16.output.dense",
+                "layers_2.blocks.17.mlp.fc1": "encoder.layers.2.blocks.17.intermediate.dense",
+                "layers_2.blocks.17.mlp.fc2": "encoder.layers.2.blocks.17.output.dense",
                 
                 # MLP mapping - layer 3
-                "layers.3.blocks.0.mlp.fc1": "encoder.layers.3.blocks.0.intermediate.dense",
-                "layers.3.blocks.0.mlp.fc2": "encoder.layers.3.blocks.0.output.dense",
-                "layers.3.blocks.1.mlp.fc1": "encoder.layers.3.blocks.1.intermediate.dense",
-                "layers.3.blocks.1.mlp.fc2": "encoder.layers.3.blocks.1.output.dense",
+                "layers_3.blocks.0.mlp.fc1": "encoder.layers.3.blocks.0.intermediate.dense",
+                "layers_3.blocks.0.mlp.fc2": "encoder.layers.3.blocks.0.output.dense",
+                "layers_3.blocks.1.mlp.fc1": "encoder.layers.3.blocks.1.intermediate.dense",
+                "layers_3.blocks.1.mlp.fc2": "encoder.layers.3.blocks.1.output.dense",
                 
                 # Downsample mapping
-                "layers.1.downsample.norm": "encoder.layers.0.downsample.norm",
-                "layers.1.downsample.reduction": "encoder.layers.0.downsample.reduction",
-                "layers.2.downsample.norm": "encoder.layers.1.downsample.norm",
-                "layers.2.downsample.reduction": "encoder.layers.1.downsample.reduction",
-                "layers.3.downsample.norm": "encoder.layers.2.downsample.norm",
-                "layers.3.downsample.reduction": "encoder.layers.2.downsample.reduction"
+                "layers_1.downsample.norm": "encoder.layers.0.downsample.norm",
+                "layers_1.downsample.reduction": "encoder.layers.0.downsample.reduction",
+                "layers_2.downsample.norm": "encoder.layers.1.downsample.norm",
+                "layers_2.downsample.reduction": "encoder.layers.1.downsample.reduction",
+                "layers_3.downsample.norm": "encoder.layers.2.downsample.norm",
+                "layers_3.downsample.reduction": "encoder.layers.2.downsample.reduction"
             }
             
             # Tambahkan pemetaan untuk relative position bias
             rel_pos_mapping = {}
-            blocks_per_layer = [2, 2, 9, 2]  # Swin Base memiliki 9 blok di layer 2
+            blocks_per_layer = [2, 2, 18, 2]  # Swin Base memiliki 18 blok di layer 2
             
             for layer_idx in range(4):  # 4 layers in Swin-B
                 for block_idx in range(blocks_per_layer[layer_idx]):
-                    timm_key = f"layers.{layer_idx}.blocks.{block_idx}.attn.relative_position_bias_table"
+                    timm_key = f"layers_{layer_idx}.blocks.{block_idx}.attn.relative_position_bias_table"
                     gd_key = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.relative_position_bias_table"
                     rel_pos_mapping[timm_key] = gd_key
             
@@ -274,7 +331,7 @@ class SwinBackbone(nn.Module):
             # Definisi struktur untuk QKV mapping (disesuaikan untuk Swin Base)
             hidden_dims = [128, 256, 512, 1024]  # dimensi per layer untuk Swin Base
             num_heads_per_layer = [4, 8, 16, 32]  # jumlah head per layer untuk Swin Base
-            blocks_per_layer = [2, 2, 9, 2]  # jumlah block per layer untuk Swin Base
+            blocks_per_layer = [2, 2, 18, 2]  # jumlah block per layer untuk Swin Base
 
             # Handle QKV parameters with improved mapping
             for layer_idx in range(4):  # Swin-B memiliki 4 layer
@@ -284,8 +341,8 @@ class SwinBackbone(nn.Module):
                     num_heads = num_heads_per_layer[layer_idx]
                     
                     # Nama parameter di TIMM model
-                    timm_qkv_weight = f"layers.{layer_idx}.blocks.{block_idx}.attn.qkv.weight"
-                    timm_qkv_bias = f"layers.{layer_idx}.blocks.{block_idx}.attn.qkv.bias"
+                    timm_qkv_weight = f"layers_{layer_idx}.blocks.{block_idx}.attn.qkv.weight"
+                    timm_qkv_bias = f"layers_{layer_idx}.blocks.{block_idx}.attn.qkv.bias"
                     
                     # Nama parameter di GroundingDINO
                     gd_q_weight = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.query.weight"

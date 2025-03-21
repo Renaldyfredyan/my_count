@@ -4,6 +4,7 @@ from torch import nn
 import timm
 import numpy as np
 import matplotlib.pyplot as plt
+from transformers import AutoModelForZeroShotObjectDetection
 import json
 
 def visualize_features(features, output_dir="./feature_maps"):
@@ -70,41 +71,17 @@ class SwinBackbone(nn.Module):
         
         # Setup path untuk menyimpan model
         os.makedirs(cache_dir, exist_ok=True)
-        model_path = os.path.join(cache_dir, 'timm_standard_swin_t_weights.pth')
+        model_path = os.path.join(cache_dir, 'timm_swin_with_gdino_weights.pth')
         
-        # Buat model Swin-T dari timm dengan pretrained=True untuk menggunakan bobot standar
+        # Buat model Swin-T dari timm
         self.backbone = timm.create_model(
             'swin_tiny_patch4_window7_224',
-            pretrained=True,  # Gunakan bobot pretrained standar
+            pretrained=False,
             num_classes=0,
             features_only=True,
             out_indices=(1, 2, 3),
             img_size=512
         )
-        
-        # Verifikasi bahwa semua parameter telah diinisialisasi dengan benar
-        if debug:
-            # Cek apakah semua parameter memiliki nilai (tidak ada yang masih nol)
-            uninit_params = []
-            total_params = 0
-            for name, param in self.backbone.named_parameters():
-                total_params += 1
-                # Cek apakah parameter masih kosong/nol (indikasi loading gagal)
-                if torch.allclose(param, torch.zeros_like(param)):
-                    uninit_params.append(name)
-            
-            if len(uninit_params) > 0:
-                print(f"WARNING: {len(uninit_params)}/{total_params} parameters appear to be uninitialized!")
-                for name in uninit_params[:5]:  # Tampilkan 5 contoh parameter yang belum diinisialisasi
-                    print(f"  - {name}")
-                if len(uninit_params) > 5:
-                    print(f"  - ...and {len(uninit_params) - 5} more")
-            else:
-                print(f"SUCCESS: All {total_params} parameters successfully loaded!")
-                
-        # Simpan bobot untuk penggunaan di masa mendatang
-        torch.save(self.backbone.state_dict(), model_path)
-        print(f"Bobot model tersimpan di: {model_path}")
         
         # Channel dimensions
         self.num_channels = {
@@ -121,13 +98,316 @@ class SwinBackbone(nn.Module):
             for name, module in self.backbone.named_modules():
                 if len(list(module.children())) == 0:  # Hanya cetak leaf modules
                     print(f"  {name}: {module}")
+        
+        # Load parameter mapping if it exists, otherwise create new mapping
+        if os.path.exists(model_path):
+            print(f"Loading pre-mapped weights from {model_path}")
+            self.backbone.load_state_dict(torch.load(model_path, weights_only=True))
+            if debug:
+                stats = print_param_stats(self.backbone, "backbone")
+        else:
+            print("Creating new parameter mapping from GroundingDINO...")
+            # Load GroundingDINO
+            gd_model = AutoModelForZeroShotObjectDetection.from_pretrained("IDEA-Research/grounding-dino-tiny")
+            gd_backbone = gd_model.model.backbone.conv_encoder.model
             
-            # Cetak statistik parameter
-            stats = print_param_stats(self.backbone, "backbone")
+            # Debug: Bandingkan arsitektur
+            if debug:
+                print("\nGroundingDINO Backbone Structure:")
+                for name, module in gd_backbone.named_modules():
+                    if len(list(module.children())) == 0:  # Hanya cetak leaf modules
+                        print(f"  {name}: {module}")
+                
+                print("\nParameter stats sebelum mapping:")
+                before_stats = print_param_stats(self.backbone, "before")
             
-            # Simpan statistik parameter ke file
-            with open('swin_parameter_stats.json', 'w') as f:
-                json.dump(stats, f, indent=2)
+            # Get state dicts
+            timm_state_dict = self.backbone.state_dict()
+            gd_state_dict = gd_backbone.state_dict()
+            
+            # Cetak beberapa key dari setiap state dict untuk debugging
+            if debug:
+                print("\nSample TIMM keys:")
+                for i, k in enumerate(timm_state_dict.keys()):
+                    if i < 10:  # Cetak 10 key pertama
+                        print(f"  {k}: {timm_state_dict[k].shape}")
+                
+                print("\nSample GroundingDINO keys:")
+                for i, k in enumerate(gd_state_dict.keys()):
+                    if i < 10:  # Cetak 10 key pertama
+                        print(f"  {k}: {gd_state_dict[k].shape}")
+            
+            # Define parameter mapping
+            # This is a starting point and may need adjustment
+            layer_mapping = {
+                # Patch embedding
+                "patch_embed.proj": "embeddings.patch_embeddings.projection",
+                "patch_embed.norm": "embeddings.norm",
+                
+                # Layer normalization mapping - layer 0
+                "layers_0.blocks.0.norm1": "encoder.layers.0.blocks.0.layernorm_before",
+                "layers_0.blocks.0.norm2": "encoder.layers.0.blocks.0.layernorm_after",
+                "layers_0.blocks.1.norm1": "encoder.layers.0.blocks.1.layernorm_before",
+                "layers_0.blocks.1.norm2": "encoder.layers.0.blocks.1.layernorm_after",
+                
+                # Layer normalization mapping - layer 1
+                "layers_1.blocks.0.norm1": "encoder.layers.1.blocks.0.layernorm_before",
+                "layers_1.blocks.0.norm2": "encoder.layers.1.blocks.0.layernorm_after",
+                "layers_1.blocks.1.norm1": "encoder.layers.1.blocks.1.layernorm_before",
+                "layers_1.blocks.1.norm2": "encoder.layers.1.blocks.1.layernorm_after",
+                
+                # Layer normalization mapping - layer 2
+                "layers_2.blocks.0.norm1": "encoder.layers.2.blocks.0.layernorm_before",
+                "layers_2.blocks.0.norm2": "encoder.layers.2.blocks.0.layernorm_after",
+                "layers_2.blocks.1.norm1": "encoder.layers.2.blocks.1.layernorm_before",
+                "layers_2.blocks.1.norm2": "encoder.layers.2.blocks.1.layernorm_after",
+                "layers_2.blocks.2.norm1": "encoder.layers.2.blocks.2.layernorm_before",
+                "layers_2.blocks.2.norm2": "encoder.layers.2.blocks.2.layernorm_after",
+                "layers_2.blocks.3.norm1": "encoder.layers.2.blocks.3.layernorm_before",
+                "layers_2.blocks.3.norm2": "encoder.layers.2.blocks.3.layernorm_after",
+                "layers_2.blocks.4.norm1": "encoder.layers.2.blocks.4.layernorm_before",
+                "layers_2.blocks.4.norm2": "encoder.layers.2.blocks.4.layernorm_after",
+                "layers_2.blocks.5.norm1": "encoder.layers.2.blocks.5.layernorm_before",
+                "layers_2.blocks.5.norm2": "encoder.layers.2.blocks.5.layernorm_after",
+                
+                # Layer normalization mapping - layer 3
+                "layers_3.blocks.0.norm1": "encoder.layers.3.blocks.0.layernorm_before",
+                "layers_3.blocks.0.norm2": "encoder.layers.3.blocks.0.layernorm_after",
+                "layers_3.blocks.1.norm1": "encoder.layers.3.blocks.1.layernorm_before",
+                "layers_3.blocks.1.norm2": "encoder.layers.3.blocks.1.layernorm_after",
+                
+                # Projection mapping - layer 0
+                "layers_0.blocks.0.attn.proj": "encoder.layers.0.blocks.0.attention.output.dense",
+                "layers_0.blocks.1.attn.proj": "encoder.layers.0.blocks.1.attention.output.dense",
+                
+                # Projection mapping - layer 1
+                "layers_1.blocks.0.attn.proj": "encoder.layers.1.blocks.0.attention.output.dense",
+                "layers_1.blocks.1.attn.proj": "encoder.layers.1.blocks.1.attention.output.dense",
+                
+                # Projection mapping - layer 2
+                "layers_2.blocks.0.attn.proj": "encoder.layers.2.blocks.0.attention.output.dense",
+                "layers_2.blocks.1.attn.proj": "encoder.layers.2.blocks.1.attention.output.dense",
+                "layers_2.blocks.2.attn.proj": "encoder.layers.2.blocks.2.attention.output.dense",
+                "layers_2.blocks.3.attn.proj": "encoder.layers.2.blocks.3.attention.output.dense",
+                "layers_2.blocks.4.attn.proj": "encoder.layers.2.blocks.4.attention.output.dense",
+                "layers_2.blocks.5.attn.proj": "encoder.layers.2.blocks.5.attention.output.dense",
+                
+                # Projection mapping - layer 3
+                "layers_3.blocks.0.attn.proj": "encoder.layers.3.blocks.0.attention.output.dense",
+                "layers_3.blocks.1.attn.proj": "encoder.layers.3.blocks.1.attention.output.dense",
+                
+                # MLP mapping - layer 0
+                "layers_0.blocks.0.mlp.fc1": "encoder.layers.0.blocks.0.intermediate.dense",
+                "layers_0.blocks.0.mlp.fc2": "encoder.layers.0.blocks.0.output.dense",
+                "layers_0.blocks.1.mlp.fc1": "encoder.layers.0.blocks.1.intermediate.dense",
+                "layers_0.blocks.1.mlp.fc2": "encoder.layers.0.blocks.1.output.dense",
+                
+                # MLP mapping - layer 1
+                "layers_1.blocks.0.mlp.fc1": "encoder.layers.1.blocks.0.intermediate.dense",
+                "layers_1.blocks.0.mlp.fc2": "encoder.layers.1.blocks.0.output.dense",
+                "layers_1.blocks.1.mlp.fc1": "encoder.layers.1.blocks.1.intermediate.dense",
+                "layers_1.blocks.1.mlp.fc2": "encoder.layers.1.blocks.1.output.dense",
+                
+                # MLP mapping - layer 2
+                "layers_2.blocks.0.mlp.fc1": "encoder.layers.2.blocks.0.intermediate.dense",
+                "layers_2.blocks.0.mlp.fc2": "encoder.layers.2.blocks.0.output.dense",
+                "layers_2.blocks.1.mlp.fc1": "encoder.layers.2.blocks.1.intermediate.dense",
+                "layers_2.blocks.1.mlp.fc2": "encoder.layers.2.blocks.1.output.dense",
+                "layers_2.blocks.2.mlp.fc1": "encoder.layers.2.blocks.2.intermediate.dense",
+                "layers_2.blocks.2.mlp.fc2": "encoder.layers.2.blocks.2.output.dense",
+                "layers_2.blocks.3.mlp.fc1": "encoder.layers.2.blocks.3.intermediate.dense",
+                "layers_2.blocks.3.mlp.fc2": "encoder.layers.2.blocks.3.output.dense",
+                "layers_2.blocks.4.mlp.fc1": "encoder.layers.2.blocks.4.intermediate.dense",
+                "layers_2.blocks.4.mlp.fc2": "encoder.layers.2.blocks.4.output.dense",
+                "layers_2.blocks.5.mlp.fc1": "encoder.layers.2.blocks.5.intermediate.dense",
+                "layers_2.blocks.5.mlp.fc2": "encoder.layers.2.blocks.5.output.dense",
+                
+                # MLP mapping - layer 3
+                "layers_3.blocks.0.mlp.fc1": "encoder.layers.3.blocks.0.intermediate.dense",
+                "layers_3.blocks.0.mlp.fc2": "encoder.layers.3.blocks.0.output.dense",
+                "layers_3.blocks.1.mlp.fc1": "encoder.layers.3.blocks.1.intermediate.dense",
+                "layers_3.blocks.1.mlp.fc2": "encoder.layers.3.blocks.1.output.dense",
+                
+                # Downsample mapping
+                "layers_1.downsample.norm": "encoder.layers.0.downsample.norm",
+                "layers_1.downsample.reduction": "encoder.layers.0.downsample.reduction",
+                "layers_2.downsample.norm": "encoder.layers.1.downsample.norm",
+                "layers_2.downsample.reduction": "encoder.layers.1.downsample.reduction",
+                "layers_3.downsample.norm": "encoder.layers.2.downsample.norm",
+                "layers_3.downsample.reduction": "encoder.layers.2.downsample.reduction"
+            }
+            
+            # Tambahkan pemetaan untuk relative position bias
+            rel_pos_mapping = {}
+            for layer_idx in range(4):  # 4 layers in Swin-T
+                for block_idx in range(2 if layer_idx < 2 else 6 if layer_idx == 2 else 2):  # jumlah blok per layer
+                    timm_key = f"layers_{layer_idx}.blocks.{block_idx}.attn.relative_position_bias_table"
+                    gd_key = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.relative_position_bias_table"
+                    rel_pos_mapping[timm_key] = gd_key
+            
+            # Map and load parameters where possible
+            loaded_params = 0
+            total_params = len(timm_state_dict)
+            qkv_mapped = 0
+            qkv_total = 0
+
+            # Debugging: simpan info parameter yang berhasil dimapping
+            mapping_info = []
+            
+            # Definisi struktur untuk QKV mapping
+            hidden_dims = [96, 192, 384, 768]  # dimensi per layer
+            num_heads_per_layer = [3, 6, 12, 24]  # jumlah head per layer
+            blocks_per_layer = [2, 2, 6, 2]  # jumlah block per layer
+
+            # Handle QKV parameters with improved mapping
+            for layer_idx in range(4):  # Swin-T memiliki 4 layer
+                for block_idx in range(blocks_per_layer[layer_idx]):
+                    # Dapatkan dimensi untuk layer ini
+                    dim = hidden_dims[layer_idx]
+                    num_heads = num_heads_per_layer[layer_idx]
+                    
+                    # Nama parameter di TIMM model
+                    timm_qkv_weight = f"layers_{layer_idx}.blocks.{block_idx}.attn.qkv.weight"
+                    timm_qkv_bias = f"layers_{layer_idx}.blocks.{block_idx}.attn.qkv.bias"
+                    
+                    # Nama parameter di GroundingDINO
+                    gd_q_weight = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.query.weight"
+                    gd_k_weight = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.key.weight"
+                    gd_v_weight = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.value.weight"
+                    gd_q_bias = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.query.bias"
+                    gd_k_bias = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.key.bias"
+                    gd_v_bias = f"encoder.layers.{layer_idx}.blocks.{block_idx}.attention.self.value.bias"
+                    
+                    qkv_total += 1
+                    
+                    if all(name in gd_state_dict for name in [gd_q_weight, gd_k_weight, gd_v_weight, gd_q_bias, gd_k_bias, gd_v_bias]):
+                        q_weight = gd_state_dict[gd_q_weight]
+                        k_weight = gd_state_dict[gd_k_weight]
+                        v_weight = gd_state_dict[gd_v_weight]
+                        
+                        # Periksa dimensi
+                        if q_weight.shape[0] == dim and timm_state_dict[timm_qkv_weight].shape[0] == 3 * dim:
+                            # Gabungkan parameter QKV
+                            combined_weight = torch.cat([q_weight, k_weight, v_weight], dim=0)
+                            
+                            q_bias = gd_state_dict[gd_q_bias]
+                            k_bias = gd_state_dict[gd_k_bias]
+                            v_bias = gd_state_dict[gd_v_bias]
+                            combined_bias = torch.cat([q_bias, k_bias, v_bias], dim=0)
+                            
+                            # Update TIMM state dict
+                            timm_state_dict[timm_qkv_weight] = combined_weight
+                            timm_state_dict[timm_qkv_bias] = combined_bias
+                            
+                            loaded_params += 2  # Weight dan bias
+                            qkv_mapped += 1
+                            
+                            mapping_info.append({
+                                "timm_name": timm_qkv_weight,
+                                "gd_name": f"{gd_q_weight}, {gd_k_weight}, {gd_v_weight}",
+                                "timm_shape": list(combined_weight.shape),
+                                "gd_shape": [list(q_weight.shape), list(k_weight.shape), list(v_weight.shape)],
+                                "status": "QKV mapped successfully"
+                            })
+                            mapping_info.append({
+                                "timm_name": timm_qkv_bias,
+                                "gd_name": f"{gd_q_bias}, {gd_k_bias}, {gd_v_bias}",
+                                "timm_shape": list(combined_bias.shape),
+                                "gd_shape": [list(q_bias.shape), list(k_bias.shape), list(v_bias.shape)],
+                                "status": "QKV bias mapped successfully"
+                            })
+            
+            # Pemetaan relative position bias table
+            for timm_key, gd_key in rel_pos_mapping.items():
+                if gd_key in gd_state_dict and timm_key in timm_state_dict:
+                    timm_shape = timm_state_dict[timm_key].shape
+                    gd_shape = gd_state_dict[gd_key].shape
+                    
+                    # Jika ukuran sama, pindahkan langsung
+                    if timm_shape == gd_shape:
+                        timm_state_dict[timm_key] = gd_state_dict[gd_key].clone()
+                        loaded_params += 1
+                        
+                        mapping_info.append({
+                            "timm_name": timm_key,
+                            "gd_name": gd_key,
+                            "timm_shape": list(timm_shape),
+                            "gd_shape": list(gd_shape),
+                            "status": "Position bias mapped successfully"
+                        })
+            
+            # Regular parameter mapping for other parameters
+            for timm_name in timm_state_dict.keys():
+                mapped = False
+                
+                # Skip QKV parameters yang sudah diproses
+                if "qkv" in timm_name or timm_name in [k for k in rel_pos_mapping.keys()]:
+                    continue
+                    
+                # Regular parameter mapping
+                for timm_prefix, gd_prefix in layer_mapping.items():
+                    # Check if current timm parameter matches any mapped prefix
+                    if timm_name.startswith(timm_prefix):
+                        # Try to find corresponding parameter in GroundingDINO
+                        suffix = timm_name[len(timm_prefix):]  # Get the suffix (e.g. ".weight", ".bias")
+                        potential_gd_name = gd_prefix + suffix
+                        
+                        # Check if parameter exists in GroundingDINO state dict
+                        if potential_gd_name in gd_state_dict:
+                            # Check if shapes match
+                            if gd_state_dict[potential_gd_name].shape == timm_state_dict[timm_name].shape:
+                                # Copy weights
+                                timm_state_dict[timm_name] = gd_state_dict[potential_gd_name].clone()
+                                loaded_params += 1
+                                
+                                # Log mapping info
+                                mapping_info.append({
+                                    "timm_name": timm_name,
+                                    "gd_name": potential_gd_name,
+                                    "timm_shape": list(timm_state_dict[timm_name].shape),
+                                    "gd_shape": list(gd_state_dict[potential_gd_name].shape),
+                                    "status": "Mapped successfully"
+                                })
+                                mapped = True
+                                break
+                            else:
+                                # Shapes don't match
+                                mapping_info.append({
+                                    "timm_name": timm_name,
+                                    "gd_name": potential_gd_name,
+                                    "timm_shape": list(timm_state_dict[timm_name].shape),
+                                    "gd_shape": list(gd_state_dict[potential_gd_name].shape),
+                                    "status": "Shape mismatch"
+                                })
+                
+                if not mapped and debug:
+                    mapping_info.append({
+                        "timm_name": timm_name,
+                        "gd_name": "No match found",
+                        "timm_shape": list(timm_state_dict[timm_name].shape),
+                        "gd_shape": None,
+                        "status": "No mapping rule"
+                    })
+
+            print(f"Mapped {loaded_params}/{total_params} parameters successfully")
+            print(f"QKV parameters: {qkv_mapped}/{qkv_total} potential matches found")
+
+            # Debug: Simpan mapping info ke file
+            if debug:
+                with open('parameter_mapping_info.json', 'w') as f:
+                    json.dump(mapping_info, f, indent=2)
+
+            # Save mapped parameters for future use
+            if loaded_params > 0:
+                self.backbone.load_state_dict(timm_state_dict, strict=False)
+                torch.save(self.backbone.state_dict(), model_path)
+                print(f"Saved mapped parameters to {model_path}")
+                
+                if debug:
+                    print("\nParameter stats setelah mapping:")
+                    after_stats = print_param_stats(self.backbone, "after")
+            else:
+                print("Warning: No parameters were successfully mapped!")
 
         # Set requires_grad
         for param in self.backbone.parameters():
@@ -237,47 +517,61 @@ def test_backbone(requires_grad=False):
     x = torch.randn(2, 3, 512, 512).to(device)
     print(f"Input tensor shape: {x.shape}")
     
+    # try:
+    #     # Test forward_multiscale
+    #     with torch.set_grad_enabled(requires_grad):
+    #         print("\nTesting forward_multiscale...")
+    #         s3, s4, s5 = backbone.forward_multiscale(x)
+    #         print(f"S3 shape: {s3.shape}")
+    #         print(f"S4 shape: {s4.shape}")
+    #         print(f"S5 shape: {s5.shape}")
+        
+    #         # Test forward_concatenated
+    #         print("\nTesting forward_concatenated...")
+    #         concat = backbone.forward_concatenated(x)
+    #         print(f"Concatenated shape: {concat.shape}")
+    #         print(f"Expected channels: {backbone.total_channels}, Actual: {concat.shape[1]}")
     try:
-        # Test forward_multiscale
-        with torch.set_grad_enabled(requires_grad):
-            print("\nTesting forward_multiscale...")
-            s3, s4, s5 = backbone.forward_multiscale(x)
-            print(f"S3 shape: {s3.shape}")
-            print(f"S4 shape: {s4.shape}")
-            print(f"S5 shape: {s5.shape}")
-        
-            # Test forward_concatenated
-            print("\nTesting forward_concatenated...")
-            concat = backbone.forward_concatenated(x)
-            print(f"Concatenated shape: {concat.shape}")
-            print(f"Expected channels: {backbone.total_channels}, Actual: {concat.shape[1]}")
-            
-            # Test backward pass jika requires_grad=True
-            if requires_grad:
-                print("\nTesting backward pass...")
-                # Simulasi loss sederhana (mean dari output)
-                loss = concat.mean()
-                print(f"Dummy loss: {loss.item()}")
-                
-                # Backward
-                optimizer.zero_grad()
-                loss.backward()
-                
-                # Cek gradients
-                grad_norms = []
-                for name, param in backbone.named_parameters():
-                    if param.grad is not None:
-                        grad_norm = param.grad.norm().item()
-                        grad_norms.append((name, grad_norm))
-                
-                # Cetak 5 gradients dengan norm tertinggi
-                print("Top 5 gradients by norm:")
-                for name, norm in sorted(grad_norms, key=lambda x: x[1], reverse=True)[:5]:
-                    print(f"  {name}: {norm:.6f}")
-                
-                optimizer.step()
-                print("Optimizer step completed")
-        
+           # Test forward_multiscale
+           with torch.set_grad_enabled(requires_grad):
+               print("\nTesting forward_multiscale...")
+               s3, s4, s5 = backbone.forward_multiscale(x)
+               print(f"S3 shape: {s3.shape}")
+               print(f"S4 shape: {s4.shape}")
+               print(f"S5 shape: {s5.shape}")
+           
+               # Test forward_concatenated
+               print("\nTesting forward_concatenated...")
+               concat = backbone.forward_concatenated(x)
+               print(f"Concatenated shape: {concat.shape}")
+               print(f"Expected channels: {backbone.total_channels}, Actual: {concat.shape[1]}")
+           
+               # Test backward pass jika requires_grad=True
+               if requires_grad:
+                   print("\nTesting backward pass...")
+                   # Simulasi loss sederhana (mean dari output)
+                   loss = concat.mean()
+                   print(f"Dummy loss: {loss.item()}")
+                   
+                   # Backward
+                   optimizer.zero_grad()
+                   loss.backward()
+                   
+                   # Cek gradients
+                   grad_norms = []
+                   for name, param in backbone.named_parameters():
+                       if param.grad is not None:
+                           grad_norm = param.grad.norm().item()
+                           grad_norms.append((name, grad_norm))
+                   
+                   # Cetak 5 gradients dengan norm tertinggi
+                   print("Top 5 gradients by norm:")
+                   for name, norm in sorted(grad_norms, key=lambda x: x[1], reverse=True)[:5]:
+                       print(f"  {name}: {norm:.6f}")
+                   
+                   optimizer.step()
+                   print("Optimizer step completed")
+           
     except Exception as e:
         print(f"Error testing backbone: {e}")
         import traceback

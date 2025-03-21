@@ -1,0 +1,2608 @@
+[
+  {
+    "timm_name": "patch_embed.proj.weight",
+    "gd_name": "embeddings.patch_embeddings.projection.weight",
+    "timm_shape": [
+      128,
+      3,
+      4,
+      4
+    ],
+    "gd_shape": [
+      128,
+      3,
+      4,
+      4
+    ],
+    "status": "Mapped successfully"
+  },
+  {
+    "timm_name": "patch_embed.proj.bias",
+    "gd_name": "embeddings.patch_embeddings.projection.bias",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
+  },
+  {
+    "timm_name": "patch_embed.norm.weight",
+    "gd_name": "embeddings.norm.weight",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
+  },
+  {
+    "timm_name": "patch_embed.norm.bias",
+    "gd_name": "embeddings.norm.bias",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": [
+      128
+    ],
+    "status": "Mapped successfully"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      4
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128,
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.0.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      4
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128,
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_0.blocks.1.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      128
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.downsample.norm.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.downsample.norm.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.downsample.reduction.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      8
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256,
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024,
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256,
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.0.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      8
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256,
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024,
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256,
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_1.blocks.1.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      256
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.downsample.norm.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.downsample.norm.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.downsample.reduction.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.0.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.1.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.2.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.3.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.4.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.5.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.6.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.7.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.8.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.9.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.10.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.11.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.12.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.13.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.14.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.15.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.16.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      16
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048,
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_2.blocks.17.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      512
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.downsample.norm.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.downsample.norm.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.downsample.reduction.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024,
+      2048
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      32
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024,
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      4096,
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      4096
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024,
+      4096
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.0.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.norm1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.norm1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.attn.relative_position_bias_table",
+    "gd_name": "No match found",
+    "timm_shape": [
+      169,
+      32
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.attn.proj.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024,
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.attn.proj.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.norm2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.norm2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.mlp.fc1.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      4096,
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.mlp.fc1.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      4096
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.mlp.fc2.weight",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024,
+      4096
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  },
+  {
+    "timm_name": "layers_3.blocks.1.mlp.fc2.bias",
+    "gd_name": "No match found",
+    "timm_shape": [
+      1024
+    ],
+    "gd_shape": null,
+    "status": "No mapping rule"
+  }
+]
