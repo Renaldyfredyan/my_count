@@ -1,0 +1,3 @@
+ganti hybrid encoder
+ganti eifl
+ganti regresion head
