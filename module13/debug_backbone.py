@@ -572,14 +572,14 @@ def test_backbone(requires_grad=False):
                    optimizer.step()
                    print("Optimizer step completed")
            
-       except Exception as e:
-           print(f"Error testing backbone: {e}")
-           import traceback
-           traceback.print_exc()
-       
-       print("\n" + "="*50)
-       print("BACKBONE TEST COMPLETE")
-       print("="*50)
+    except Exception as e:
+        print(f"Error testing backbone: {e}")
+        import traceback
+        traceback.print_exc()
+    
+    print("\n" + "="*50)
+    print("BACKBONE TEST COMPLETE")
+    print("="*50)
 
 
 if __name__ == "__main__":

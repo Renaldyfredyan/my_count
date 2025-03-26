@@ -108,6 +108,7 @@ def train(args):
     )
 
     print(rank)
+            
     for epoch in range(start_epoch + 1, args.epochs + 1):
         if rank == 0:
             start = perf_counter()
@@ -120,6 +121,7 @@ def train(args):
 
         train_loader.sampler.set_epoch(epoch)
         model.train()
+
         for img, bboxes, density_map in train_loader:
             img = img.to(device)
             bboxes = bboxes.to(device)

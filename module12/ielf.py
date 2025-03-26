@@ -6,6 +6,69 @@ from torch import nn
 
 from torchvision.ops import roi_align
 
+class LinearAttention(nn.Module):
+    def __init__(self, emb_dim, dropout=0.1, norm_first=False):
+        super().__init__()
+        self.emb_dim = emb_dim
+        self.scale = emb_dim ** -0.5
+        self.norm_first = norm_first
+        
+        self.q_proj = nn.Linear(emb_dim, emb_dim)
+        self.k_proj = nn.Linear(emb_dim, emb_dim)
+        self.v_proj = nn.Linear(emb_dim, emb_dim)
+        
+        self.dropout = nn.Dropout(dropout)
+        
+        # Normalization layer for pre-norm variant
+        self.norm = nn.LayerNorm(emb_dim)
+        
+    def forward(self, query, key_value, query_pos=None, key_pos=None):
+        """
+        Efficient linear attention implementation
+        Args:
+            query: [N*B, E] tensor of query features
+            key_value: [HW*B, E] tensor of key/value features
+            query_pos: Optional positional encoding for query
+            key_pos: Optional positional encoding for key
+        Returns:
+            output: [N*B, E] tensor of updated query features
+        """
+        # Apply positional encodings if provided
+        q = query
+        if query_pos is not None:
+            q = q + query_pos
+            
+        k = key_value
+        if key_pos is not None:
+            k = k + key_pos
+        
+        # Apply normalization if using pre-norm
+        if self.norm_first:
+            q = self.norm(q)
+            k = self.norm(k)  # Pastikan norm digunakan juga untuk k
+        
+        # Linear projections
+        q = self.q_proj(q) * self.scale  # [N*B, E]
+        k = self.k_proj(k)  # [HW*B, E]
+        v = self.v_proj(key_value)  # [HW*B, E]
+        
+        # Apply softmax along feature dimension
+        q = q.softmax(dim=-1)  # [N*B, E]
+        k = k.softmax(dim=0)    # [HW*B, E]
+        
+        # Linear attention computation
+        # First compute context: k^T * v
+        context = torch.einsum('be,be->e', k, v)  # [E]
+        
+        # Then compute output: q * context
+        out = torch.einsum('be,e->be', q, context)  # [N*B, E]
+        
+        # Apply normalization after if using post-norm
+        if not self.norm_first:
+            out = self.norm(out)  # Pastikan norm digunakan juga dalam kasus post-norm
+        
+        return out
+
 class iEFLModule(nn.Module):
     def __init__(
         self,
@@ -48,29 +111,25 @@ class iEFLModule(nn.Module):
             )
             nn.init.normal_(self.shape_mapping)
 
-        # Multi-head cross attention for exemplar and shape fusion
-        self.exemplar_attention = nn.MultiheadAttention(
+        # Multi-head cross attention for exemplar and shape fusion (Step 1)
+        self.exemplar_shape_attention = nn.MultiheadAttention(
             emb_dim, num_heads, dropout=dropout, batch_first=False
-        )
-
-        # Self-attention untuk fitur enhancer
-        self.self_attention = nn.MultiheadAttention(
-            emb_dim, num_heads, dropout=dropout, batch_first=False
-        )
-                
-        # Feed-forward networks
-        self.ff_network = nn.Sequential(
-            nn.Linear(emb_dim, mlp_factor * emb_dim),
-            activation(),
-            nn.Linear(mlp_factor * emb_dim, emb_dim)
         )
         
-        # Linear attention for exemplar-image interaction
+        # Multi-head cross attention for exemplar-image interaction (Step 2)
+        self.exemplar_image_attention = nn.MultiheadAttention(
+            emb_dim, num_heads, dropout=dropout, batch_first=False
+        )
+        
+        # Linear attention for the next part of the pipeline (as shown in the figure)
         self.linear_attention = LinearAttention(
             emb_dim, 
             dropout=dropout,
             norm_first=norm_first
         )
+        
+        # Feed-forward network (Step 3)
+        self.ff_network = MLP(emb_dim, mlp_factor * emb_dim, dropout, activation)
         
         # Normalization layers
         self.norm1 = nn.LayerNorm(emb_dim, eps=layer_norm_eps) if norm else nn.Identity()
@@ -84,16 +143,9 @@ class iEFLModule(nn.Module):
 
         # Positional encoding
         self.pos_emb = PositionalEncodingsFixed(emb_dim)
-        
-        # Discriminative filter
-        self.discriminative_filter = nn.Sequential(
-            nn.Linear(emb_dim, 1),
-            nn.Sigmoid()
-        )
-        
-        # Dummy parameter untuk memastikan semua parameter digunakan
-        # Sering kali masalah terjadi karena parameter terakhir dalam model
-        self.dummy_param = nn.Parameter(torch.ones(1, 1))
+
+        # Flag untuk menggunakan MHCA atau Linear Attention di step 2
+        self.use_mhca_for_step2 = True  # Set True untuk mengikuti paper
 
     def forward(self, f_e, pos_emb, bboxes):
         bs, _, h, w = f_e.size()
@@ -129,7 +181,8 @@ class iEFLModule(nn.Module):
                 bs, self.num_objects * self.kernel_dim ** 2, -1
             ).transpose(0, 1).contiguous()  # [N, B, E]
         else:
-            exemplar_features = None
+            # Dalam mode zero-shot, gunakan shape_emb sebagai exemplar_features
+            exemplar_features = shape_emb.clone()
 
         # Generate positional encodings for queries
         query_pos_emb = self.pos_emb(
@@ -142,190 +195,75 @@ class iEFLModule(nn.Module):
         # Iterative feature learning
         all_prototypes = []
         
-        # Initialize F_k with shape_emb or exemplar_features
-        F_k = exemplar_features if exemplar_features is not None else shape_emb
+        # Initialize F_S_exm dengan shape_emb (sesuai Algorithm 1)
+        F_S_exm = shape_emb
         
-        # Dummy operation untuk memastikan self.dummy_param digunakan
-        # Ini akan memastikan parameter terakhir mendapat gradien
-        dummy_factor = torch.sigmoid(self.dummy_param)
+        # Initialize F_exm dengan exemplar_features (sesuai Algorithm 1)
+        F_exm = exemplar_features
         
         for k in range(self.num_iterative_steps):
-            # Step 1: Fuse shape and appearance information
-            if not self.zero_shot:
-                if self.norm_first:
-                    # Pre-norm for Step 1
-                    F_k_norm = self.norm1(F_k)
-                    attn_output = self.exemplar_attention(
-                        query=F_k_norm + query_pos_emb,
-                        key=shape_emb,
-                        value=shape_emb
-                    )[0]
-                    F_k = F_k + self.dropout1(attn_output)
-                else:
-                    # Post-norm for Step 1
-                    attn_output = self.exemplar_attention(
-                        query=F_k + query_pos_emb,
-                        key=shape_emb,
-                        value=shape_emb
-                    )[0]
-                    F_k = self.norm1(F_k + self.dropout1(attn_output))
-            
-            # Gunakan self-attention pada setiap iterasi
-            if k == self.num_iterative_steps - 1:  # Khusus iterasi terakhir
-                self_attn_out, _ = self.self_attention(
-                    query=F_k,
-                    key=F_k,
-                    value=F_k
-                )
-                # Bobot kecil agar tidak mengubah hasil secara signifikan
-                F_k = F_k + 0.01 * self_attn_out
-            
-            # Step 2: Learn from image features using linear attention
+            # Step 1: MHCA for fusing shape and exemplar
             if self.norm_first:
-                # Pre-norm for Step 2
-                F_k_norm = self.norm2(F_k)
-                F_k_flat = F_k_norm.reshape(-1, self.emb_dim)  # [N*B, E]
-                memory_flat = memory.reshape(-1, self.emb_dim)  # [HW*B, E]
-                
-                # Apply linear attention
-                attn_output = self.linear_attention(
-                    query=F_k_flat,
-                    key_value=memory_flat,
-                    query_pos=query_pos_emb.reshape(-1, self.emb_dim),
-                    key_pos=pos_emb.reshape(-1, self.emb_dim) if pos_emb is not None else None
-                )
-                
-                # Reshape back to [N, B, E]
-                attn_output = attn_output.reshape(F_k.shape)
-                F_k = F_k + self.dropout2(attn_output)
+                F_S_norm = self.norm1(F_S_exm)
+                attn_output = self.exemplar_shape_attention(
+                    query=F_S_norm + query_pos_emb,
+                    key=F_exm,
+                    value=F_exm
+                )[0]
+                F_prime_exm = F_S_exm + self.dropout1(attn_output)
             else:
-                # Post-norm for Step 2
-                F_k_flat = F_k.reshape(-1, self.emb_dim)  # [N*B, E]
-                memory_flat = memory.reshape(-1, self.emb_dim)  # [HW*B, E]
-                
-                # Apply linear attention
-                attn_output = self.linear_attention(
-                    query=F_k_flat,
-                    key_value=memory_flat,
-                    query_pos=query_pos_emb.reshape(-1, self.emb_dim),
-                    key_pos=pos_emb.reshape(-1, self.emb_dim) if pos_emb is not None else None
-                )
-                
-                # Reshape back to [N, B, E]
-                attn_output = attn_output.reshape(F_k.shape)
-                F_k = self.norm2(F_k + self.dropout2(attn_output))
+                attn_output = self.exemplar_shape_attention(
+                    query=F_S_exm + query_pos_emb,
+                    key=F_exm,
+                    value=F_exm
+                )[0]
+                F_prime_exm = self.norm1(F_S_exm + self.dropout1(attn_output))
             
-            # Step 3: Feed-forward transformation
+            # Step 2: First MHCA with image features
+            if self.norm_first:
+                F_prime_norm = self.norm2(F_prime_exm)
+                attn_output = self.exemplar_image_attention(
+                    query=F_prime_norm,
+                    key=memory,
+                    value=memory
+                )[0]
+                F_hat_k_mhca = F_prime_exm + self.dropout2(attn_output)
+            else:
+                attn_output = self.exemplar_image_attention(
+                    query=F_prime_exm,
+                    key=memory,
+                    value=memory
+                )[0]
+                F_hat_k_mhca = self.norm2(F_prime_exm + self.dropout2(attn_output))
+            
+            # Then apply linear attention as shown in the figure
+            F_prime_flat = F_hat_k_mhca.reshape(-1, self.emb_dim)
+            memory_flat = memory.reshape(-1, self.emb_dim)
+            
+            # Apply linear attention - pastikan LayerNorm dalam LinearAttention digunakan
+            attn_output = self.linear_attention(
+                query=F_prime_flat,
+                key_value=memory_flat,
+                query_pos=query_pos_emb.reshape(-1, self.emb_dim),
+                key_pos=pos_emb.reshape(-1, self.emb_dim) if pos_emb is not None else None
+            )
+            
+            # Reshape back and continue
+            F_hat_k = attn_output.reshape(F_hat_k_mhca.shape)
+            
+            # Step 3: Feed-forward transformation (F_S(k+1)_exm = FF(F^k) + F^k)
             if self.norm_first:
                 # Pre-norm for Step 3
-                F_k_norm = self.norm3(F_k)
-                ff_output = self.ff_network(F_k_norm)
-                F_k = F_k + self.dropout3(ff_output)
+                F_hat_norm = self.norm3(F_hat_k)
+                ff_output = self.ff_network(F_hat_norm)
+                F_S_exm = F_hat_k + self.dropout3(ff_output)  # Update F_S_exm untuk iterasi berikutnya
             else:
                 # Post-norm for Step 3
-                ff_output = self.ff_network(F_k)
-                F_k = self.norm3(F_k + self.dropout3(ff_output))
-
-            # Tambahkan residual skip connection dengan fitur awal
-            if k == 0:  # Hanya tambahkan pada iterasi pertama
-                F_k = F_k + shape_emb  # Tambahkan residual connection
+                ff_output = self.ff_network(F_hat_k)
+                F_S_exm = self.norm3(F_hat_k + self.dropout3(ff_output))  # Update F_S_exm untuk iterasi berikutnya
             
-            # Apply discriminative filtering pada setiap iterasi
-            # Gunakan dummy_factor untuk memastikan parameter tersebut digunakan
-            F_k_reshaped = F_k.permute(1, 0, 2)  # [B, N, E]
-            importance_scores = self.discriminative_filter(F_k_reshaped) * dummy_factor  # [B, N, 1]
-            
-            # Terapkan weighting hanya pada iterasi terakhir
-            if k == self.num_iterative_steps - 1:
-                F_k_weighted = F_k_reshaped * importance_scores
-                F_k = F_k_weighted.permute(1, 0, 2)  # [N, B, E]
-            else:
-                # Untuk iterasi lain, tetap gunakan importance_scores agar parameternya dipakai
-                # tapi dengan efek minimal
-                F_k_weighted = F_k_reshaped * (0.001 * importance_scores + 0.999)
-                F_k = F_k_weighted.permute(1, 0, 2)  # [N, B, E]
-                
-            # Add to the list of all prototypes
-            all_prototypes.append(F_k)
+            # Add to the list of all prototypes (F^k yang sudah diproses)
+            all_prototypes.append(F_hat_k)
 
         # Stack all iterations of prototype features
         return torch.stack(all_prototypes)  # [T, N, B, E]
-
-
-class LinearAttention(nn.Module):
-    def __init__(self, emb_dim, dropout=0.1, norm_first=False):
-        super().__init__()
-        self.emb_dim = emb_dim
-        self.scale = emb_dim ** -0.5
-        self.norm_first = norm_first
-        
-        self.q_proj = nn.Linear(emb_dim, emb_dim)
-        self.k_proj = nn.Linear(emb_dim, emb_dim)
-        self.v_proj = nn.Linear(emb_dim, emb_dim)
-        
-        self.dropout = nn.Dropout(dropout)
-        
-        # Normalization layer for pre-norm variant
-        self.norm = nn.LayerNorm(emb_dim)
-        
-    def forward(self, query, key_value, query_pos=None, key_pos=None):
-        """
-        Efficient linear attention implementation
-        Args:
-            query: [N*B, E] tensor of query features
-            key_value: [HW*B, E] tensor of key/value features
-            query_pos: Optional positional encoding for query
-            key_pos: Optional positional encoding for key
-        Returns:
-            output: [N*B, E] tensor of updated query features
-        """
-        # Apply positional encodings if provided
-        q = query
-        if query_pos is not None:
-            q = q + query_pos
-                
-        k = key_value
-        if key_pos is not None:
-            k = k + key_pos
-        
-        # Apply normalization if using pre-norm
-        if self.norm_first:
-            q = self.norm(q)
-            k = self.norm(k)
-        
-        # Linear projections
-        q = self.q_proj(q) * self.scale  # [N*B, E]
-        k = self.k_proj(k)  # [HW*B, E]
-        v = self.v_proj(key_value)  # [HW*B, E]
-        
-        # Hybrid approach - gunakan gabungan linear dan scaled dot-product attention
-        # untuk memastikan semua parameter digunakan
-        
-        # 1. Linear attention (ringan untuk komputasi)
-        q_soft = torch.softmax(q, dim=-1)  # [N*B, E]
-        k_soft = torch.softmax(k, dim=0)    # [HW*B, E]
-        linear_context = torch.einsum('be,be->e', k_soft, v)  # [E]
-        linear_output = torch.einsum('be,e->be', q_soft, linear_context)  # [N*B, E]
-        
-        # 2. Scaled dot-product attention (lebih ekspresif)
-        # Gunakan subsample dari key jika terlalu besar untuk menghindari OOM
-        max_keys = 1024  # Batasi jumlah key untuk scaled dot-product
-        if k.size(0) > max_keys:
-            # Subsample key dan value secara acak
-            indices = torch.randperm(k.size(0), device=k.device)[:max_keys]
-            k_sampled = k[indices]
-            v_sampled = v[indices]
-        else:
-            k_sampled = k
-            v_sampled = v
-            
-        # Compute attention
-        dot_attn_weights = torch.matmul(q, k_sampled.transpose(-2, -1))
-        dot_attn_weights = torch.softmax(dot_attn_weights, dim=-1)
-        dot_output = torch.matmul(dot_attn_weights, v_sampled)
-        
-        # Kombinasikan kedua jenis attention
-        # Gunakan bobot yang lebih besar untuk linear attention karena lebih stabil
-        output = 0.8 * linear_output + 0.2 * dot_output
-        
-        return output

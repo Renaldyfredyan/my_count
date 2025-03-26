@@ -79,13 +79,6 @@ class iEFLModule(nn.Module):
 
         # Positional encoding
         self.pos_emb = PositionalEncodingsFixed(emb_dim)
-        
-        # NEW: Discriminative filter yang sederhana (hanya 1 layer)
-        # untuk membedakan prototype lebih baik
-        self.discriminative_filter = nn.Sequential(
-            nn.Linear(emb_dim, 1),
-            nn.Sigmoid()
-        )
 
     def forward(self, f_e, pos_emb, bboxes):
         bs, _, h, w = f_e.size()
@@ -203,20 +196,6 @@ class iEFLModule(nn.Module):
                 # Post-norm for Step 3
                 ff_output = self.ff_network(F_k)
                 F_k = self.norm3(F_k + self.dropout3(ff_output))
-            
-            # NEW: Apply discriminative filtering pada iterasi terakhir
-            if k == self.num_iterative_steps - 1:
-                # Reshape untuk pemrosesan batch
-                F_k_reshaped = F_k.permute(1, 0, 2)  # [B, N, E]
-                
-                # Calculate prototypes importance
-                importance_scores = self.discriminative_filter(F_k_reshaped)  # [B, N, 1]
-                
-                # Apply importance weighting (pastikan semua parameter terlibat dalam forward)
-                F_k_weighted = F_k_reshaped * importance_scores
-                
-                # Reshape kembali ke format original
-                F_k = F_k_weighted.permute(1, 0, 2)  # [N, B, E]
             
             # Add to the list of all prototypes
             all_prototypes.append(F_k)
