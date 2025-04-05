@@ -79,8 +79,8 @@ def evaluate(args):
                 f"MAE: {ae.item() / len(test):.2f}",
                 f"RMSE: {torch.sqrt(se / len(test)).item():.2f}",
             )
-            print(f"GT count: {density_map.flatten(1).sum(dim=1)}")
-            print(f"Predicted count: {out.flatten(1).sum(dim=1)}")
+            # print(f"GT count: {density_map.flatten(1).sum(dim=1)}")
+            # print(f"Predicted count: {out.flatten(1).sum(dim=1)}")
         torch.cuda.empty_cache()
 
     torch.cuda.empty_cache()

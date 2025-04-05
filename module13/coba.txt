@@ -1,0 +1,160 @@
+import torch
+from data import FSC147Dataset
+from torch.utils.data import DataLoader, Subset
+from backbone import SwinBackbone
+from hybrid_encoder13 import HybridEncoder  # Ubah ke versi yang ingin diuji
+from regression_head import DensityMapRegressor
+from losses import ObjectNormalizedL2Loss  # Menggunakan loss dari losses.py
+
+
+import torch
+from torch import nn
+import random
+import numpy as np
+
+# Gunakan device cuda jika tersedia
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f"Menggunakan device: {device}")
+
+# 1. Siapkan dataset dengan sampel terbatas
+dataset = FSC147Dataset(
+    data_path='/home/renaldy_fredyan/PhDResearch/LOCA/Dataset/',
+    img_size=512,
+    split='train',
+    num_objects=3
+)
+
+# Ambil subset kecil saja untuk testing cepat
+subset_size = 5
+subset_indices = list(range(subset_size))
+subset_dataset = Subset(dataset, subset_indices)
+dataloader = DataLoader(subset_dataset, batch_size=1, shuffle=False)
+
+backbone = SwinBackbone().to(device)
+
+# ------------------------------------------------------------------------
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+# Gunakan di awal program
+set_seed(0)
+
+# Inisialisasi model
+hybrid_encoder = HybridEncoder(
+    num_layers=3,
+    emb_dim=256,
+    num_heads=8,
+    dropout=0.1,
+    layer_norm_eps=1e-5,
+    mlp_factor=8,
+    norm_first=True,
+    activation=torch.nn.GELU,
+    norm=True,
+    groups=8  # Uncomment untuk hybrid_encoder13
+)
+
+# Fungsi inisialisasi bobot
+def init_weights(m):
+    if isinstance(m, (nn.Conv2d, nn.Linear)):
+        torch.nn.init.xavier_uniform_(m.weight, gain=1.0)
+        if m.bias is not None:
+            torch.nn.init.zeros_(m.bias)
+    elif isinstance(m, (nn.BatchNorm2d, nn.LayerNorm)):
+        if m.weight is not None:
+            torch.nn.init.ones_(m.weight)
+        if m.bias is not None:
+            torch.nn.init.zeros_(m.bias)
+
+# Terapkan inisialisasi bobot
+hybrid_encoder.apply(init_weights)
+
+# Pindahkan ke device setelah inisialisasi
+hybrid_encoder = hybrid_encoder.to(device)
+
+# ------------------------------------------------------------------------
+
+# 3. Inisialisasi regression head untuk evaluasi
+regression_head = DensityMapRegressor(256, 8).to(device)
+
+# 4. Inisialisasi loss function
+loss_fn = ObjectNormalizedL2Loss()
+
+# 5. Optimizer (hanya untuk hybrid encoder)
+optimizer = torch.optim.Adam(hybrid_encoder.parameters(), lr=1e-4)
+
+# 6. Fungsi evaluasi untuk menghitung MAE
+def calculate_mae(pred_counts, gt_counts):
+    return torch.mean(torch.abs(pred_counts - gt_counts)).item()
+
+# 7. Loop training singkat
+print("Mulai proses training dengan subset data...")
+num_epochs = 10  # Satu epoch saja
+
+# Simpan error untuk perbandingan
+all_errors = []
+
+for epoch in range(num_epochs):
+    epoch_loss = 0
+    epoch_mae = 0
+    
+    for i, (img, bboxes, density_map) in enumerate(dataloader):
+        # Pindahkan data ke device
+        img = img.to(device)
+        bboxes = bboxes.to(device)
+        density_map = density_map.to(device)
+        
+        # Dapat jumlah objek dari bounding box
+        # Asumsi bounding box format [batch, max_obj, 4]
+        # Hitung objek yang bukan padding (biasanya diidentifikasi dengan nilai bukan nol)
+        num_objects = torch.sum(torch.any(bboxes != 0, dim=2)).item()
+        
+        # Forward pass dengan backbone (tanpa gradient)
+        with torch.no_grad():
+            s3, s4, s5 = backbone.forward_multiscale(img)
+        
+        # Forward pass melalui hybrid encoder
+        features = hybrid_encoder(s3, s4, s5)
+        
+        # Prediction dengan regression head
+        pred_density = regression_head(features)
+        
+        # Hitung loss menggunakan ObjectNormalizedL2Loss
+        loss = loss_fn(pred_density, density_map, num_objects)
+        
+        # Backward dan optimize
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        
+        # Hitung MAE untuk sampel ini
+        pred_count = pred_density.sum().item()
+        gt_count = density_map.sum().item()
+        error = abs(pred_count - gt_count)
+        all_errors.append(error)
+        
+        print(f"Sample {i+1}, Loss: {loss.item():.6f}")
+        print(f"  Prediksi: {pred_count:.2f}, Ground Truth: {gt_count:.2f}, MAE: {error:.2f}")
+        
+        epoch_loss += loss.item()
+        epoch_mae += error
+    
+    # Hitung rata-rata untuk epoch
+    avg_loss = epoch_loss / len(dataloader)
+    avg_mae = epoch_mae / len(dataloader)
+    print(f"Epoch {epoch+1} - Average Loss: {avg_loss:.6f}, Average MAE: {avg_mae:.2f}")
+
+print("Training selesai!")
+print(f"Total MAE rata-rata: {sum(all_errors)/len(all_errors):.2f}")
+
+# Cek parameter yang memiliki gradien
+print("\nStatistik parameter hybrid encoder:")
+total_params = sum(p.numel() for p in hybrid_encoder.parameters())
+trainable_params = sum(p.numel() for p in hybrid_encoder.parameters() if p.requires_grad)
+print(f"Total parameter: {total_params:,}")
+print(f"Parameter trainable: {trainable_params:,} ({trainable_params/total_params*100:.2f}%)")
