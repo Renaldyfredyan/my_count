@@ -40,7 +40,8 @@ def evaluate_single_image(args, image_idx=0, image_name=None):
     model.load_state_dict(state_dict)
 
     # Pilih dataset (misalnya, 'val' atau 'test')
-    split = 'test'  
+    # split = 'test'  
+    split = args.split if hasattr(args, 'split') else 'test'  # Default tetap 'test'
     
     # Membuat dataset
     test = FSC147Dataset(
@@ -172,9 +173,9 @@ def evaluate_single_image(args, image_idx=0, image_name=None):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser('LOCA Single Image Evaluation', parents=[get_argparser()])
+    parser = argparse.ArgumentParser('Single Image Evaluation', parents=[get_argparser()])
     parser.add_argument('--image_idx', type=int, default=0, help='Index of the image to evaluate')
-    parser.add_argument('--image_name', type=str, default=None, help='Name of the image file to evaluate')
+    # parser.add_argument('--image_name', type=str, default=None, help='Name of the image file to evaluate')
     args = parser.parse_args()
     
     # Panggil fungsi untuk mengevaluasi satu gambar

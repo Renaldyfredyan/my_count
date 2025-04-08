@@ -40,4 +40,9 @@ def get_argparser():
     parser.add_argument('--zero_shot', action='store_true')
     parser.add_argument('--pre_norm', action='store_true')
 
+    # visualize
+    parser.add_argument('--image_name', type=str, default=None, help='Name of the image file to evaluate')
+    parser.add_argument('--split', type=str, default='test', choices=['val', 'test'], help='Dataset split to evaluate')
+
+
     return parser

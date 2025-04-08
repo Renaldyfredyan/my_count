@@ -3,21 +3,20 @@ import argparse
 
 def get_argparser():
 
-    parser = argparse.ArgumentParser("LOCA parser", add_help=False)
+    parser = argparse.ArgumentParser("Efficient", add_help=False)
 
-    parser.add_argument('--model_name', default='loca_3_shot', type=str)
+    parser.add_argument('--model_name', default='efficient_low_2', type=str)
     parser.add_argument(
         '--data_path',
-        default='/home/nikola/master-thesis/data/fsc147/',
+        default='/home/renaldy_fredyan/PhDResearch/LOCA/Dataset/',
         type=str
     )
     parser.add_argument(
         '--model_path',
-        default='/home/nikola/master-thesis/models/pretrained/',
+        default='/home/renaldy_fredyan/PhDResearch/ELS/checkpoints/',
         type=str
     )
-    parser.add_argument('--backbone', default='swinT', type=str)
-    parser.add_argument('--swav_backbone', action='store_true')
+    parser.add_argument('--backbone', default='grounding_dino', type=str)
     parser.add_argument('--reduction', default=8, type=int)
     parser.add_argument('--image_size', default=512, type=int)
     parser.add_argument('--num_enc_layers', default=3, type=int)
@@ -40,5 +39,10 @@ def get_argparser():
     parser.add_argument('--tiling_p', default=0.5, type=float)
     parser.add_argument('--zero_shot', action='store_true')
     parser.add_argument('--pre_norm', action='store_true')
+
+    # visualize
+    parser.add_argument('--image_name', type=str, default=None, help='Name of the image file to evaluate')
+    parser.add_argument('--split', type=str, default='test', choices=['val', 'test'], help='Dataset split to evaluate')
+
 
     return parser
